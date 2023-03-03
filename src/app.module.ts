@@ -7,6 +7,8 @@ import { TransactionMiddleware } from '@/common/middleware/transaction.middlewar
 import { Plan } from '@/entity/plan.entity';
 import { User } from '@/entity/user.entity';
 
+import { PlanModule } from './api/plan/plan.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,12 +24,13 @@ import { User } from '@/entity/user.entity';
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_SCHEMA'),
         entities: [Plan, User],
-        // synchronize: config.get('NODE_ENV') === 'development', // true 시 테이블이 이미 존재하면 에러 발생
-        synchronize: false,
+        synchronize: config.get('NODE_ENV') === 'development', // true 시 테이블이 이미 존재하면 에러 발생
+        // synchronize: false,
         logging: config.get('NODE_ENV') === 'development',
       }),
     }),
     UserModule,
+    PlanModule,
   ],
 })
 export class AppModule implements NestModule {
