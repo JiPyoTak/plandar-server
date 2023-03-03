@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { getNamespace } from 'cls-hooked';
+import { createNamespace, getNamespace } from 'cls-hooked';
 import { EntityManager } from 'typeorm';
 
 import { PLANDAR_ENTITY_MANAGER, PLANDAR_NAMESPACE } from '@/utils/constants';
@@ -7,8 +7,9 @@ import { PLANDAR_ENTITY_MANAGER, PLANDAR_NAMESPACE } from '@/utils/constants';
 @Injectable()
 export class TransactionManager {
   getEntityManager(): EntityManager {
-    const nameSpace = getNamespace(PLANDAR_NAMESPACE);
-    if (!nameSpace || !nameSpace.active)
+    const nameSpace =
+      getNamespace(PLANDAR_NAMESPACE) ?? createNamespace(PLANDAR_NAMESPACE);
+    if (!nameSpace)
       throw new InternalServerErrorException(
         `${PLANDAR_NAMESPACE} is not active`,
       );
