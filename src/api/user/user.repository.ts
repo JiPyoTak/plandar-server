@@ -1,9 +1,9 @@
 import { EntityTarget } from 'typeorm';
 
-import { GenericTypeOrmRepository } from '@/common/generic.repository';
+import { RootRepository } from '@/common/root.repository';
 import { User } from '@/entity/user.entity';
 
-export class UserRepository extends GenericTypeOrmRepository<User> {
+export class UserRepository extends RootRepository<User> {
   getName(): EntityTarget<User> {
     return User.name;
   }
