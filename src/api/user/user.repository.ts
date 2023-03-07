@@ -9,6 +9,6 @@ export class UserRepository extends RootRepository<User> {
   }
 
   async createUser(username: string) {
-    return this.getRepo().insert({ username });
+    return this.getRepo().save(this.getRepo().create({ username }));
   }
 }
