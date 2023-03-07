@@ -1,9 +1,10 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 
 import { UserModule } from '@/api/user/user.module';
-import { TransactionMiddleware } from '@/common/middleware/transaction.middleware';
 import { Plan } from '@/entity/plan.entity';
 import { User } from '@/entity/user.entity';
 
@@ -24,17 +25,19 @@ import { PlanModule } from './api/plan/plan.module';
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_SCHEMA'),
         entities: [Plan, User],
-        synchronize: config.get('NODE_ENV') === 'development', // true 시 테이블이 이미 존재하면 에러 발생
-        // synchronize: false,
+        // synchronize: config.get('NODE_ENV') === 'development', // true 시 테이블이 이미 존재하면 에러 발생
+        synchronize: false,
         logging: config.get('NODE_ENV') === 'development',
       }),
+      dataSourceFactory: async (options) => {
+        if (!options) {
+          throw new Error('Invalid options passed');
+        }
+        return addTransactionalDataSource(new DataSource(options));
+      },
     }),
     UserModule,
     PlanModule,
   ],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(TransactionMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}
