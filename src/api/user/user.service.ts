@@ -3,10 +3,10 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 
 import { PlanRepository } from '@/api/plan/plan.repository';
 import { UserRepository } from '@/api/user/user.repository';
-import { Transactional } from '@/common/decorator/transaction.decorator';
 
 @Injectable()
 export class UserService {
@@ -42,7 +42,7 @@ export class UserService {
       if (i === time - 1 && !success) {
         throw new NotFoundException('bomb! Not Found');
       } else {
-        data.push(await this.createUser(true));
+        data.push(...(await this.createUser(true)));
       }
     }
     return data;
