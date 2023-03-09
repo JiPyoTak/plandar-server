@@ -1,9 +1,7 @@
-import { Test } from '@nestjs/testing';
-
 import { PlanRepository } from '@/api/plan/plan.repository';
 import { UserRepository } from '@/api/user/user.repository';
 import { UserService } from '@/api/user/user.service';
-import { TransactionManager } from '@/common/transaction.manager';
+import createTestingModule from 'test/utils/createTestingModule';
 
 describe('UserService', () => {
   let planRepository: PlanRepository;
@@ -11,25 +9,13 @@ describe('UserService', () => {
   let userService: UserService;
 
   beforeEach(async () => {
-    const moduleRef = await Test.createTestingModule({
+    const moduleRef = await createTestingModule({
       providers: [UserService],
-    })
-      .useMocker((token) => {
-        if (token === UserRepository) {
-          return { createUser: jest.fn().mockResolvedValue({}) };
-        }
-        if (token === PlanRepository) {
-          return { createPlan: jest.fn().mockResolvedValue({}) };
-        }
-        if (token === TransactionManager) {
-          return { getEntityManager: jest.fn().mockResolvedValue({}) };
-        }
-      })
-      .compile();
+    });
 
     planRepository = moduleRef.get<PlanRepository>(PlanRepository);
     userRepository = moduleRef.get<UserRepository>(UserRepository);
-    userService = await moduleRef.resolve(UserService);
+    userService = moduleRef.get<UserService>(UserService);
   });
 
   it('Check defining Modules', () => {

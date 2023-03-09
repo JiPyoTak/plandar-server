@@ -1,29 +1,24 @@
-import { Test } from '@nestjs/testing';
+import type { INestApplication } from '@nestjs/common';
 
 import { PlanController } from '@/api/plan/plan.controller';
 import { PlanService } from '@/api/plan/plan.service';
+import createTestingModule from 'test/utils/createTestingModule';
 
 describe('PlanController', () => {
-  let planController: PlanController;
+  let app: INestApplication;
   let planService: PlanService;
 
   beforeEach(async () => {
-    const moduleRef = await Test.createTestingModule({
+    const moduleRef = await createTestingModule({
       controllers: [PlanController],
-    })
-      .useMocker((token) => {
-        if (token === PlanService) {
-          return { createPlan: jest.fn().mockResolvedValue({}) };
-        }
-      })
-      .compile();
+    });
 
-    planController = moduleRef.get<PlanController>(PlanController);
-    planService = await moduleRef.resolve(PlanService);
+    app = moduleRef.createNestApplication();
+    await app.init();
+    planService = await app.resolve<PlanService>(PlanService);
   });
 
   it('Check defining Modules', () => {
-    expect(planController).toBeDefined();
     expect(planService).toBeDefined();
   });
 });
