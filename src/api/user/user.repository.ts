@@ -1,14 +1,15 @@
-import { EntityTarget } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { DataSource, Repository } from 'typeorm';
 
-import { RootRepository } from '@/common/root.repository';
 import { User } from '@/entity/user.entity';
 
-export class UserRepository extends RootRepository<User> {
-  getName(): EntityTarget<User> {
-    return User.name;
+@Injectable()
+export class UserRepository extends Repository<User> {
+  constructor(dataSource: DataSource) {
+    super(User, dataSource.createEntityManager());
   }
 
   async createUser(username: string) {
-    return this.getRepo().insert({ username });
+    return this.save(this.create({ username }));
   }
 }
