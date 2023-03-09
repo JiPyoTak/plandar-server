@@ -16,7 +16,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     abortOnError: true,
   });
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalInterceptors(new SuccessInterceptor());
   app.setGlobalPrefix('api');

@@ -1,32 +1,25 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 
-import { PlanRepository } from '@/api/plan/plan.repository';
 import { UserRepository } from '@/api/user/user.repository';
+import { CreateUserRetDto } from '@/dto/user/create-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly userRepo: UserRepository,
-    private readonly planRepo: PlanRepository,
-  ) {}
+  constructor(private readonly userRepo: UserRepository) {}
 
   @Transactional()
-  async createUser(success: boolean) {
+  async createUser(success: boolean): Promise<CreateUserRetDto[]> {
     const ret = [];
     for (let i = 0; i < 3; i++) {
       const num = Math.random() * 10000;
-      const data = { user: undefined, plan: undefined };
       if (i === 2 && !success) {
-        throw new InternalServerErrorException('bomb! Internal Server');
+        throw new InternalServerErrorException('transaction failed');
       }
-      data.user = await this.userRepo.createUser(`user${Math.floor(num)}`);
-      data.plan = await this.planRepo.createPlan(`plan${Math.floor(num)}`);
-      ret.push(data);
+      const { username, id } = await this.userRepo.createUser(
+        `user${Math.floor(num)}`,
+      );
+      ret.push({ username, id });
     }
     return ret;
   }
@@ -40,7 +33,7 @@ export class UserService {
     const data = [];
     for (let i = 0; i < time; i++) {
       if (i === time - 1 && !success) {
-        throw new NotFoundException('bomb! Not Found');
+        throw new InternalServerErrorException('transaction failed');
       } else {
         data.push(...(await this.createUser(true)));
       }
