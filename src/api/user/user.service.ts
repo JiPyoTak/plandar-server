@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 
 import { UserRepository } from '@/api/user/user.repository';
-import { Transactional } from '@/common/decorator/transaction.decorator';
 import { CreateUserRetDto } from '@/dto/user/create-user.dto';
 
 @Injectable()
@@ -16,13 +16,14 @@ export class UserService {
       if (i === 2 && !success) {
         throw new InternalServerErrorException('transaction failed');
       }
-      const tmp = await this.userRepo.createUser(`user${Math.floor(num)}`);
-      ret.push({ username: tmp.username, id: tmp.id });
+      const { username, id } = await this.userRepo.createUser(
+        `user${Math.floor(num)}`,
+      );
+      ret.push({ username, id });
     }
     return ret;
   }
 
-  @Transactional()
   async getUsers() {
     return this.userRepo.find();
   }
