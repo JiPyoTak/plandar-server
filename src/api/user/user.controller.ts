@@ -40,6 +40,7 @@ export class UserController {
     type: CreateUserRetDto,
     isArray: true,
   })
+  @ApiOperation({ summary: '3 * time 만큼의 새로운 유저 생성' })
   @Post()
   async createUser(@Query() { time, success }: CreateUserQueryDto) {
     return time
