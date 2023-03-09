@@ -1,14 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
+import { CustomRepository } from '@/common/customRepository.decorator';
 import { Plan } from '@/entity/plan.entity';
 
-@Injectable()
+@CustomRepository(Plan)
 export class PlanRepository extends Repository<Plan> {
-  constructor(dataSource: DataSource) {
-    super(Plan, dataSource.createEntityManager());
-  }
-
   async createPlan(planName: string) {
     return this.save(this.create({ planName }));
   }

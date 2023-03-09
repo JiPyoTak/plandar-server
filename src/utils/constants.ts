@@ -1,2 +1,1 @@
-export const PLANDAR_NAMESPACE = 'plandar';
-export const PLANDAR_ENTITY_MANAGER = 'plandarEntityManager';
+export const PLANDAR_CUSTOM_REPSOITORY = 'PLANDAR_CUSTOM_REPSOITORY';
