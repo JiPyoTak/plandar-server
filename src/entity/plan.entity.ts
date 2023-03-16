@@ -1,27 +1,98 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  IsBoolean,
+  IsDate,
+  IsEmpty,
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  MaxLength,
+} from 'class-validator';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+} from 'typeorm';
 
 import { DefaultEntity } from '@/entity/default.entity';
 import { User } from '@/entity/user.entity';
 
-@Entity('PLAN_TB')
+import { Category } from './category.entity';
+import { Tag } from './tag.entity';
+
+export enum PLAN_TYPE {
+  EVENT = 'event',
+  TASK = 'task',
+  ALARM = 'alarm',
+}
+
+@Entity('plan_tb')
 export class Plan extends DefaultEntity {
   @ApiProperty()
-  @Column({
-    name: 'plan_name',
-    type: 'varchar',
-    length: 30,
-  })
+  @Column({ type: 'varchar', length: 30 })
   @IsString()
   @MaxLength(30)
   @IsNotEmpty()
-  planName: string;
+  title!: string;
 
   @ApiProperty()
-  @ManyToOne(() => User, (user) => user.plans, {
+  @Column({ type: 'text', nullable: true })
+  @IsString()
+  @IsEmpty()
+  description?: string;
+
+  @ApiProperty()
+  @Column({ type: 'binary', length: 3, default: '0x52d681' })
+  @IsString()
+  @IsNotEmpty()
+  color!: string;
+
+  @ApiProperty()
+  @Column({ type: 'boolean', default: true })
+  @IsBoolean()
+  @IsNotEmpty()
+  isAllDay: boolean;
+
+  @ApiProperty()
+  @Column({ type: 'enum', enum: PLAN_TYPE })
+  @IsEnum(PLAN_TYPE)
+  @IsNotEmpty()
+  type!: PLAN_TYPE;
+
+  @ApiProperty()
+  @Column({ type: 'datetime' })
+  @IsDate()
+  @IsNotEmpty()
+  startTime!: Date;
+
+  @ApiProperty()
+  @Column({ type: 'datetime', nullable: true })
+  @IsDate()
+  @IsEmpty()
+  endTime?: Date;
+
+  @ApiProperty()
+  @ManyToOne(() => User, { onDelete: 'CASCADE', cascade: true })
+  @JoinColumn({ name: 'userId' })
+  user!: User;
+
+  @ApiProperty()
+  @ManyToOne(() => Category, (category) => category.plans, {
     onDelete: 'CASCADE',
+    cascade: true,
   })
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+  @JoinColumn({ name: 'categoryId' })
+  category!: Category;
+
+  @ApiProperty()
+  @ManyToMany(() => Tag, (tag) => tag.plans, { cascade: true })
+  @JoinTable({
+    joinColumn: { name: 'planId' },
+    inverseJoinColumn: { name: 'tagId' },
+    name: 'plan_tag_tb',
+  })
+  tags?: Tag[];
 }
