@@ -18,7 +18,7 @@ export class Tag extends DefaultEntity {
 
   @ApiProperty()
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'user_id' })
   user!: User;
 
   @ApiProperty()

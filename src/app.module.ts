@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 
 import { UserModule } from '@/api/user/user.module';
@@ -28,13 +29,15 @@ import { Tag } from './entity/tag.entity';
         database: config.get('DB_SCHEMA'),
         entities: [Plan, User, Category, Tag],
         // synchronize: config.get('NODE_ENV') === 'development', // true 시 테이블이 이미 존재하면 에러 발생
-        synchronize: false,
+        synchronize: true,
         logging: config.get('NODE_ENV') === 'development',
+        namingStrategy: new SnakeNamingStrategy(),
       }),
       dataSourceFactory: async (options) => {
         if (!options) {
           throw new Error('Invalid options passed');
         }
+
         return addTransactionalDataSource(new DataSource(options));
       },
     }),
