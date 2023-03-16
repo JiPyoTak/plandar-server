@@ -3,22 +3,13 @@ import * as testRequest from 'supertest';
 
 import { PlanController } from '@/api/plan/plan.controller';
 import { PlanService } from '@/api/plan/plan.service';
-import type { Plan } from '@/entity/plan.entity';
-import type { User } from '@/entity/user.entity';
+import { Plan } from '@/entity/plan.entity';
 import createTestingModule from 'test/utils/createTestingModule';
 
+import { MOCK_PLAN } from './mock';
+
 describe('PlanController', () => {
-  const mockedPlan: Plan = {
-    id: 4,
-    planName: 'MyPlan',
-    createdAt: new Date(
-      '2023-03-07 15:38:06.785155',
-    ).toString() as unknown as Date,
-    updatedAt: new Date(
-      '2023-03-07 15:38:06.785155',
-    ).toString() as unknown as Date,
-    user: {} as User,
-  };
+  const mockedPlan = Object.assign(MOCK_PLAN);
 
   let app: INestApplication;
   let planService: PlanService;

@@ -1,17 +1,12 @@
 import { PlanRepository } from '@/api/plan/plan.repository';
 import { PlanService } from '@/api/plan/plan.service';
 import { Plan } from '@/entity/plan.entity';
-import { User } from '@/entity/user.entity';
 import createTestingModule from 'test/utils/createTestingModule';
 
+import { MOCK_PLAN } from './mock';
+
 describe('PlanService', () => {
-  const mockedPlan: Plan = {
-    id: 4,
-    planName: 'MyPlan',
-    createdAt: new Date('2023-03-07 15:38:06.785155'),
-    updatedAt: new Date('2023-03-07 15:38:06.785155'),
-    user: {} as User,
-  };
+  const mockedPlan = Object.assign(MOCK_PLAN);
 
   let planRepository: PlanRepository;
   let planService: PlanService;
@@ -87,7 +82,7 @@ describe('PlanService', () => {
     it('should update an existing plan', async () => {
       // given
       const id = mockedPlan.id;
-      const changedOption = { planName: 'YourPlan' };
+      const changedOption = { title: 'YourPlan' };
       const changedPlan = { ...mockedPlan, ...changedOption };
       const planRepoSpy = jest
         .spyOn(planRepository, 'updatePlan')
