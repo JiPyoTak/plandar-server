@@ -3,9 +3,11 @@ import { IsString, MaxLength } from 'class-validator';
 import { Entity, Column, OneToMany } from 'typeorm';
 
 import { DefaultEntity } from '@/entity/default.entity';
-import { Plan } from '@/entity/plan.entity';
 
-@Entity('USER_TB')
+import { Category } from './category.entity';
+import { Tag } from './tag.entity';
+
+@Entity('user_tb')
 export class User extends DefaultEntity {
   @Column({ type: 'varchar', length: 20 })
   @ApiProperty()
@@ -13,6 +15,23 @@ export class User extends DefaultEntity {
   @MaxLength(20)
   username: string;
 
-  @OneToMany(() => Plan, (plan) => plan.user)
-  plans: Plan[];
+  @Column({ type: 'varchar', length: 50 })
+  @ApiProperty()
+  @IsString()
+  @MaxLength(50)
+  email: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  @ApiProperty()
+  @IsString()
+  @MaxLength(255)
+  profileImage: string;
+
+  @ApiProperty()
+  @OneToMany(() => Category, (category) => category.user)
+  categories?: Category[];
+
+  @ApiProperty()
+  @OneToMany(() => Tag, (tag) => tag.user)
+  tags?: Tag[];
 }
