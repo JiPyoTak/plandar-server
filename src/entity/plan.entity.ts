@@ -5,6 +5,7 @@ import {
   IsEmpty,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsString,
   MaxLength,
 } from 'class-validator';
@@ -45,10 +46,14 @@ export class Plan extends DefaultEntity {
   description?: string;
 
   @ApiProperty()
-  @Column({ type: 'binary', length: 3, default: '0x52d681' })
-  @IsString()
+  @Column({
+    type: 'binary',
+    length: 3,
+    default: Buffer.from('0x52d681'),
+  })
+  @IsNumber()
   @IsNotEmpty()
-  color!: string;
+  color!: number;
 
   @ApiProperty()
   @Column({ type: 'boolean', default: true })
@@ -76,7 +81,7 @@ export class Plan extends DefaultEntity {
 
   @ApiProperty()
   @ManyToOne(() => User, { onDelete: 'CASCADE', cascade: true })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'user_id' })
   user!: User;
 
   @ApiProperty()
@@ -84,14 +89,14 @@ export class Plan extends DefaultEntity {
     onDelete: 'CASCADE',
     cascade: true,
   })
-  @JoinColumn({ name: 'categoryId' })
+  @JoinColumn({ name: 'category_id' })
   category!: Category;
 
   @ApiProperty()
   @ManyToMany(() => Tag, (tag) => tag.plans, { cascade: true })
   @JoinTable({
-    joinColumn: { name: 'planId' },
-    inverseJoinColumn: { name: 'tagId' },
+    joinColumn: { name: 'plan_id' },
+    inverseJoinColumn: { name: 'tag_id' },
     name: 'plan_tag_tb',
   })
   tags?: Tag[];
