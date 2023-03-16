@@ -9,6 +9,8 @@ import { Plan } from '@/entity/plan.entity';
 import { User } from '@/entity/user.entity';
 
 import { PlanModule } from './api/plan/plan.module';
+import { Category } from './entity/category.entity';
+import { Tag } from './entity/tag.entity';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { PlanModule } from './api/plan/plan.module';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_SCHEMA'),
-        entities: [Plan, User],
+        entities: [Plan, User, Category, Tag],
         // synchronize: config.get('NODE_ENV') === 'development', // true 시 테이블이 이미 존재하면 에러 발생
         synchronize: false,
         logging: config.get('NODE_ENV') === 'development',
