@@ -16,15 +16,15 @@ export class User extends DefaultEntity {
   @MaxLength(20)
   username!: string;
 
-  @Column({ type: 'varchar', length: 50 })
   @ApiProperty()
+  @Column({ type: 'varchar', length: 50 })
   @IsNotEmpty()
   @IsString()
   @MaxLength(50)
   email!: string;
 
-  @Column({ type: 'varchar', length: 255 })
   @ApiProperty()
+  @Column({ type: 'varchar', length: 255 })
   @IsNotEmpty()
   @IsString()
   @MaxLength(255)
