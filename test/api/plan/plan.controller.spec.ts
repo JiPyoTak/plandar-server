@@ -9,7 +9,7 @@ import createTestingModule from 'test/utils/createTestingModule';
 import { MOCK_PLAN } from './mock';
 
 describe('PlanController', () => {
-  const mockedPlan = Object.assign(MOCK_PLAN);
+  const mockedPlan = Object.assign({}, MOCK_PLAN);
 
   let app: INestApplication;
   let planService: PlanService;

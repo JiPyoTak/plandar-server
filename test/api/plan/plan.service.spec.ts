@@ -6,7 +6,7 @@ import createTestingModule from 'test/utils/createTestingModule';
 import { MOCK_PLAN } from './mock';
 
 describe('PlanService', () => {
-  const mockedPlan = Object.assign(MOCK_PLAN);
+  const mockedPlan = Object.assign({}, MOCK_PLAN);
 
   let planRepository: PlanRepository;
   let planService: PlanService;
