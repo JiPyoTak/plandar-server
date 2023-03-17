@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsDate,
-  IsEmpty,
+  IsOptional,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -41,7 +41,7 @@ export class Plan extends DefaultEntity {
 
   @ApiProperty()
   @Column({ type: 'text', nullable: true })
-  @IsEmpty()
+  @IsOptional()
   @IsString()
   description?: string;
 
@@ -75,7 +75,7 @@ export class Plan extends DefaultEntity {
 
   @ApiProperty()
   @Column({ type: 'datetime', nullable: true })
-  @IsEmpty()
+  @IsOptional()
   @IsDate()
   endTime?: Date;
 
