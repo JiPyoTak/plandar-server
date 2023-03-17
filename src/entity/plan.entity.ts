@@ -34,15 +34,15 @@ export enum PLAN_TYPE {
 export class Plan extends DefaultEntity {
   @ApiProperty()
   @Column({ type: 'varchar', length: 30 })
+  @IsNotEmpty()
   @IsString()
   @MaxLength(30)
-  @IsNotEmpty()
   title!: string;
 
   @ApiProperty()
   @Column({ type: 'text', nullable: true })
-  @IsString()
   @IsEmpty()
+  @IsString()
   description?: string;
 
   @ApiProperty()
@@ -51,32 +51,32 @@ export class Plan extends DefaultEntity {
     length: 3,
     default: Buffer.from('0x52d681'),
   })
-  @IsNumber()
   @IsNotEmpty()
+  @IsNumber()
   color!: number;
 
   @ApiProperty()
   @Column({ type: 'boolean', default: true })
-  @IsBoolean()
   @IsNotEmpty()
+  @IsBoolean()
   isAllDay: boolean;
 
   @ApiProperty()
   @Column({ type: 'enum', enum: PLAN_TYPE })
-  @IsEnum(PLAN_TYPE)
   @IsNotEmpty()
+  @IsEnum(PLAN_TYPE)
   type!: PLAN_TYPE;
 
   @ApiProperty()
   @Column({ type: 'datetime' })
-  @IsDate()
   @IsNotEmpty()
+  @IsDate()
   startTime!: Date;
 
   @ApiProperty()
   @Column({ type: 'datetime', nullable: true })
-  @IsDate()
   @IsEmpty()
+  @IsDate()
   endTime?: Date;
 
   @ApiProperty()

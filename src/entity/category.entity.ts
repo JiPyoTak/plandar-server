@@ -9,10 +9,10 @@ import { User } from './user.entity';
 
 @Entity('category_tb')
 export class Category extends DefaultEntity {
-  @Column({ type: 'varchar', length: 20 })
   @ApiProperty()
-  @IsString()
+  @Column({ type: 'varchar', length: 20 })
   @IsNotEmpty()
+  @IsString()
   @MaxLength(20)
   name!: string;
 
@@ -22,8 +22,8 @@ export class Category extends DefaultEntity {
     length: 3,
     default: Buffer.from('0x52d681'),
   })
-  @IsNumber()
   @IsNotEmpty()
+  @IsNumber()
   color!: number;
 
   @ApiProperty()

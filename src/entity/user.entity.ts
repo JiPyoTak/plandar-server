@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { Entity, Column, OneToMany } from 'typeorm';
 
 import { DefaultEntity } from '@/entity/default.entity';
@@ -11,21 +11,24 @@ import { Tag } from './tag.entity';
 export class User extends DefaultEntity {
   @Column({ type: 'varchar', length: 20 })
   @ApiProperty()
+  @IsNotEmpty()
   @IsString()
   @MaxLength(20)
-  username: string;
+  username!: string;
 
   @Column({ type: 'varchar', length: 50 })
   @ApiProperty()
+  @IsNotEmpty()
   @IsString()
   @MaxLength(50)
-  email: string;
+  email!: string;
 
   @Column({ type: 'varchar', length: 255 })
   @ApiProperty()
+  @IsNotEmpty()
   @IsString()
   @MaxLength(255)
-  profileImage: string;
+  profileImage!: string;
 
   @ApiProperty()
   @OneToMany(() => Category, (category) => category.user)

@@ -11,8 +11,8 @@ import { User } from './user.entity';
 export class Tag extends DefaultEntity {
   @Column({ type: 'varchar', length: 20 })
   @ApiProperty()
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   @MaxLength(20)
   name: string;
 
