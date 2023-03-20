@@ -1,3 +1,5 @@
+import { BadRequestException } from '@nestjs/common';
+
 import { UserRepository } from '@/api/user/user.repository';
 import { UserService } from '@/api/user/user.service';
 import createTestingModule from 'test/utils/createTestingModule';
@@ -29,7 +31,7 @@ describe('UserService', () => {
       // given
       const id = mockUser.id;
       const result = { ...mockUser };
-      const userRepoSpy = jest
+      const userRepoSpyByGetUserInfo = jest
         .spyOn(userRepository, 'getUserById')
         .mockResolvedValue(result);
 
@@ -37,8 +39,22 @@ describe('UserService', () => {
       const user = await userService.getUser(id);
 
       // then
-      expect(userRepoSpy).toHaveBeenCalledWith(id);
+      expect(userRepoSpyByGetUserInfo).toHaveBeenCalledWith(id);
       expect(user).toEqual(result);
+    });
+
+    it('Should return an error if the user does not exist.', async () => {
+      try {
+        // given
+        const id = mockUser.id;
+        jest.spyOn(userRepository, 'getUserById').mockResolvedValue(null);
+
+        // when
+        await userService.getUser(id);
+      } catch (error) {
+        // then
+        expect(error).toBeInstanceOf(BadRequestException);
+      }
     });
   });
 
@@ -47,7 +63,12 @@ describe('UserService', () => {
       // given
       const newUser = { ...mockUser, id: undefined };
       const result = { ...mockUser };
-      const userRepoSpy = jest
+
+      const userRepoSpyByfindeOne = jest
+        .spyOn(userRepository, 'findOne')
+        .mockResolvedValue(null);
+
+      const userRepoSpyByCreateUser = jest
         .spyOn(userRepository, 'createUser')
         .mockResolvedValue(result);
 
@@ -55,8 +76,26 @@ describe('UserService', () => {
       const user = await userService.createUser(newUser);
 
       // then
-      expect(userRepoSpy).toHaveBeenCalledWith(newUser);
+      expect(userRepoSpyByCreateUser).toHaveBeenCalledWith(newUser);
+      expect(userRepoSpyByfindeOne).toHaveBeenCalledWith({
+        where: { email: mockUser.email },
+      });
       expect(user).toEqual(result);
+    });
+
+    it('Should return an error when the user already exists', async () => {
+      try {
+        // given
+        const newUser = { ...mockUser, id: undefined };
+
+        jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser);
+
+        // when
+        await userService.createUser(newUser);
+      } catch (error) {
+        // then
+        expect(error).toBeInstanceOf(BadRequestException);
+      }
     });
   });
 });
