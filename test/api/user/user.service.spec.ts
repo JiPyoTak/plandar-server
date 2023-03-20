@@ -7,7 +7,7 @@ import createTestingModule from 'test/utils/createTestingModule';
 import { USER_STUB } from './mock';
 
 describe('UserService', () => {
-  const mockUser = Object.assign({}, USER_MOCK);
+  const mockUser = Object.assign({}, USER_STUB);
 
   let userRepository: UserRepository;
   let userService: UserService;
