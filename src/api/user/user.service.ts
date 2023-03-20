@@ -16,25 +16,21 @@ export class UserService {
     const user = await this.userRepo.getUserById(id);
 
     if (!user) {
-      new BadRequestException('존재하지 않는 유저입니다.');
+      throw new BadRequestException('존재하지 않는 유저입니다.');
     }
 
     return user;
   }
 
   async createUser(userInfo: CreateUserRetDto): Promise<User> {
-    try {
-      const user = await this.userRepo.findOne({
-        where: { email: userInfo.email },
-      });
+    const user = await this.userRepo.findOne({
+      where: { email: userInfo.email },
+    });
 
-      if (user) {
-        new BadRequestException('이미 존재하는 유저입니다.');
-      }
-
-      return this.userRepo.createUser(userInfo);
-    } catch (error) {
-      new InternalServerErrorException('서버 에러입니다.');
+    if (user) {
+      throw new BadRequestException('이미 존재하는 유저입니다.');
     }
+
+    return this.userRepo.createUser(userInfo);
   }
 }
