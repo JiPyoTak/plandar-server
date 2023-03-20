@@ -1,6 +1,6 @@
 import { User } from '@/entity/user.entity';
 
-const USER_MOCK: User = {
+const USER_STUB: User = {
   id: 1,
   email: 'test@test.com',
   username: '테스트',
@@ -9,4 +9,4 @@ const USER_MOCK: User = {
   updatedAt: new Date('2023-03-07 15:38:06.785155'),
 };
 
-export { USER_MOCK };
+export { USER_STUB };

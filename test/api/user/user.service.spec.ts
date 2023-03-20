@@ -4,7 +4,7 @@ import { UserRepository } from '@/api/user/user.repository';
 import { UserService } from '@/api/user/user.service';
 import createTestingModule from 'test/utils/createTestingModule';
 
-import { USER_MOCK } from './mock';
+import { USER_STUB } from './mock';
 
 describe('UserService', () => {
   const mockUser = Object.assign({}, USER_MOCK);
