@@ -13,7 +13,7 @@ export class UserService {
   constructor(private readonly userRepo: UserRepository) {}
 
   async getUser(id: number): Promise<User> {
-    const user = await this.userRepo.findOne({ where: { id } });
+    const user = await this.userRepo.getUserById(id);
 
     if (!user) {
       new BadRequestException('존재하지 않는 유저입니다.');

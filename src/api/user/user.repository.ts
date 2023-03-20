@@ -9,4 +9,8 @@ export class UserRepository extends Repository<User> {
   async createUser(userInfo: CreateUserRetDto) {
     return this.save(this.create(userInfo));
   }
+
+  async getUserById(id: number) {
+    return this.findOne({ where: { id } });
+  }
 }

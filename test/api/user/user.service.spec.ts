@@ -30,7 +30,7 @@ describe('UserService', () => {
       const id = mockUser.id;
       const result = { ...mockUser };
       const userRepoSpy = jest
-        .spyOn(userRepository, 'findOne')
+        .spyOn(userRepository, 'getUserById')
         .mockResolvedValue(result);
 
       // when
