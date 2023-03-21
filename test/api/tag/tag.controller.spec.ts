@@ -1,6 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import * as testRequest from 'supertest';
 
+import { TagController } from '@/api/tag/tag.controller';
+import { TagService } from '@/api/tag/tag.service';
 import { MOCK_TAG } from 'test/api/tag/mock';
 import createTestingModule from 'test/utils/createTestingModule';
 
