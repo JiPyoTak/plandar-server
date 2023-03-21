@@ -29,7 +29,7 @@ describe('TagController', () => {
     it('expect success response with created tag', async () => {
       // given
       const tag = { name: mockedTag.name };
-      const createdTag = { ...mockedTag };
+      const createdTag = { name: mockedTag.name, id: mockedTag.id };
       const tagServSpy = jest
         .spyOn(tagService, 'createTag')
         .mockResolvedValue(createdTag);
@@ -39,7 +39,7 @@ describe('TagController', () => {
 
       // then
       return request.expect(201).expect((res) => {
-        expect(tagServSpy).toHaveBeenCalledWith(tag);
+        expect(tagServSpy).toHaveBeenCalledWith(mockedTag.name);
         expect(res.body).toEqual(createdTag);
       });
     });
@@ -52,9 +52,8 @@ describe('TagController', () => {
       const id = mockedTag.id;
       const tag = { name: newTagName };
       const updatedTag = {
-        ...mockedTag,
         name: newTagName,
-        updatedAt: new Date(),
+        id: mockedTag.id,
       };
       const tagServSpy = jest
         .spyOn(tagService, 'updateTag')
@@ -67,7 +66,7 @@ describe('TagController', () => {
 
       // then
       return request.expect(200).expect((res) => {
-        expect(tagServSpy).toHaveBeenCalledWith(id, tag);
+        expect(tagServSpy).toHaveBeenCalledWith(id, newTagName);
         expect(res.body).toEqual(updatedTag);
       });
     });
@@ -77,7 +76,7 @@ describe('TagController', () => {
     it('expect success response with deleted tag', async () => {
       // given
       const id = mockedTag.id;
-      const result = true;
+      const result = { success: true };
       const tagServSpy = jest
         .spyOn(tagService, 'deleteTag')
         .mockResolvedValue(result);
