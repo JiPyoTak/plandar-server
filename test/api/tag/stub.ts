@@ -1,6 +1,6 @@
 import { User } from '@/entity/user.entity';
 
-const MOCK_TAG = {
+const STUB_TAG = {
   id: 1,
   name: 'test tag',
   createdAt: new Date(),
@@ -8,4 +8,4 @@ const MOCK_TAG = {
   user: {} as User,
 };
 
-export { MOCK_TAG };
+export { STUB_TAG };

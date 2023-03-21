@@ -3,11 +3,11 @@ import * as testRequest from 'supertest';
 
 import { TagController } from '@/api/tag/tag.controller';
 import { TagService } from '@/api/tag/tag.service';
-import { MOCK_TAG } from 'test/api/tag/mock';
+import { STUB_TAG } from 'test/api/tag/stub';
 import createTestingModule from 'test/utils/createTestingModule';
 
 describe('TagController', () => {
-  const mockedTag = { ...MOCK_TAG };
+  const stubTag = { ...STUB_TAG };
   let app: INestApplication;
   let tagService: TagService;
 
@@ -28,8 +28,8 @@ describe('TagController', () => {
   describe('POST /tag', () => {
     it('expect success response with created tag', async () => {
       // given
-      const tag = { name: mockedTag.name };
-      const createdTag = { name: mockedTag.name, id: mockedTag.id };
+      const tag = { name: stubTag.name };
+      const createdTag = { name: stubTag.name, id: stubTag.id };
       const tagServSpy = jest
         .spyOn(tagService, 'createTag')
         .mockResolvedValue(createdTag);
@@ -39,7 +39,7 @@ describe('TagController', () => {
 
       // then
       return request.expect(201).expect((res) => {
-        expect(tagServSpy).toHaveBeenCalledWith(mockedTag.name);
+        expect(tagServSpy).toHaveBeenCalledWith(stubTag.name);
         expect(res.body).toEqual(createdTag);
       });
     });
@@ -49,11 +49,11 @@ describe('TagController', () => {
     it('expect success response with updated tag', async () => {
       // given
       const newTagName = 'new tag name';
-      const id = mockedTag.id;
+      const id = stubTag.id;
       const tag = { name: newTagName };
       const updatedTag = {
         name: newTagName,
-        id: mockedTag.id,
+        id: stubTag.id,
       };
       const tagServSpy = jest
         .spyOn(tagService, 'updateTag')
@@ -75,7 +75,7 @@ describe('TagController', () => {
   describe('DELETE /tag/:tagId', () => {
     it('expect success response with deleted tag', async () => {
       // given
-      const id = mockedTag.id;
+      const id = stubTag.id;
       const result = { success: true };
       const tagServSpy = jest
         .spyOn(tagService, 'deleteTag')
