@@ -5,8 +5,19 @@ const USER_STUB: User = {
   email: 'test@test.com',
   username: '테스트',
   profileImage: '이미지',
-  createdAt: new Date('2023-03-07 15:38:06.785155'),
-  updatedAt: new Date('2023-03-07 15:38:06.785155'),
+  createdAt: new Date(
+    '2023-03-07 15:38:06.785155',
+  ).toISOString() as unknown as Date,
+  updatedAt: new Date(
+    '2023-03-07 15:38:06.785155',
+  ).toISOString() as unknown as Date,
 };
 
-export { USER_STUB };
+const GET_USER_ERROR_STUB = {
+  error: 'Bad Request',
+  message: '존재하지 않는 유저입니다.',
+  statusCode: 400,
+  success: false,
+};
+
+export { USER_STUB, GET_USER_ERROR_STUB };
