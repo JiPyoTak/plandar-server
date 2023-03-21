@@ -7,7 +7,7 @@ import { STUB_TAG } from 'test/api/tag/stub';
 import createTestingModule from 'test/utils/createTestingModule';
 
 describe('TagController', () => {
-  const stubTag = { ...STUB_TAG };
+  const stubTag = Object.assign({}, STUB_TAG);
   let app: INestApplication;
   let tagService: TagService;
 
