@@ -5,7 +5,14 @@ const STUB_TAG = {
   name: 'test tag',
   createdAt: new Date(),
   updatedAt: new Date(),
-  user: {} as User,
+  user: {
+    id: 1,
+    username: 'test user',
+    email: 'test@test.com',
+    profileImage: 'test image',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  } as User,
 };
 
 export { STUB_TAG };
