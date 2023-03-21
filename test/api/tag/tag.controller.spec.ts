@@ -16,7 +16,7 @@ describe('TagController', () => {
 
     app = moduleRef.createNestApplication();
     await app.init();
-    tagService = await app.resolve<TagService>(tagService);
+    tagService = await app.resolve<TagService>(TagService);
   });
 
   it('Check defining Modules', () => {
