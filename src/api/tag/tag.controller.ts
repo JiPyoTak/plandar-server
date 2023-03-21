@@ -15,7 +15,9 @@ import {
 } from '@nestjs/swagger';
 
 import { TagService } from '@/api/tag/tag.service';
-import { TagReqDto, TagResDto } from '@/dto/tag/create-tag.dto';
+import { TagDeleteReqDto, TagReqDto, TagResDto } from '@/dto/tag/tag.dto';
+
+const USER_ID = 1;
 
 @ApiTags('tag')
 @Controller('tag')
@@ -32,7 +34,7 @@ export class TagController {
   })
   @Post()
   async createTag(@Body() { name: tagName }: TagReqDto) {
-    return this.tagService.createTag(tagName);
+    return this.tagService.createTag({ userId: USER_ID, tagName });
   }
 
   @ApiOperation({
@@ -47,7 +49,7 @@ export class TagController {
     @Param('tagId', ParseIntPipe) tagId: number,
     @Body() { name: tagName }: TagReqDto,
   ) {
-    return this.tagService.updateTag(tagId, tagName);
+    return this.tagService.updateTag({ userId: USER_ID, tagId, tagName });
   }
 
   @ApiOperation({
@@ -58,7 +60,7 @@ export class TagController {
     type: () => true,
   })
   @Delete('/:tagId')
-  async deleteTag(@Param('tagId', ParseIntPipe) tagId: number) {
-    return this.tagService.deleteTag(tagId);
+  async deleteTag(@Param() { id: tagId }: TagDeleteReqDto) {
+    return this.tagService.deleteTag({ userId: USER_ID, tagId });
   }
 }

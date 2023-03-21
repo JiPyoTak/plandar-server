@@ -28,19 +28,25 @@ describe('TagController', () => {
   describe('POST /tag', () => {
     it('expect success response with created tag', async () => {
       // given
-      const tag = { name: stubTag.name };
-      const createdTag = { name: stubTag.name, id: stubTag.id };
+      const userId = stubTag.user.id;
+      const reqBody = { name: stubTag.name };
+      const resBody = { name: stubTag.name, id: stubTag.id };
       const tagServSpy = jest
         .spyOn(tagService, 'createTag')
-        .mockResolvedValue(createdTag);
+        .mockResolvedValue(resBody);
 
       // when
-      const request = testRequest(app.getHttpServer()).post('/tag').send(tag);
+      const request = testRequest(app.getHttpServer())
+        .post('/tag')
+        .send(reqBody);
 
       // then
       return request.expect(201).expect((res) => {
-        expect(tagServSpy).toHaveBeenCalledWith(stubTag.name);
-        expect(res.body).toEqual(createdTag);
+        expect(tagServSpy).toHaveBeenCalledWith({
+          userId,
+          tagName: stubTag.name,
+        });
+        expect(res.body).toEqual(resBody);
       });
     });
   });
@@ -49,25 +55,30 @@ describe('TagController', () => {
     it('expect success response with updated tag', async () => {
       // given
       const newTagName = 'new tag name';
-      const id = stubTag.id;
-      const tag = { name: newTagName };
-      const updatedTag = {
+      const tagId = stubTag.id;
+      const userId = stubTag.user.id;
+      const reqBody = { name: newTagName };
+      const resBody = {
         name: newTagName,
         id: stubTag.id,
       };
       const tagServSpy = jest
         .spyOn(tagService, 'updateTag')
-        .mockResolvedValue(updatedTag);
+        .mockResolvedValue(resBody);
 
       // when
       const request = testRequest(app.getHttpServer())
-        .put(`/tag/${id}`)
-        .send(tag);
+        .put(`/tag/${tagId}`)
+        .send(reqBody);
 
       // then
       return request.expect(200).expect((res) => {
-        expect(tagServSpy).toHaveBeenCalledWith(id, newTagName);
-        expect(res.body).toEqual(updatedTag);
+        expect(tagServSpy).toHaveBeenCalledWith({
+          userId,
+          tagId,
+          tagName: newTagName,
+        });
+        expect(res.body).toEqual(resBody);
       });
     });
   });
@@ -75,19 +86,20 @@ describe('TagController', () => {
   describe('DELETE /tag/:tagId', () => {
     it('expect success response with deleted tag', async () => {
       // given
-      const id = stubTag.id;
-      const result = { success: true };
+      const userId = stubTag.user.id;
+      const tagId = stubTag.id;
+      const resBody = { success: true };
       const tagServSpy = jest
         .spyOn(tagService, 'deleteTag')
-        .mockResolvedValue(result);
+        .mockResolvedValue(resBody);
 
       // when
-      const request = testRequest(app.getHttpServer()).delete(`/tag/${id}`);
+      const request = testRequest(app.getHttpServer()).delete(`/tag/${tagId}`);
 
       // then
       return request.expect(200).expect((res) => {
-        expect(tagServSpy).toHaveBeenCalledWith(id);
-        expect(res.body).toEqual(result);
+        expect(tagServSpy).toHaveBeenCalledWith({ userId, tagId });
+        expect(res.body).toEqual(resBody);
       });
     });
   });
