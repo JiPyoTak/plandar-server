@@ -10,16 +10,14 @@ import { UserService } from '@/api/user/user.service';
 import { HttpExceptionFilter } from '@/common/http-exception.filter';
 import { SuccessInterceptor } from '@/common/success.interceptor';
 import { JwtAuthGuard } from '@/guard/jwt-auth.guard';
+import { createMockJwtAuthGuard } from 'test/utils/createMockJwtAuthGuard';
 import createTestingModule from 'test/utils/createTestingModule';
 
 import { GET_USER_ERROR_STUB, USER_STUB } from './mock';
 
 describe('UserController', () => {
   const mockUser = Object.assign({}, USER_STUB);
-  const mockJwtAuthGuard = {
-    canActivate: jest.fn(() => true),
-    handleRequest: jest.fn(() => ({ id: mockUser.id })),
-  };
+  const mockJwtAuthGuard = createMockJwtAuthGuard(mockUser.id);
 
   let app: INestApplication;
   let userService: UserService;
