@@ -1,43 +1,36 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { Transactional } from 'typeorm-transactional';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 import { UserRepository } from '@/api/user/user.repository';
 import { CreateUserRetDto } from '@/dto/user/create-user.dto';
+import { User } from '@/entity/user.entity';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepo: UserRepository) {}
 
-  @Transactional()
-  async createUser(success: boolean): Promise<CreateUserRetDto[]> {
-    const ret = [];
-    for (let i = 0; i < 3; i++) {
-      const num = Math.random() * 10000;
-      if (i === 2 && !success) {
-        throw new InternalServerErrorException('transaction failed');
-      }
-      const { username, id } = await this.userRepo.createUser(
-        `user${Math.floor(num)}`,
-      );
-      ret.push({ username, id });
+  async getUser(id: number): Promise<User> {
+    const user = await this.userRepo.getUserById(id);
+
+    if (!user) {
+      throw new BadRequestException('존재하지 않는 유저입니다.');
     }
-    return ret;
+
+    return user;
   }
 
-  async getUsers() {
-    return this.userRepo.find();
-  }
+  async createUser(userInfo: CreateUserRetDto): Promise<User> {
+    const user = await this.userRepo.findOne({
+      where: { email: userInfo.email },
+    });
 
-  @Transactional()
-  async createUserWithTime(time: number, success: boolean) {
-    const data = [];
-    for (let i = 0; i < time; i++) {
-      if (i === time - 1 && !success) {
-        throw new InternalServerErrorException('transaction failed');
-      } else {
-        data.push(...(await this.createUser(true)));
-      }
+    if (user) {
+      throw new BadRequestException('이미 존재하는 유저입니다.');
     }
-    return data;
+
+    return this.userRepo.createUser(userInfo);
   }
 }
