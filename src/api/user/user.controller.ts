@@ -1,12 +1,10 @@
-import { Controller, Get, Post, Query } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { UserService } from '@/api/user/user.service';
-import {
-  CreateUserQueryDto,
-  CreateUserRetDto,
-} from '@/dto/user/create-user.dto';
-import { User } from '@/entity/user.entity';
+import { User } from '@/decorators/user.decorator';
+import { User as UserEntity } from '@/entity/user.entity';
+import { JwtAuthGuard } from '@/guard/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -16,35 +14,12 @@ export class UserController {
     status: 500,
     description: '데이터 베이스에서 제대로 값을 읽어오지 못한 경우',
   })
-  @ApiResponse({
-    status: 200,
-    type: User,
-    isArray: true,
-  })
-  @ApiOperation({ summary: '모든 유저정보 데이터 가져오기' })
+  @ApiResponse({ status: 400, description: '유저 정보가 존재하지 않을경우' })
+  @ApiResponse({ status: 200, type: UserEntity })
+  @ApiOperation({ summary: '유저 정보 가져오기' })
+  @UseGuards(JwtAuthGuard)
   @Get()
-  async getUsers() {
-    return this.userService.getUsers();
-  }
-
-  @ApiResponse({
-    status: 500,
-    description: '트랜잭션 실패한 경우',
-  })
-  @ApiResponse({
-    status: 400,
-    description: '올바른 쿼리를 넣어주지 않은 경우',
-  })
-  @ApiResponse({
-    status: 200,
-    type: CreateUserRetDto,
-    isArray: true,
-  })
-  @ApiOperation({ summary: '3 * time 만큼의 새로운 유저 생성' })
-  @Post()
-  async createUser(@Query() { time, success }: CreateUserQueryDto) {
-    return time
-      ? this.userService.createUserWithTime(time, success)
-      : this.userService.createUser(success);
+  getUser(@User() user: UserEntity) {
+    return this.userService.getUser(user.id);
   }
 }
