@@ -6,15 +6,46 @@ import { Tag } from '@/entity/tag.entity';
 
 @CustomRepository(Tag)
 export class TagRepository extends Repository<Tag> {
+  async getTagById({ tagId, userId }: { tagId: number; userId: number }) {
+    return this.findOne({
+      where: {
+        id: tagId,
+        user: { id: userId },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+  }
+
+  async getTagByName({ tagName, userId }: { tagName: string; userId: number }) {
+    return this.findOne({
+      where: {
+        name: tagName,
+        user: { id: userId },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+  }
+
   async createTag({ tagName, userId }: CreateTagArgs) {
-    return this.save(this.create({ name: tagName, user: { id: userId } }));
+    const {
+      identifiers: [{ id }],
+    } = await this.insert({ name: tagName, user: { id: userId } });
+    return this.getTagById({ tagId: id, userId });
   }
 
   async updateTag({ tagName, userId, tagId }: UpdateTagArgs) {
-    return this.update({ id: tagId, user: { id: userId } }, { name: tagName });
+    await this.update({ id: tagId, user: { id: userId } }, { name: tagName });
+    return this.getTagById({ tagId, userId });
   }
 
-  async deleteTag({ tagName, userId }: DeleteTagArgs) {
-    return this.delete({ name: tagName, user: { id: userId } });
+  async deleteTag({ tagId, userId }: DeleteTagArgs) {
+    const { affected } = await this.delete({ id: tagId, user: { id: userId } });
+    return !!affected;
   }
 }
