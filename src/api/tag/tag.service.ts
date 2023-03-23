@@ -13,7 +13,7 @@ export class TagService {
   constructor(private readonly tagRepo: TagRepository) {}
 
   async createTag(createTagArgs: CreateTagArgs): Promise<TagResDto> {
-    const tag = await this.tagRepo.getTagByName(createTagArgs);
+    const tag = await this.tagRepo.findTagByName(createTagArgs);
     if (tag) {
       throw new ConflictException('Tag already exists');
     }
@@ -21,7 +21,7 @@ export class TagService {
   }
 
   async updateTag(updateTagArgs: UpdateTagArgs): Promise<TagResDto> {
-    const tag = await this.tagRepo.getTagById({
+    const tag = await this.tagRepo.findTagById({
       tagId: updateTagArgs.tagId,
       userId: updateTagArgs.userId,
     });

@@ -11,7 +11,7 @@ import { Tag } from '@/entity/tag.entity';
 
 @CustomRepository(Tag)
 export class TagRepository extends Repository<Tag> {
-  async getTagById({
+  async findTagById({
     tagId,
     userId,
   }: {
@@ -30,7 +30,7 @@ export class TagRepository extends Repository<Tag> {
     });
   }
 
-  async getTagByName({
+  async findTagByName({
     tagName,
     userId,
   }: {
@@ -53,7 +53,7 @@ export class TagRepository extends Repository<Tag> {
     const {
       identifiers: [{ id }],
     } = await this.insert({ name: tagName, user: { id: userId } });
-    return this.getTagById({ tagId: id, userId });
+    return this.findTagById({ tagId: id, userId });
   }
 
   async updateTag({
@@ -62,7 +62,7 @@ export class TagRepository extends Repository<Tag> {
     tagId,
   }: UpdateTagArgs): Promise<TagResDto> {
     await this.update({ id: tagId, user: { id: userId } }, { name: tagName });
-    return this.getTagById({ tagId, userId });
+    return this.findTagById({ tagId, userId });
   }
 
   async deleteTag({ tagId, userId }: DeleteTagArgs): Promise<boolean> {
