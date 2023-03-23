@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 
 import { TagRepository } from '@/api/tag/tag.repository';
 import { CreateTagArgs, DeleteTagArgs, UpdateTagArgs } from '@/dto/tag/tag.dto';
@@ -7,15 +7,28 @@ import { CreateTagArgs, DeleteTagArgs, UpdateTagArgs } from '@/dto/tag/tag.dto';
 export class TagService {
   constructor(private readonly tagRepo: TagRepository) {}
 
-  async createTag({ userId, tagName }: CreateTagArgs) {
-    return Promise.resolve(undefined);
+  async createTag(createTagArgs: CreateTagArgs) {
+    const tag = await this.tagRepo.getTagByName(createTagArgs);
+    if (tag) {
+      throw new ConflictException('Tag already exists');
+    }
+    return this.tagRepo.createTag(createTagArgs);
   }
 
-  async updateTag({ userId, tagName, tagId }: UpdateTagArgs) {
-    return Promise.resolve(undefined);
+  async updateTag(updateTagArgs: UpdateTagArgs) {
+    const tag = await this.tagRepo.getTagById({
+      tagId: updateTagArgs.tagId,
+      userId: updateTagArgs.userId,
+    });
+    if (!tag) {
+      throw new ConflictException('Tag does not exist');
+    } else if (tag.name === updateTagArgs.tagName) {
+      throw new ConflictException('Tag name is the same');
+    }
+    return this.tagRepo.updateTag(updateTagArgs);
   }
 
-  deleteTag({ tagName, userId }: DeleteTagArgs) {
-    return Promise.resolve(undefined);
+  async deleteTag(deleteTagArgs: DeleteTagArgs) {
+    return this.tagRepo.deleteTag(deleteTagArgs);
   }
 }
