@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 
 import { UserRepository } from '@/api/user/user.repository';
 import { UserService } from '@/api/user/user.service';
@@ -53,7 +53,8 @@ describe('UserService', () => {
         await userService.getUser(id);
       } catch (error) {
         // then
-        expect(error).toBeInstanceOf(BadRequestException);
+        expect(error.status).toEqual(404);
+        expect(error).toBeInstanceOf(NotFoundException);
       }
     });
   });
@@ -94,7 +95,8 @@ describe('UserService', () => {
         await userService.createUser(newUser);
       } catch (error) {
         // then
-        expect(error).toBeInstanceOf(BadRequestException);
+        expect(error.status).toEqual(409);
+        expect(error).toBeInstanceOf(ConflictException);
       }
     });
   });

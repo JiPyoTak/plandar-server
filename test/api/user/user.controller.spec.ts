@@ -1,6 +1,6 @@
 import {
-  BadRequestException,
   INestApplication,
+  NotFoundException,
   ValidationPipe,
 } from '@nestjs/common';
 import * as testRequest from 'supertest';
@@ -76,9 +76,7 @@ describe('UserController', () => {
       const id = mockUser.id;
       const userServSpy = jest
         .spyOn(userService, 'getUser')
-        .mockRejectedValue(
-          new BadRequestException('존재하지 않는 유저입니다.'),
-        );
+        .mockRejectedValue(new NotFoundException('존재하지 않는 유저입니다.'));
 
       // when
       const request = await testRequest(app.getHttpServer())
