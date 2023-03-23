@@ -1,12 +1,23 @@
 import { Repository } from 'typeorm';
 
 import { CustomRepository } from '@/common/customRepository.decorator';
-import { CreateTagArgs, DeleteTagArgs, UpdateTagArgs } from '@/dto/tag/tag.dto';
+import {
+  CreateTagArgs,
+  DeleteTagArgs,
+  TagResDto,
+  UpdateTagArgs,
+} from '@/dto/tag/tag.dto';
 import { Tag } from '@/entity/tag.entity';
 
 @CustomRepository(Tag)
 export class TagRepository extends Repository<Tag> {
-  async getTagById({ tagId, userId }: { tagId: number; userId: number }) {
+  async getTagById({
+    tagId,
+    userId,
+  }: {
+    tagId: number;
+    userId: number;
+  }): Promise<TagResDto> {
     return this.findOne({
       where: {
         id: tagId,
@@ -19,7 +30,13 @@ export class TagRepository extends Repository<Tag> {
     });
   }
 
-  async getTagByName({ tagName, userId }: { tagName: string; userId: number }) {
+  async getTagByName({
+    tagName,
+    userId,
+  }: {
+    tagName: string;
+    userId: number;
+  }): Promise<TagResDto> {
     return this.findOne({
       where: {
         name: tagName,
@@ -32,19 +49,23 @@ export class TagRepository extends Repository<Tag> {
     });
   }
 
-  async createTag({ tagName, userId }: CreateTagArgs) {
+  async createTag({ tagName, userId }: CreateTagArgs): Promise<TagResDto> {
     const {
       identifiers: [{ id }],
     } = await this.insert({ name: tagName, user: { id: userId } });
     return this.getTagById({ tagId: id, userId });
   }
 
-  async updateTag({ tagName, userId, tagId }: UpdateTagArgs) {
+  async updateTag({
+    tagName,
+    userId,
+    tagId,
+  }: UpdateTagArgs): Promise<TagResDto> {
     await this.update({ id: tagId, user: { id: userId } }, { name: tagName });
     return this.getTagById({ tagId, userId });
   }
 
-  async deleteTag({ tagId, userId }: DeleteTagArgs) {
+  async deleteTag({ tagId, userId }: DeleteTagArgs): Promise<boolean> {
     const { affected } = await this.delete({ id: tagId, user: { id: userId } });
     return !!affected;
   }
