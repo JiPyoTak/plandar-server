@@ -2,8 +2,8 @@ import { Controller, Get, UseGuards } from '@nestjs/common';
 import {
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
-  ApiResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
@@ -23,7 +23,7 @@ export class UserController {
     description: 'access된 유저가 인증되지 않은 유저일 경우',
   })
   @ApiNotFoundResponse({ description: '유저 정보가 존재하지 않을경우' })
-  @ApiResponse({ status: 200, type: UserEntity })
+  @ApiOkResponse({ type: UserEntity })
   @ApiOperation({ summary: '유저 정보 가져오기' })
   @UseGuards(JwtAuthGuard)
   @Get()
