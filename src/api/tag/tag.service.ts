@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 import { TagRepository } from '@/api/tag/tag.repository';
 import {
@@ -33,7 +37,17 @@ export class TagService {
     return this.tagRepo.updateTag(updateTagArgs);
   }
 
-  async deleteTag(deleteTagArgs: DeleteTagArgs): Promise<boolean> {
-    return this.tagRepo.deleteTag(deleteTagArgs);
+  async deleteTag(deleteTagArgs: DeleteTagArgs): Promise<TagResDto> {
+    const tag = await this.tagRepo.findTagById(deleteTagArgs);
+    if (!tag) {
+      throw new ConflictException('Tag does not exist');
+    }
+
+    if (!(await this.tagRepo.deleteTag(deleteTagArgs))) {
+      throw new InternalServerErrorException(
+        'There is an error in deleting tag',
+      );
+    }
+    return tag;
   }
 }
