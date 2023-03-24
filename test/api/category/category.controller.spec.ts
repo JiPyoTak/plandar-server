@@ -30,9 +30,13 @@ describe('CategoryController', () => {
     it('get all category', async () => {
       // given
       const userId = stubCategory[0].user.id;
-      const resBody = STUB_CATEGORY;
+      const resBody = STUB_CATEGORY.map((category) => ({
+        name: category.name,
+        id: category.id,
+        color: category.color,
+      }));
       const categoryServSpy = jest
-        .spyOn(categoryService, 'readCategories')
+        .spyOn(categoryService, 'readCategory')
         .mockResolvedValue(resBody);
 
       // when
@@ -98,6 +102,7 @@ describe('CategoryController', () => {
         expect(categoryServSpy).toHaveBeenCalledWith({
           categoryName,
           userId,
+          color,
         });
         expect(res.body).toEqual(resBody);
       });
