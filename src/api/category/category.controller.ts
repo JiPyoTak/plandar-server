@@ -19,8 +19,11 @@ import {
 } from '@nestjs/swagger';
 
 import { CategoryService } from '@/api/category/category.service';
-import { CategoryCreateReqDto, CategoryUpdateReqDto } from '@/dto/category';
-import { CategoryResDto } from '@/dto/category/category-res.dto';
+import {
+  CategoryCreateReqDto,
+  CategoryUpdateReqDto,
+  CategoryResDto,
+} from '@/dto/category';
 
 const USER_ID = 1;
 
