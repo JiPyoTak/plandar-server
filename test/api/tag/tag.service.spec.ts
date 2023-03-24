@@ -150,22 +150,48 @@ describe('TagService', () => {
     });
   });
 
-  describe('delete tag', () => {
-    it('if success return true else return false', async () => {
+  describe('fail delete tag', () => {
+    it('There is no matched tag', async () => {
       // given
       const userId = stubTag.user.id;
       const tagId = stubTag.id;
       const params = { userId, tagId };
-      const shouldBe = true;
-      const tagRepoSpy = jest
+      jest.spyOn(tagRepo, 'findTagById').mockResolvedValue(null);
+
+      try {
+        // when
+        await tagService.deleteTag(params);
+      } catch (e) {
+        // then
+        expect(e).toBeInstanceOf(ConflictException);
+      }
+    });
+  });
+
+  describe('success delete tag', () => {
+    it('return deleted tag info (name & id)', async () => {
+      // given
+      const userId = stubTag.user.id;
+      const tagId = stubTag.id;
+      const params = { userId, tagId };
+      const shouldBe = { name: stubTag.name, id: stubTag.id };
+
+      const tagRepoFindByTagId = jest
+        .spyOn(tagRepo, 'findTagById')
+        .mockResolvedValue({
+          id: tagId,
+          name: stubTag.name,
+        });
+      const tagRepoDeleteTag = jest
         .spyOn(tagRepo, 'deleteTag')
-        .mockResolvedValue(shouldBe);
+        .mockResolvedValue(true);
 
       // when
       const tag = await tagService.deleteTag(params);
 
       // then
-      expect(tagRepoSpy).toHaveBeenCalledWith(params);
+      expect(tagRepoFindByTagId).toHaveBeenCalledWith(params);
+      expect(tagRepoDeleteTag).toHaveBeenCalledWith(params);
       expect(tag).toEqual(shouldBe);
     });
   });
