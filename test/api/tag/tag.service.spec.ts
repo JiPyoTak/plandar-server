@@ -150,6 +150,24 @@ describe('TagService', () => {
     });
   });
 
+  describe('fail delete tag', () => {
+    it('There is no matched tag', async () => {
+      // given
+      const userId = stubTag.user.id;
+      const tagId = stubTag.id;
+      const params = { userId, tagId };
+      jest.spyOn(tagRepo, 'findTagById').mockResolvedValue(null);
+
+      try {
+        // when
+        await tagService.deleteTag(params);
+      } catch (e) {
+        // then
+        expect(e).toBeInstanceOf(ConflictException);
+      }
+    });
+  });
+
   describe('delete tag', () => {
     it('if success return true else return false', async () => {
       // given
