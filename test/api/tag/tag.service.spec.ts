@@ -168,13 +168,20 @@ describe('TagService', () => {
     });
   });
 
-  describe('delete tag', () => {
-    it('if success return true else return false', async () => {
+  describe('success delete tag', () => {
+    it('return deleted tag info (name & id)', async () => {
       // given
       const userId = stubTag.user.id;
       const tagId = stubTag.id;
       const params = { userId, tagId };
-      const shouldBe = true;
+      const shouldBe = { name: stubTag.name, id: stubTag.id };
+
+      const tagRepoFindByTagId = jest
+        .spyOn(tagRepo, 'findTagById')
+        .mockResolvedValue({
+          id: tagId,
+          name: stubTag.name,
+        });
       const tagRepoSpy = jest
         .spyOn(tagRepo, 'deleteTag')
         .mockResolvedValue(shouldBe);
@@ -183,6 +190,7 @@ describe('TagService', () => {
       const tag = await tagService.deleteTag(params);
 
       // then
+      expect(tagRepoFindByTagId).toHaveBeenCalledWith(params);
       expect(tagRepoSpy).toHaveBeenCalledWith(params);
       expect(tag).toEqual(shouldBe);
     });
