@@ -17,7 +17,7 @@ import {
 } from '@nestjs/swagger';
 
 import { TagService } from '@/api/tag/tag.service';
-import { TagReqDto, TagResDto } from '@/dto/tag/tag.dto';
+import { TagReqDto, TagResDto } from '@/dto/tag';
 
 const USER_ID = 1;
 

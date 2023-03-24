@@ -10,7 +10,7 @@ import {
   DeleteTagArgs,
   TagResDto,
   UpdateTagArgs,
-} from '@/dto/tag/tag.dto';
+} from '@/dto/tag';
 
 @Injectable()
 export class TagService {

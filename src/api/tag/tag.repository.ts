@@ -6,7 +6,7 @@ import {
   DeleteTagArgs,
   TagResDto,
   UpdateTagArgs,
-} from '@/dto/tag/tag.dto';
+} from '@/dto/tag';
 import { Tag } from '@/entity/tag.entity';
 
 @CustomRepository(Tag)
