@@ -10,6 +10,7 @@ import { Plan } from '@/entity/plan.entity';
 import { User } from '@/entity/user.entity';
 
 import { PlanModule } from './api/plan/plan.module';
+import { TagModule } from './api/tag/tag.module';
 import { Category } from './entity/category.entity';
 import { Tag } from './entity/tag.entity';
 
@@ -29,7 +30,7 @@ import { Tag } from './entity/tag.entity';
         database: config.get('DB_SCHEMA'),
         entities: [Plan, User, Category, Tag],
         // synchronize: config.get('NODE_ENV') === 'development', // true 시 테이블이 이미 존재하면 에러 발생
-        synchronize: true,
+        // synchronize: true,
         logging: config.get('NODE_ENV') === 'development',
         namingStrategy: new SnakeNamingStrategy(),
       }),
@@ -43,6 +44,7 @@ import { Tag } from './entity/tag.entity';
     }),
     UserModule,
     PlanModule,
+    TagModule,
   ],
 })
 export class AppModule {}
