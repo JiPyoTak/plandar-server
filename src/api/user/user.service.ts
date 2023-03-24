@@ -1,7 +1,7 @@
 import {
-  BadRequestException,
   Injectable,
-  InternalServerErrorException,
+  ConflictException,
+  NotFoundException,
 } from '@nestjs/common';
 
 import { UserRepository } from '@/api/user/user.repository';
@@ -16,7 +16,7 @@ export class UserService {
     const user = await this.userRepo.getUserById(id);
 
     if (!user) {
-      throw new BadRequestException('존재하지 않는 유저입니다.');
+      throw new NotFoundException('존재하지 않는 유저입니다.');
     }
 
     return user;
@@ -28,7 +28,7 @@ export class UserService {
     });
 
     if (user) {
-      throw new BadRequestException('이미 존재하는 유저입니다.');
+      throw new ConflictException('이미 존재하는 유저입니다.');
     }
 
     return this.userRepo.createUser(userInfo);
