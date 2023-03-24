@@ -110,7 +110,22 @@ describe('CategoryController', () => {
   });
 
   describe('PUT /category/:categoryId', () => {
-    it('expect success response with updated category (without color)', async () => {
+    it('expect fail (without both categoryName & color)', async () => {
+      // given
+      const categoryId = stubCategory[0].id;
+
+      // when
+      const request = testRequest(app.getHttpServer())
+        .put(`/category/${categoryId}`)
+        .send({});
+
+      // then
+      return request.expect(422);
+    });
+  });
+
+  describe('PUT /category/:categoryId', () => {
+    it('expect success response with updated category (only categoryName)', async () => {
       // given
       const newCategoryName = 'new category name';
       const categoryId = stubCategory[0].id;
@@ -144,7 +159,41 @@ describe('CategoryController', () => {
   });
 
   describe('PUT /category/:categoryId', () => {
-    it('expect success response with updated category (with color)', async () => {
+    it('expect success response with updated category (only color)', async () => {
+      // given
+      const categoryName = stubCategory[0].name;
+      const categoryId = stubCategory[0].id;
+      const userId = stubCategory[0].user.id;
+      const color = stubCategory[1].color;
+      const reqBody = { color };
+      const resBody = {
+        name: categoryName,
+        id: categoryId,
+        color,
+      };
+      const categoryServSpy = jest
+        .spyOn(categoryService, 'updateCategory')
+        .mockResolvedValue(resBody);
+
+      // when
+      const request = testRequest(app.getHttpServer())
+        .put(`/category/${categoryId}`)
+        .send(reqBody);
+
+      // then
+      return request.expect(200).expect((res) => {
+        expect(categoryServSpy).toHaveBeenCalledWith({
+          userId,
+          categoryId,
+          color,
+        });
+        expect(res.body).toEqual(resBody);
+      });
+    });
+  });
+
+  describe('PUT /category/:categoryId', () => {
+    it('expect success response with updated category (without both categoryName & color)', async () => {
       // given
       const newCategoryName = 'new category name';
       const newColor = 0x333333;
