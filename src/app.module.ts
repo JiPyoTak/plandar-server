@@ -9,6 +9,7 @@ import { UserModule } from '@/api/user/user.module';
 import { Plan } from '@/entity/plan.entity';
 import { User } from '@/entity/user.entity';
 
+import { CategoryModule } from './api/category/category.module';
 import { PlanModule } from './api/plan/plan.module';
 import { TagModule } from './api/tag/tag.module';
 import { Category } from './entity/category.entity';
@@ -45,6 +46,7 @@ import { Tag } from './entity/tag.entity';
     UserModule,
     PlanModule,
     TagModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}
