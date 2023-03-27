@@ -9,6 +9,8 @@ import { UserModule } from '@/api/user/user.module';
 import { Plan } from '@/entity/plan.entity';
 import { User } from '@/entity/user.entity';
 
+
+import { AuthModule } from './api/auth/auth.module';
 import { CategoryModule } from './api/category/category.module';
 import { PlanModule } from './api/plan/plan.module';
 import { TagModule } from './api/tag/tag.module';
@@ -45,6 +47,7 @@ import { Tag } from './entity/tag.entity';
     }),
     UserModule,
     PlanModule,
+    AuthModule,
     TagModule,
     CategoryModule,
   ],
