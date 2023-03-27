@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 
 import { UserService } from '@/api/user/user.service';
-import { User } from '@/decorators/user.decorator';
+import { ITokenUser, User } from '@/decorators/user.decorator';
 import { User as UserEntity } from '@/entity/user.entity';
 import { JwtAuthGuard } from '@/guard/jwt-auth.guard';
 
@@ -27,7 +27,7 @@ export class UserController {
   @ApiOperation({ summary: '유저 정보 가져오기' })
   @UseGuards(JwtAuthGuard)
   @Get()
-  getUser(@User() user: UserEntity) {
-    return this.userService.getUser(user?.id);
+  async getUser(@User() user: ITokenUser) {
+    return this.userService.getUser(user.id);
   }
 }
