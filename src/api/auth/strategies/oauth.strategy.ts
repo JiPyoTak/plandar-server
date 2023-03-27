@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy, Type } from '@nestjs/passport';
 import { Strategy } from 'passport';
@@ -60,7 +60,7 @@ const getProfileByProvider = (
         ),
       };
     default:
-      throw new BadRequestException('유저 정보가 존재하지 않습니다.');
+      throw new InternalServerErrorException('유저 정보가 존재하지 않습니다.');
   }
 };
 
