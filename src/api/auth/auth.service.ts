@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   signature(user: User, options: JwtSignOptions = {}) {
-    return this.jwtService.sign(user, options);
+    return this.jwtService.sign({ id: user.id }, options);
   }
 
   registerTokenInCookie(type: TokenType, token: string, res: Response) {
