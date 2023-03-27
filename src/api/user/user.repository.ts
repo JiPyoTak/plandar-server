@@ -13,4 +13,8 @@ export class UserRepository extends Repository<User> {
   async getUserById(id: number) {
     return this.findOne({ where: { id } });
   }
+
+  async getUserByEmail(email: string) {
+    return this.findOne({ where: { email } });
+  }
 }
