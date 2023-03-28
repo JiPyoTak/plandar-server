@@ -27,24 +27,36 @@ export class CategoryService {
       userId: createCategoryArgs.userId,
       categoryName: createCategoryArgs.categoryName,
     });
+
     if (category) {
       throw new ConflictException('Category already exists');
     }
+
     return this.categoryRepo.createCategory(createCategoryArgs);
   }
 
   async updateCategory(
     updateCategoryArgs: UpdateCategoryArgs,
   ): Promise<CategoryResDto> {
-    const category = await this.categoryRepo.findCategoryByName({
-      categoryName: updateCategoryArgs.categoryName,
+    const category = await this.categoryRepo.findCategoryById({
       userId: updateCategoryArgs.userId,
+      categoryId: updateCategoryArgs.categoryId,
     });
+
+    updateCategoryArgs.categoryName ??= category.name;
+    updateCategoryArgs.color ??= category.color;
+
     if (!category) {
-      throw new ConflictException('Tag does not exist');
-    } else if (category.name === updateCategoryArgs.categoryName) {
-      throw new ConflictException('Tag name is the same');
+      throw new ConflictException('Category does not exist');
+    } else if (
+      category.name === updateCategoryArgs.categoryName &&
+      category.color === updateCategoryArgs.color
+    ) {
+      throw new ConflictException(
+        'Please change category to not same name or color',
+      );
     }
+
     return this.categoryRepo.updateCategory(updateCategoryArgs);
   }
 
@@ -55,7 +67,7 @@ export class CategoryService {
       deleteCategoryArgs,
     );
     if (!category) {
-      throw new ConflictException('Tag does not exist');
+      throw new ConflictException('Category does not exist');
     }
 
     if (!(await this.categoryRepo.deleteCategory(deleteCategoryArgs))) {
