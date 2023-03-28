@@ -1,9 +1,9 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import * as testRequest from 'supertest';
 
 import { AuthController } from '@/api/auth/auth.controller';
 import { AuthService } from '@/api/auth/auth.service';
-import { JwtAuthGuard } from '@/api/auth/guards/jwt-auth.guard';
 import { GoogleAuthGuard } from '@/api/auth/guards/oauth.guard';
 import { HttpExceptionFilter } from '@/common/http-exception.filter';
 import { SuccessInterceptor } from '@/common/success.interceptor';
@@ -25,10 +25,10 @@ describe('AuthController', () => {
     const moduleRef = await createTestingModule(
       {
         controllers: [AuthController],
+        providers: [{ provide: APP_GUARD, useValue: mockJwtAuthGuard }],
       },
       undefined,
       (builder) => {
-        builder.overrideGuard(JwtAuthGuard).useValue(mockJwtAuthGuard);
         builder.overrideGuard(GoogleAuthGuard).useValue(mockoAuthGuard);
       },
     );
