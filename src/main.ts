@@ -1,13 +1,37 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import {
+  SwaggerModule,
+  DocumentBuilder,
+  SwaggerCustomOptions,
+} from '@nestjs/swagger';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { HttpExceptionFilter } from '@/common/http-exception.filter';
 import { SuccessInterceptor } from '@/common/success.interceptor';
 
 import { AppModule } from './app.module';
+
+const swaggerOptions: SwaggerCustomOptions = {
+  swaggerOptions: {
+    persistAuthorization: true,
+    authAction: {
+      defaultBearerAuth: {
+        name: 'defaultBearerAuth',
+        schema: {
+          description: 'Default',
+          type: 'http',
+          in: 'header',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+        value:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjc5OTkyMzE2LCJleHAiOjE5OTU1NjgzMTZ9.aKtmtPBeFpOo6yxkU3403niWAzxI_ztu1_dPNY_pRo0',
+      },
+    },
+  },
+};
 
 async function bootstrap() {
   // transactional
@@ -34,10 +58,13 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Plandar API')
     .setDescription('Plandar 서비스를 위한 API 문서')
-    .setVersion('1.0')
+    .setVersion('1.0.0')
+    .addBearerAuth(undefined, 'defaultBearerAuth')
+    .addSecurityRequirements('defaultBearerAuth')
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, swaggerOptions);
 
   await app.listen(PORT || 4000);
 }
