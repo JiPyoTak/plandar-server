@@ -227,7 +227,7 @@ describe('CategoryService', () => {
   });
 
   describe('success update', () => {
-    it('with only categoryName', async () => {
+    it('with only different categoryName', async () => {
       // given
       const userId = stubCategory[0].user.id;
       const categoryId = stubCategory[0].id;
@@ -266,7 +266,7 @@ describe('CategoryService', () => {
       expect(category).toEqual(shouldBe);
     });
 
-    it('with only color', async () => {
+    it('with only different color', async () => {
       // given
       const userId = stubCategory[0].user.id;
       const categoryId = stubCategory[0].id;
@@ -305,7 +305,87 @@ describe('CategoryService', () => {
       expect(category).toEqual(shouldBe);
     });
 
-    it('with both name and color', async () => {
+    it('with different categoryName and same color', async () => {
+      // given
+      const userId = stubCategory[0].user.id;
+      const categoryId = stubCategory[0].id;
+      const categoryName = stubCategory[0].name;
+      const color = stubCategory[0].color;
+      const newCategoryName = 'new Category Name';
+      const params = {
+        userId,
+        categoryId,
+        color,
+        categoryName: newCategoryName,
+      };
+      const shouldBe = {
+        name: newCategoryName,
+        id: categoryId,
+        color,
+      };
+
+      const categoryFindById = jest
+        .spyOn(categoryRepo, 'findCategoryById')
+        .mockResolvedValue({
+          name: categoryName,
+          id: categoryId,
+          color,
+        });
+
+      const categoryRepoSpy = jest
+        .spyOn(categoryRepo, 'updateCategory')
+        .mockResolvedValue(shouldBe);
+
+      // when
+      const category = await categoryService.updateCategory(params);
+
+      // then
+      expect(categoryFindById).toHaveBeenCalledWith({ userId, categoryId });
+      expect(categoryRepoSpy).toHaveBeenCalledWith(params);
+      expect(category).toEqual(shouldBe);
+    });
+
+    it('with different color and same categoryName', async () => {
+      // given
+      const userId = stubCategory[0].user.id;
+      const categoryId = stubCategory[0].id;
+      const categoryName = stubCategory[0].name;
+      const color = stubCategory[0].color;
+      const newColor = stubCategory[1].color;
+      const params = {
+        userId,
+        categoryId,
+        categoryName,
+        color: newColor,
+      };
+      const shouldBe = {
+        name: categoryName,
+        id: categoryId,
+        color: newColor,
+      };
+
+      const categoryFindById = jest
+        .spyOn(categoryRepo, 'findCategoryById')
+        .mockResolvedValue({
+          name: categoryName,
+          id: categoryId,
+          color,
+        });
+
+      const categoryRepoSpy = jest
+        .spyOn(categoryRepo, 'updateCategory')
+        .mockResolvedValue(shouldBe);
+
+      // when
+      const category = await categoryService.updateCategory(params);
+
+      // then
+      expect(categoryFindById).toHaveBeenCalledWith({ userId, categoryId });
+      expect(categoryRepoSpy).toHaveBeenCalledWith(params);
+      expect(category).toEqual(shouldBe);
+    });
+
+    it('with both different name and color', async () => {
       // given
       const userId = stubCategory[0].user.id;
       const categoryId = stubCategory[0].id;
