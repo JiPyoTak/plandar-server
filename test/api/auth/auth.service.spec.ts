@@ -4,7 +4,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { AuthService } from '@/api/auth/auth.service';
 import { UserService } from '@/api/user/user.service';
 import { User } from '@/entity/user.entity';
-import { TokenType } from '@/utils/constants';
+import { TokenType } from '@/types';
 import { USER_STUB } from 'test/api/user/mock';
 import createTestingModule from 'test/utils/createTestingModule';
 
