@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
@@ -10,6 +11,7 @@ import { Plan } from '@/entity/plan.entity';
 import { User } from '@/entity/user.entity';
 
 import { AuthModule } from './api/auth/auth.module';
+import { JwtAuthGuard } from './api/auth/guards/jwt-auth.guard';
 import { CategoryModule } from './api/category/category.module';
 import { PlanModule } from './api/plan/plan.module';
 import { TagModule } from './api/tag/tag.module';
@@ -50,5 +52,6 @@ import { Tag } from './entity/tag.entity';
     TagModule,
     CategoryModule,
   ],
+  providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
 export class AppModule {}

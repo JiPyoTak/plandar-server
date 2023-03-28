@@ -10,7 +10,6 @@ import {
 import { UserService } from '@/api/user/user.service';
 import { User } from '@/decorators/user.decorator';
 import { User as UserEntity } from '@/entity/user.entity';
-import { JwtAuthGuard } from '@/guard/jwt-auth.guard';
 import { TTokenUser } from '@/types';
 
 @Controller('user')
@@ -26,7 +25,6 @@ export class UserController {
   @ApiNotFoundResponse({ description: '유저 정보가 존재하지 않을경우' })
   @ApiOkResponse({ type: UserEntity })
   @ApiOperation({ summary: '유저 정보 가져오기' })
-  @UseGuards(JwtAuthGuard)
   @Get()
   async getUser(@User() user: TTokenUser) {
     return this.userService.getUser(user.id);
