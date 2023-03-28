@@ -7,7 +7,7 @@ import createTestingModule from 'test/utils/createTestingModule';
 import { STUB_CATEGORY } from './stub';
 
 describe('CategoryService', () => {
-  const stubCategory = Object.assign({}, STUB_CATEGORY);
+  const stubCategory = STUB_CATEGORY;
 
   let categoryRepo: CategoryRepository;
   let categoryService: CategoryService;
@@ -272,15 +272,16 @@ describe('CategoryService', () => {
       const categoryId = stubCategory[0].id;
       const categoryName = stubCategory[0].name;
       const color = stubCategory[0].color;
+      const newColor = stubCategory[1].color;
       const params = {
         userId,
         categoryId,
-        color,
+        color: newColor,
       };
       const shouldBe = {
         name: categoryName,
         id: categoryId,
-        color,
+        color: newColor,
       };
 
       const categoryFindById = jest
@@ -391,7 +392,7 @@ describe('CategoryService', () => {
         .mockResolvedValue(shouldBe);
       const categoryRepoSpy = jest
         .spyOn(categoryRepo, 'deleteCategory')
-        .mockResolvedValue(shouldBe);
+        .mockResolvedValue(true);
 
       // when
       const category = await categoryService.deleteCategory(params);
