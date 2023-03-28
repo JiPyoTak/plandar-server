@@ -4,10 +4,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { User as UserEntity } from '@/entity/user.entity';
-
-export type ITokenUser = Pick<UserEntity, 'id'>;
-
 export const User = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();

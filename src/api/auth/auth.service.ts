@@ -3,7 +3,8 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { CookieOptions, Response } from 'express';
 
 import { User } from '@/entity/user.entity';
-import { AuthEnvironment, ENV_PROVIDER, TokenType } from '@/utils/constants';
+import { AuthEnvironment, TokenType } from '@/types';
+import { ENV_PROVIDER } from '@/utils/constants';
 
 @Injectable()
 export class AuthService {
