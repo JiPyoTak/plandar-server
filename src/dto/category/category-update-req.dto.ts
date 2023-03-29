@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsHexColor, IsOptional, IsString } from 'class-validator';
 
 class CategoryUpdateReqDto {
   @ApiPropertyOptional({
@@ -13,15 +13,12 @@ class CategoryUpdateReqDto {
 
   @ApiPropertyOptional({
     description: '카테고리 색상',
-    example: 0x52d681,
-    minimum: 0x000000,
-    maximum: 0xffffff,
-    default: Buffer.from('0x52d681'),
+    example: '#52d681',
   })
   @IsOptional()
-  @IsNumber()
-  @Transform(({ value }) => Buffer.from(value, 'hex'))
-  color?: number;
+  @IsHexColor()
+  @Transform(({ value }) => value.replace('#', ''))
+  color?: string;
 }
 
 export { CategoryUpdateReqDto };
