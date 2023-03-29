@@ -1,14 +1,22 @@
+import { CategoryResDto } from '@/dto/category/category-res.dto';
+
+type HexColor = `#${string}`;
+
+interface CategoryInfo extends Omit<CategoryResDto, 'color'> {
+  color: string;
+}
+
 interface CreateCategoryArgs {
   userId: number;
   categoryName: string;
-  color?: number;
+  color?: string;
 }
 
 interface UpdateCategoryArgs {
   userId: number;
   categoryId: number;
   categoryName?: string;
-  color?: number;
+  color?: string;
 }
 
 interface DeleteCategoryArgs {
@@ -16,4 +24,10 @@ interface DeleteCategoryArgs {
   categoryId: number;
 }
 
-export { CreateCategoryArgs, UpdateCategoryArgs, DeleteCategoryArgs };
+export {
+  CreateCategoryArgs,
+  UpdateCategoryArgs,
+  DeleteCategoryArgs,
+  HexColor,
+  CategoryInfo,
+};
