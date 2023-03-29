@@ -4,7 +4,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { AuthService } from '@/api/auth/auth.service';
 import { UserService } from '@/api/user/user.service';
 import { User } from '@/entity/user.entity';
-import { TokenType } from '@/types';
+import { EJwtTokenType } from '@/types';
 import { USER_STUB } from 'test/api/user/mock';
 import createTestingModule from 'test/utils/createTestingModule';
 
@@ -78,7 +78,7 @@ describe('AuthService', () => {
 
   describe('registerTokenInCookie', () => {
     it('should return true', async () => {
-      const token_type = TokenType.ACCESS;
+      const token_type = EJwtTokenType.ACCESS;
 
       await authService.registerTokenInCookie(
         token_type,
