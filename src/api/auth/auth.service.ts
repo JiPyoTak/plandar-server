@@ -4,6 +4,7 @@ import { CookieOptions, Response } from 'express';
 
 import { User } from '@/entity/user.entity';
 import { AuthEnvironment, EJwtTokenType } from '@/types';
+import { IRegisterTokenInCookieArgs, ISignatureArgs } from '@/types/args';
 import { ENV_PROVIDER } from '@/utils/constants';
 
 @Injectable()
@@ -19,8 +20,8 @@ export class AuthService {
     const accessOptions: JwtSignOptions = { expiresIn: ACCESS_EXPIRES };
     const refreshOptions: JwtSignOptions = { expiresIn: REFRESH_EXPIRES };
 
-    const accessToken = this.signature(user, accessOptions);
-    const refreshToken = this.signature(user, refreshOptions);
+    const accessToken = this.signature({ user, options: accessOptions });
+    const refreshToken = this.signature({ user, options: refreshOptions });
 
     return [accessToken, refreshToken];
   }
@@ -32,11 +33,11 @@ export class AuthService {
     res.clearCookie(REFRESH_HEADER);
   }
 
-  signature(user: User, options: JwtSignOptions = {}) {
+  signature({ user, options = {} }: ISignatureArgs) {
     return this.jwtService.sign({ id: user.id }, options);
   }
 
-  registerTokenInCookie(type: EJwtTokenType, token: string, res: Response) {
+  registerTokenInCookie({ type, token, res }: IRegisterTokenInCookieArgs) {
     const { ACCESS_HEADER, REFRESH_HEADER, COOKIE_MAX_AGE } = this.env;
 
     const tokenName =
