@@ -5,7 +5,7 @@ import {
   CreateCategoryArgs,
   DeleteCategoryArgs,
   UpdateCategoryArgs,
-} from '@/dto/category';
+} from '@/types/args';
 
 @Injectable()
 export class CategoryService {

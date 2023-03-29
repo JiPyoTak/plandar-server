@@ -5,12 +5,8 @@ import {
 } from '@nestjs/common';
 
 import { TagRepository } from '@/api/tag/tag.repository';
-import {
-  CreateTagArgs,
-  DeleteTagArgs,
-  TagResDto,
-  UpdateTagArgs,
-} from '@/dto/tag';
+import { TagResDto } from '@/dto/tag';
+import { CreateTagArgs, DeleteTagArgs, UpdateTagArgs } from '@/types/args';
 
 @Injectable()
 export class TagService {
