@@ -3,7 +3,6 @@ import { APP_GUARD } from '@nestjs/core';
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
 
-import {} from 'test/api/auth/mock';
 import { USER_STUB } from 'test/api/user/mock';
 
 import { createMockAuthGuard } from './createMockJwtAuthGuard';
