@@ -5,7 +5,7 @@ import { Response } from 'express';
 import { Public } from '@/decorators/skip-auth.decorator';
 import { User } from '@/decorators/user.decorator';
 import { User as UserEntity } from '@/entity/user.entity';
-import { JwtTokenType } from '@/types';
+import { EJwtTokenType } from '@/types';
 
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard, KakaoAuthGuard } from './guards/oauth.guard';
@@ -25,12 +25,12 @@ export class AuthController {
     const [accessToken, refreshToken] = await this.authService.login(user);
 
     this.authService.registerTokenInCookie(
-      JwtTokenType.ACCESS,
+      EJwtTokenType.ACCESS,
       accessToken,
       res,
     );
     this.authService.registerTokenInCookie(
-      JwtTokenType.REFRESH,
+      EJwtTokenType.REFRESH,
       refreshToken,
       res,
     );
@@ -79,7 +79,13 @@ export class AuthController {
     @User() user: UserEntity,
     @Res({ passthrough: true }) res: Response,
   ) {
-    return await this.loginCallback(user, res);
+    const [accessToken] = await this.authService.login(user);
+
+    this.authService.registerTokenInCookie(
+      EJwtTokenType.ACCESS,
+      accessToken,
+      res,
+    );
   }
 
   @Post('/logout')

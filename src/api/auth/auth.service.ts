@@ -3,7 +3,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { CookieOptions, Response } from 'express';
 
 import { User } from '@/entity/user.entity';
-import { AuthEnvironment, JwtTokenType } from '@/types';
+import { AuthEnvironment, EJwtTokenType } from '@/types';
 import { ENV_PROVIDER } from '@/utils/constants';
 
 @Injectable()
@@ -36,11 +36,11 @@ export class AuthService {
     return this.jwtService.sign({ id: user.id }, options);
   }
 
-  registerTokenInCookie(type: JwtTokenType, token: string, res: Response) {
+  registerTokenInCookie(type: EJwtTokenType, token: string, res: Response) {
     const { ACCESS_HEADER, REFRESH_HEADER, COOKIE_MAX_AGE } = this.env;
 
     const tokenName =
-      type === JwtTokenType.ACCESS ? ACCESS_HEADER : REFRESH_HEADER;
+      type === EJwtTokenType.ACCESS ? ACCESS_HEADER : REFRESH_HEADER;
 
     const cookieOptions: CookieOptions = {
       maxAge: Number(COOKIE_MAX_AGE),

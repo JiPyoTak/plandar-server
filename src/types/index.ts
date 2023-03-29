@@ -1,6 +1,6 @@
 import { User } from '@/entity/user.entity';
 
-enum JwtTokenType {
+const enum EJwtTokenType {
   ACCESS = 'access',
   REFRESH = 'refresh',
 }
@@ -19,4 +19,4 @@ type AuthEnvironment = {
 
 type TTokenUser = Pick<User, 'id'>;
 
-export { JwtTokenType, AuthEnvironment, TTokenUser };
+export { AuthEnvironment, TTokenUser, EJwtTokenType };
