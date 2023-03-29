@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 
 import { CategoryRepository } from '@/api/category/category.repository';
 import {
@@ -11,15 +12,17 @@ import {
   DeleteCategoryArgs,
   UpdateCategoryArgs,
 } from '@/dto/category';
+import { mapToHexColor } from '@/utils/color-converter';
 
 @Injectable()
 export class CategoryService {
   constructor(private readonly categoryRepo: CategoryRepository) {}
 
   async readCategory(userId: number): Promise<CategoryResDto[]> {
-    return this.categoryRepo.readCategory(userId);
+    return mapToHexColor(await this.categoryRepo.readCategory(userId));
   }
 
+  @Transactional()
   async createCategory(
     createCategoryArgs: CreateCategoryArgs,
   ): Promise<CategoryResDto> {
@@ -31,10 +34,12 @@ export class CategoryService {
     if (category) {
       throw new ConflictException('Category already exists');
     }
-
-    return this.categoryRepo.createCategory(createCategoryArgs);
+    return mapToHexColor(
+      await this.categoryRepo.createCategory(createCategoryArgs),
+    );
   }
 
+  @Transactional()
   async updateCategory(
     updateCategoryArgs: UpdateCategoryArgs,
   ): Promise<CategoryResDto> {
@@ -57,9 +62,12 @@ export class CategoryService {
       );
     }
 
-    return this.categoryRepo.updateCategory(updateCategoryArgs);
+    return mapToHexColor(
+      await this.categoryRepo.updateCategory(updateCategoryArgs),
+    );
   }
 
+  @Transactional()
   async deleteCategory(
     deleteCategoryArgs: DeleteCategoryArgs,
   ): Promise<CategoryResDto> {
@@ -75,6 +83,6 @@ export class CategoryService {
         'There is an error in deleting category',
       );
     }
-    return category;
+    return mapToHexColor(category);
   }
 }
