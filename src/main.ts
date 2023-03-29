@@ -27,7 +27,6 @@ const getSwaggerOptions = (token: string) => ({
     },
   },
 });
-const a: any = {};
 
 async function bootstrap() {
   // transactional
