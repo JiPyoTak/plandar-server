@@ -1,5 +1,4 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
 import * as testRequest from 'supertest';
 
 import { AuthController } from '@/api/auth/auth.controller';
@@ -15,7 +14,6 @@ import { TOKEN_STUB } from './mock';
 
 describe('AuthController', () => {
   const mockUser = Object.assign({}, USER_STUB);
-  const mockJwtAuthGuard = createMockAuthGuard(mockUser);
   const mockoAuthGuard = createMockAuthGuard(mockUser);
 
   let app: INestApplication;
@@ -23,10 +21,7 @@ describe('AuthController', () => {
 
   beforeEach(async () => {
     const moduleRef = await createTestingModule(
-      {
-        controllers: [AuthController],
-        providers: [{ provide: APP_GUARD, useValue: mockJwtAuthGuard }],
-      },
+      { controllers: [AuthController] },
       undefined,
       (builder) => {
         builder.overrideGuard(GoogleAuthGuard).useValue(mockoAuthGuard);
@@ -54,7 +49,7 @@ describe('AuthController', () => {
         .spyOn(authService, 'login')
         .mockResolvedValue([TOKEN_STUB, TOKEN_STUB]);
 
-      const authSpyOnByRegistrer = jest
+      const authSpyOnByRegister = jest
         .spyOn(authService, 'registerTokenInCookie')
         .mockReturnThis();
 
@@ -63,7 +58,7 @@ describe('AuthController', () => {
         .expect(302);
 
       expect(authSpyOnByLogin).toBeCalledTimes(1);
-      expect(authSpyOnByRegistrer).toBeCalledTimes(2);
+      expect(authSpyOnByRegister).toBeCalledTimes(2);
     });
   });
 
@@ -73,7 +68,7 @@ describe('AuthController', () => {
         .spyOn(authService, 'login')
         .mockResolvedValue([TOKEN_STUB, TOKEN_STUB]);
 
-      const authSpyOnByRegistrer = jest
+      const authSpyOnByRegister = jest
         .spyOn(authService, 'registerTokenInCookie')
         .mockReturnThis();
 
@@ -82,7 +77,7 @@ describe('AuthController', () => {
         .expect(201);
 
       expect(authSpyOnByLogin).toBeCalledTimes(1);
-      expect(authSpyOnByRegistrer).toBeCalledTimes(2);
+      expect(authSpyOnByRegister).toBeCalledTimes(1);
       expect(request.body).toEqual({ success: true });
     });
   });
