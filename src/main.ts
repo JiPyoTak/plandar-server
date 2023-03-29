@@ -1,11 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import {
-  SwaggerModule,
-  DocumentBuilder,
-  SwaggerCustomOptions,
-} from '@nestjs/swagger';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { HttpExceptionFilter } from '@/common/http-exception.filter';
@@ -13,7 +9,7 @@ import { SuccessInterceptor } from '@/common/success.interceptor';
 
 import { AppModule } from './app.module';
 
-const swaggerOptions: SwaggerCustomOptions = {
+const getSwaggerOptions = (token: string) => ({
   swaggerOptions: {
     persistAuthorization: true,
     authAction: {
@@ -26,12 +22,12 @@ const swaggerOptions: SwaggerCustomOptions = {
           scheme: 'bearer',
           bearerFormat: 'JWT',
         },
-        value:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjc5OTkyMzE2LCJleHAiOjE5OTU1NjgzMTZ9.aKtmtPBeFpOo6yxkU3403niWAzxI_ztu1_dPNY_pRo0',
+        value: token,
       },
     },
   },
-};
+});
+const a: any = {};
 
 async function bootstrap() {
   // transactional
@@ -45,10 +41,12 @@ async function bootstrap() {
   app.useGlobalInterceptors(new SuccessInterceptor());
   app.setGlobalPrefix('api');
 
-  // cors
   const configService = app.get(ConfigService);
   const PORT = configService.get('PORT');
   const CLIENT_URL = configService.get('CLIENT_URL');
+  const TOKEN_STUB = configService.get('TOKEN_STUB');
+
+  // cors
   app.enableCors({
     origin: CLIENT_URL,
     credentials: true,
@@ -64,7 +62,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document, swaggerOptions);
+  SwaggerModule.setup('api', app, document, getSwaggerOptions(TOKEN_STUB));
 
   await app.listen(PORT || 4000);
 }
