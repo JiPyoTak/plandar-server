@@ -56,9 +56,6 @@ export class CategoryService {
         : null,
     ]);
 
-    updateCategoryArgs.categoryName ??= category.name;
-    updateCategoryArgs.color ??= category.color;
-
     if (!category) {
       throw new ConflictException('Category does not exist');
     } else if (categoryByName) {
@@ -71,6 +68,9 @@ export class CategoryService {
         'Please change category to not same name or color',
       );
     }
+
+    updateCategoryArgs.categoryName ??= category.name;
+    updateCategoryArgs.color ??= category.color;
 
     return mapToHexColor(
       await this.categoryRepo.updateCategory(updateCategoryArgs),
