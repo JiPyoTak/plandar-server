@@ -81,7 +81,7 @@ describe('UserController', () => {
       // when
       const request = await testRequest(app.getHttpServer())
         .get(`/user`)
-        .expect(400);
+        .expect(404);
 
       const result = {
         ...GET_USER_ERROR_STUB,
