@@ -66,7 +66,7 @@ describe('UserService', () => {
       const result = { ...mockUser };
 
       const userRepoSpyByfindeOne = jest
-        .spyOn(userRepository, 'findOne')
+        .spyOn(userRepository, 'getUserByEmail')
         .mockResolvedValue(null);
 
       const userRepoSpyByCreateUser = jest
@@ -78,9 +78,7 @@ describe('UserService', () => {
 
       // then
       expect(userRepoSpyByCreateUser).toHaveBeenCalledWith(newUser);
-      expect(userRepoSpyByfindeOne).toHaveBeenCalledWith({
-        where: { email: mockUser.email },
-      });
+      expect(userRepoSpyByfindeOne).toHaveBeenCalledWith(mockUser.email);
       expect(user).toEqual(result);
     });
 

@@ -1,14 +1,14 @@
-import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 
 import { AuthService } from '@/api/auth/auth.service';
 import { UserService } from '@/api/user/user.service';
 import { User } from '@/entity/user.entity';
 import { EJwtTokenType } from '@/types';
+import { ENV_PROVIDER } from '@/utils/constants';
 import { USER_STUB } from 'test/api/user/mock';
 import createTestingModule from 'test/utils/createTestingModule';
 
-import { MockConfigService, RESPONSE_STUB, TOKEN_STUB } from './mock';
+import { MOCK_CONFIG_SERVICE, RESPONSE_STUB, TOKEN_STUB } from './mock';
 
 describe('AuthService', () => {
   const mockUser = Object.assign({}, USER_STUB);
@@ -16,7 +16,6 @@ describe('AuthService', () => {
   let authService: AuthService;
   let userService: UserService;
   let jwtService: JwtService;
-  let configService: ConfigService;
 
   beforeEach(async () => {
     const moduleRef = await createTestingModule({
@@ -25,8 +24,8 @@ describe('AuthService', () => {
         UserService,
         JwtService,
         {
-          provide: ConfigService,
-          useClass: MockConfigService,
+          provide: ENV_PROVIDER,
+          useValue: MOCK_CONFIG_SERVICE,
         },
       ],
     });
@@ -34,14 +33,12 @@ describe('AuthService', () => {
     authService = moduleRef.get<AuthService>(AuthService);
     userService = moduleRef.get<UserService>(UserService);
     jwtService = moduleRef.get<JwtService>(JwtService);
-    configService = moduleRef.get<ConfigService>(ConfigService);
   });
 
   it('Check defining Modules', () => {
     expect(authService).toBeDefined();
     expect(userService).toBeDefined();
     expect(jwtService).toBeDefined();
-    expect(configService).toBeDefined();
   });
 
   describe('signature', () => {
@@ -53,9 +50,12 @@ describe('AuthService', () => {
         .spyOn(jwtService, 'sign')
         .mockReturnValue(TOKEN_STUB);
 
-      const token = authService.signature(user, jwtSignOption);
+      const token = authService.signature({ user, options: jwtSignOption });
 
-      expect(jwtServBySign).toHaveBeenCalledWith(user, jwtSignOption);
+      expect(jwtServBySign).toHaveBeenCalledWith(
+        { id: user.id },
+        jwtSignOption,
+      );
       expect(token).toEqual(TOKEN_STUB);
     });
   });
@@ -80,11 +80,11 @@ describe('AuthService', () => {
     it('should return true', async () => {
       const token_type = EJwtTokenType.ACCESS;
 
-      await authService.registerTokenInCookie(
-        token_type,
-        TOKEN_STUB,
-        RESPONSE_STUB,
-      );
+      await authService.registerTokenInCookie({
+        type: token_type,
+        token: TOKEN_STUB,
+        res: RESPONSE_STUB,
+      });
 
       expect(RESPONSE_STUB.cookie).toBeCalledTimes(1);
     });
