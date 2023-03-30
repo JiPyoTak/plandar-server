@@ -1,4 +1,3 @@
-import { ConfigService } from '@nestjs/config';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 
 import { AuthService } from '@/api/auth/auth.service';
