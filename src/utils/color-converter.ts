@@ -1,11 +1,11 @@
-import { HexColor } from '@/dto/category';
+import { THexColor } from '@/types';
 
-const strToHexColor = (color: string): HexColor => `#${color}`;
+const strToHexColor = (color: string): THexColor => `#${color}`;
 
 const mapToHexColor = <
   IType extends { color: string },
   TArgs = IType | IType[],
-  TForm = { color: HexColor } & Omit<IType, 'color'>,
+  TForm = { color: THexColor } & Omit<IType, 'color'>,
   TReturn = TArgs extends any[] ? TForm[] : TForm,
 >(
   obj: TArgs,

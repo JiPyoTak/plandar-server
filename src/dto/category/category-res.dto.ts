@@ -1,8 +1,8 @@
 import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsHexColor } from 'class-validator';
 
-import { HexColor } from '@/dto/category/args';
 import { Category } from '@/entity/category.entity';
+import { THexColor } from '@/types';
 
 class CategoryResDto extends PickType(Category, ['name', 'id'] as const) {
   @ApiProperty({
@@ -10,7 +10,7 @@ class CategoryResDto extends PickType(Category, ['name', 'id'] as const) {
     example: '#52d681',
   })
   @IsHexColor()
-  color!: HexColor;
+  color!: THexColor;
 }
 
 export { CategoryResDto };
