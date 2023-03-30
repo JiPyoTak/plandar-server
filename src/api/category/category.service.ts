@@ -43,16 +43,26 @@ export class CategoryService {
   async updateCategory(
     updateCategoryArgs: UpdateCategoryArgs,
   ): Promise<CategoryResDto> {
-    const category = await this.categoryRepo.findCategoryById({
-      userId: updateCategoryArgs.userId,
-      categoryId: updateCategoryArgs.categoryId,
-    });
+    const [category, categoryByName] = await Promise.all([
+      this.categoryRepo.findCategoryById({
+        userId: updateCategoryArgs.userId,
+        categoryId: updateCategoryArgs.categoryId,
+      }),
+      updateCategoryArgs.categoryName
+        ? this.categoryRepo.findCategoryByName({
+            userId: updateCategoryArgs.userId,
+            categoryName: updateCategoryArgs.categoryName,
+          })
+        : null,
+    ]);
 
     updateCategoryArgs.categoryName ??= category.name;
     updateCategoryArgs.color ??= category.color;
 
     if (!category) {
       throw new ConflictException('Category does not exist');
+    } else if (categoryByName) {
+      throw new ConflictException('Category already exists');
     } else if (
       category.name === updateCategoryArgs.categoryName &&
       category.color === updateCategoryArgs.color
