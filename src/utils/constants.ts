@@ -4,4 +4,15 @@ const ENV_PROVIDER = 'ENV_PROVIDER';
 
 const IS_PUBLIC_KEY = 'isPublic';
 
-export { PLANDAR_CUSTOM_REPSOITORY, ENV_PROVIDER, IS_PUBLIC_KEY };
+const CATEGORY_SELECT = {
+  id: true,
+  name: true,
+  color: true,
+};
+
+export {
+  PLANDAR_CUSTOM_REPSOITORY,
+  ENV_PROVIDER,
+  IS_PUBLIC_KEY,
+  CATEGORY_SELECT,
+};

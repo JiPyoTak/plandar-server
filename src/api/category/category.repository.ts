@@ -8,12 +8,7 @@ import {
   IDeleteCategoryArgs,
   IUpdateCategoryArgs,
 } from '@/types/args/category';
-
-const SELECT = {
-  id: true,
-  name: true,
-  color: true,
-};
+import { CATEGORY_SELECT } from '@/utils/constants';
 
 @CustomRepository(Category)
 export class CategoryRepository extends Repository<Category> {
@@ -29,7 +24,7 @@ export class CategoryRepository extends Repository<Category> {
         id: categoryId,
         user: { id: userId },
       },
-      select: SELECT,
+      select: CATEGORY_SELECT,
     });
   }
 
@@ -45,7 +40,7 @@ export class CategoryRepository extends Repository<Category> {
         name: categoryName,
         user: { id: userId },
       },
-      select: SELECT,
+      select: CATEGORY_SELECT,
     });
   }
 
@@ -54,7 +49,7 @@ export class CategoryRepository extends Repository<Category> {
       where: {
         user: { id: userId },
       },
-      select: SELECT,
+      select: CATEGORY_SELECT,
     });
   }
 
