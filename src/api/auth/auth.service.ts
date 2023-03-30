@@ -3,7 +3,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { CookieOptions, Response } from 'express';
 
 import { User } from '@/entity/user.entity';
-import { AuthEnvironment, EJwtTokenType } from '@/types';
+import { TAuthEnvironment, EJwtTokenType } from '@/types';
 import { IRegisterTokenInCookieArgs, ISignatureArgs } from '@/types/args';
 import { ENV_PROVIDER } from '@/utils/constants';
 
@@ -11,7 +11,7 @@ import { ENV_PROVIDER } from '@/utils/constants';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject(ENV_PROVIDER) private readonly env: AuthEnvironment,
+    @Inject(ENV_PROVIDER) private readonly env: TAuthEnvironment,
   ) {}
 
   async login(user: User): Promise<[string, string]> {
