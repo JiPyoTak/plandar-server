@@ -5,7 +5,6 @@ import {
   IsOptional,
   IsEnum,
   IsNotEmpty,
-  IsNumber,
   IsString,
   MaxLength,
 } from 'class-validator';
@@ -47,13 +46,13 @@ export class Plan extends DefaultEntity {
 
   @ApiProperty()
   @Column({
-    type: 'binary',
-    length: 3,
-    default: Buffer.from('0x52d681'),
+    type: 'char',
+    length: 6,
+    default: '52d681',
   })
   @IsNotEmpty()
-  @IsNumber()
-  color!: number;
+  @IsString()
+  color!: string;
 
   @ApiProperty()
   @Column({ type: 'boolean', default: true })

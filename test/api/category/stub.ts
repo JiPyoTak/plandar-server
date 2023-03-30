@@ -4,7 +4,7 @@ const STUB_CATEGORY: Category[] = [
   {
     id: 1,
     name: 'category1',
-    color: 0x111111,
+    color: '111111',
     createdAt: new Date(),
     updatedAt: new Date(),
     user: {
@@ -19,7 +19,7 @@ const STUB_CATEGORY: Category[] = [
   {
     id: 2,
     name: 'category2',
-    color: 0x222222,
+    color: '222222',
     createdAt: new Date(),
     updatedAt: new Date(),
     user: {
