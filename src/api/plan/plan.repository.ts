@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 
-import { CustomRepository } from '@/common/customRepository.decorator';
+import { CustomRepository } from '@/common/decorators';
 import { Plan } from '@/entity/plan.entity';
 
 @CustomRepository(Plan)

@@ -5,12 +5,24 @@ import {
 } from '@nestjs/common';
 
 import { UserRepository } from '@/api/user/user.repository';
-import { CreateUserRetDto } from '@/dto/user/create-user.dto';
+import { UserCreateDto } from '@/dto/user';
 import { User } from '@/entity/user.entity';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepo: UserRepository) {}
+
+  async validateUser(userInfo: UserCreateDto) {
+    const user = await this.userRepo.getUserByEmail(userInfo.email);
+
+    if (user) {
+      return user;
+    }
+
+    const newUser = await this.createUser(userInfo);
+
+    return newUser;
+  }
 
   async getUser(id: number): Promise<User> {
     const user = await this.userRepo.getUserById(id);
@@ -22,10 +34,8 @@ export class UserService {
     return user;
   }
 
-  async createUser(userInfo: CreateUserRetDto): Promise<User> {
-    const user = await this.userRepo.findOne({
-      where: { email: userInfo.email },
-    });
+  async createUser(userInfo: UserCreateDto): Promise<User> {
+    const user = await this.userRepo.getUserByEmail(userInfo.email);
 
     if (user) {
       throw new ConflictException('이미 존재하는 유저입니다.');
