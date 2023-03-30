@@ -6,12 +6,12 @@ import {
 import { Transactional } from 'typeorm-transactional';
 
 import { CategoryRepository } from '@/api/category/category.repository';
+import { CategoryResDto } from '@/dto/category';
 import {
-  CategoryResDto,
   CreateCategoryArgs,
   DeleteCategoryArgs,
   UpdateCategoryArgs,
-} from '@/dto/category';
+} from '@/types/args/category';
 import { mapToHexColor } from '@/utils/color-converter';
 
 @Injectable()

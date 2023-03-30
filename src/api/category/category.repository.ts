@@ -1,13 +1,13 @@
 import { Repository } from 'typeorm';
 
-import { CustomRepository } from '@/common/customRepository.decorator';
+import { CustomRepository } from '@/common/decorators/custom-repository.decorator';
+import { Category } from '@/entity/category.entity';
 import {
   CategoryInfo,
   CreateCategoryArgs,
   DeleteCategoryArgs,
   UpdateCategoryArgs,
-} from '@/dto/category';
-import { Category } from '@/entity/category.entity';
+} from '@/types/args/category';
 
 const SELECT = {
   id: true,
