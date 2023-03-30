@@ -15,9 +15,9 @@ export class TagService {
   async createTag(createTagArgs: CreateTagArgs): Promise<TagResDto> {
     const tag = await this.tagRepo.findTagByName(createTagArgs);
     if (tag) {
-      throw new ConflictException('Tag already exists');
+      return tag;
     }
-    return this.tagRepo.createTag(createTagArgs);
+    return await this.tagRepo.createTag(createTagArgs);
   }
 
   async updateTag(updateTagArgs: UpdateTagArgs): Promise<TagResDto> {

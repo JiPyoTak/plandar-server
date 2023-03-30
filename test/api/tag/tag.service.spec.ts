@@ -25,26 +25,25 @@ describe('TagService', () => {
     expect(tagService).toBeDefined();
   });
 
-  describe('fail create tag', () => {
-    it('request create tag already existed', async () => {
+  describe('success create tag', () => {
+    it('request already existed tag', async () => {
       // given
       const tagName = stubTag.name;
       const userId = stubTag.user.id;
-      const alreadyExistTag = { name: stubTag.name, id: stubTag.id };
       const params = { userId, tagName };
-      jest.spyOn(tagRepo, 'findTagByName').mockResolvedValue(alreadyExistTag);
+      const shouldBe = { name: stubTag.name, id: stubTag.id };
 
-      try {
-        // when
-        await tagService.createTag(params);
-      } catch (e) {
-        // then
-        expect(e).toBeInstanceOf(ConflictException);
-      }
+      const tagRepoFindByName = jest
+        .spyOn(tagRepo, 'findTagByName')
+        .mockResolvedValue(shouldBe);
+
+      // when
+      const result = await tagService.createTag(params);
+
+      // then
+      expect(tagRepoFindByName).toHaveBeenCalledWith(params);
+      expect(result).toEqual(shouldBe);
     });
-  });
-
-  describe('success create tag', () => {
     it("should return created tag's name and id", async () => {
       // given
       const tagName = stubTag.name;
