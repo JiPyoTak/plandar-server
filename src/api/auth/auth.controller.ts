@@ -1,10 +1,11 @@
-import { Controller, Get, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 
-import { User } from '@/decorators/user.decorator';
+import { Public, User } from '@/common/decorators';
 import { User as UserEntity } from '@/entity/user.entity';
-import { TokenType } from '@/types';
+import { EJwtTokenType } from '@/types';
+import { ILoginCallbackArgs } from '@/types/args';
 
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard, KakaoAuthGuard } from './guards/oauth.guard';
@@ -20,45 +21,75 @@ export class AuthController {
     this.CLIENT_REDIRECT_URL = configService.get('CLIENT_REDIRECT_URL');
   }
 
-  async loginCallback(user: UserEntity, res: Response) {
+  async loginCallback({ user, res }: ILoginCallbackArgs) {
     const [accessToken, refreshToken] = await this.authService.login(user);
 
-    this.authService.registerTokenInCookie(TokenType.ACCESS, accessToken, res);
-    this.authService.registerTokenInCookie(
-      TokenType.REFRESH,
-      refreshToken,
+    this.authService.registerTokenInCookie({
+      type: EJwtTokenType.ACCESS,
+      token: accessToken,
       res,
-    );
-
-    res.redirect(this.CLIENT_REDIRECT_URL);
+    });
+    this.authService.registerTokenInCookie({
+      type: EJwtTokenType.REFRESH,
+      token: refreshToken,
+      res,
+    });
   }
 
+  @Public()
   @Get('/')
   async get() {
     return 'auth';
   }
 
+  @Public()
   @UseGuards(GoogleAuthGuard)
   @Get('/google')
   async googleLogin() {
     return 'google auth login';
   }
 
+  @Public()
   @UseGuards(KakaoAuthGuard)
   @Get('/kakao')
   async kakaoLogin() {
     return 'kakao auth login';
   }
 
+  @Public()
   @UseGuards(GoogleAuthGuard)
   @Get('/google/callback')
   async googleLoginCallback(@User() user: UserEntity, @Res() res: Response) {
-    return this.loginCallback(user, res);
+    await this.loginCallback({ user, res });
+
+    return res.redirect(this.CLIENT_REDIRECT_URL);
   }
 
+  @Public()
   @UseGuards(KakaoAuthGuard)
   @Get('/kakao/callback')
   async kakaoLoginCallback(@User() user: UserEntity, @Res() res: Response) {
-    return this.loginCallback(user, res);
+    await this.loginCallback({ user, res });
+
+    return res.redirect(this.CLIENT_REDIRECT_URL);
+  }
+
+  @Post('/refresh')
+  async refresh(
+    @User() user: UserEntity,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const [accessToken] = await this.authService.login(user);
+
+    this.authService.registerTokenInCookie({
+      type: EJwtTokenType.ACCESS,
+      token: accessToken,
+      res,
+    });
+  }
+
+  @Post('/logout')
+  async logout(@Res({ passthrough: true }) res: Response) {
+    return await this.authService.clearCookie(res);
   }
 }

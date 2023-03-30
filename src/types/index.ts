@@ -1,11 +1,11 @@
 import { User } from '@/entity/user.entity';
 
-enum TokenType {
+const enum EJwtTokenType {
   ACCESS = 'access',
   REFRESH = 'refresh',
 }
 
-type EnvironmentType =
+type TEnvironmentType =
   | 'JWT_SECRET_KEY'
   | 'ACCESS_HEADER'
   | 'REFRESH_HEADER'
@@ -13,10 +13,10 @@ type EnvironmentType =
   | 'REFRESH_EXPIRES'
   | 'COOKIE_MAX_AGE';
 
-type AuthEnvironment = {
-  [key in EnvironmentType]: string;
+type TAuthEnvironment = {
+  [key in TEnvironmentType]: string;
 };
 
 type TTokenUser = Pick<User, 'id'>;
 
-export { TokenType, AuthEnvironment, TTokenUser };
+export { TAuthEnvironment, TTokenUser, EJwtTokenType };

@@ -5,19 +5,19 @@ import {
 } from '@nestjs/common';
 import * as testRequest from 'supertest';
 
+import { JwtAuthGuard } from '@/api/auth/guards/jwt-auth.guard';
 import { UserController } from '@/api/user/user.controller';
 import { UserService } from '@/api/user/user.service';
-import { HttpExceptionFilter } from '@/common/http-exception.filter';
-import { SuccessInterceptor } from '@/common/success.interceptor';
-import { JwtAuthGuard } from '@/guard/jwt-auth.guard';
-import { createMockJwtAuthGuard } from 'test/utils/createMockJwtAuthGuard';
+import { HttpExceptionFilter } from '@/common/filters';
+import { SuccessInterceptor } from '@/common/interceptors';
+import { createMockAuthGuard } from 'test/utils/createMockJwtAuthGuard';
 import createTestingModule from 'test/utils/createTestingModule';
 
 import { GET_USER_ERROR_STUB, USER_STUB } from './mock';
 
 describe('UserController', () => {
   const mockUser = Object.assign({}, USER_STUB);
-  const mockJwtAuthGuard = createMockJwtAuthGuard(mockUser.id);
+  const mockJwtAuthGuard = createMockAuthGuard(mockUser);
 
   let app: INestApplication;
   let userService: UserService;

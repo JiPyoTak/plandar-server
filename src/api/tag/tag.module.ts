@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { TagRepository } from '@/api/tag/tag.repository';
-import { TypeOrmExModule } from '@/common/typeOrmEx.module';
+import { TypeOrmExModule } from '@/common/modules';
 
 import { TagController } from './tag.controller';
 import { TagService } from './tag.service';

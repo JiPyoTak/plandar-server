@@ -3,11 +3,12 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
-import { TypeOrmExModule } from '@/common/typeOrmEx.module';
+import { TypeOrmExModule } from '@/common/modules';
 import { ENV_PROVIDER } from '@/utils/constants';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { JwtStrategy } from './strategies/jwt-auth.strategy';
 import {
   GoogleAuthStrategy,
   KaKaoAuthStrategy,
@@ -46,6 +47,7 @@ const CustomConfigProvider: Provider = {
     ConfigService,
     GoogleAuthStrategy,
     KaKaoAuthStrategy,
+    JwtStrategy,
     CustomConfigProvider,
   ],
 })

@@ -3,14 +3,15 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { CookieOptions, Response } from 'express';
 
 import { User } from '@/entity/user.entity';
-import { AuthEnvironment, TokenType } from '@/types';
+import { TAuthEnvironment, EJwtTokenType } from '@/types';
+import { IRegisterTokenInCookieArgs, ISignatureArgs } from '@/types/args';
 import { ENV_PROVIDER } from '@/utils/constants';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject(ENV_PROVIDER) private readonly env: AuthEnvironment,
+    @Inject(ENV_PROVIDER) private readonly env: TAuthEnvironment,
   ) {}
 
   async login(user: User): Promise<[string, string]> {
@@ -19,8 +20,8 @@ export class AuthService {
     const accessOptions: JwtSignOptions = { expiresIn: ACCESS_EXPIRES };
     const refreshOptions: JwtSignOptions = { expiresIn: REFRESH_EXPIRES };
 
-    const accessToken = this.signature(user, accessOptions);
-    const refreshToken = this.signature(user, refreshOptions);
+    const accessToken = this.signature({ user, options: accessOptions });
+    const refreshToken = this.signature({ user, options: refreshOptions });
 
     return [accessToken, refreshToken];
   }
@@ -32,15 +33,15 @@ export class AuthService {
     res.clearCookie(REFRESH_HEADER);
   }
 
-  signature(user: User, options: JwtSignOptions = {}) {
+  signature({ user, options = {} }: ISignatureArgs) {
     return this.jwtService.sign({ id: user.id }, options);
   }
 
-  registerTokenInCookie(type: TokenType, token: string, res: Response) {
+  registerTokenInCookie({ type, token, res }: IRegisterTokenInCookieArgs) {
     const { ACCESS_HEADER, REFRESH_HEADER, COOKIE_MAX_AGE } = this.env;
 
     const tokenName =
-      type === TokenType.ACCESS ? ACCESS_HEADER : REFRESH_HEADER;
+      type === EJwtTokenType.ACCESS ? ACCESS_HEADER : REFRESH_HEADER;
 
     const cookieOptions: CookieOptions = {
       maxAge: Number(COOKIE_MAX_AGE),

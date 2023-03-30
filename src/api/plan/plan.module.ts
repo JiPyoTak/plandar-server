@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { TypeOrmExModule } from '@/common/typeOrmEx.module';
+import { TypeOrmExModule } from '@/common/modules';
 
 import { PlanController } from './plan.controller';
 import { PlanRepository } from './plan.repository';

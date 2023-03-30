@@ -1,13 +1,9 @@
 import { Repository } from 'typeorm';
 
-import { CustomRepository } from '@/common/customRepository.decorator';
-import {
-  CreateTagArgs,
-  DeleteTagArgs,
-  TagResDto,
-  UpdateTagArgs,
-} from '@/dto/tag';
+import { CustomRepository } from '@/common/decorators';
+import { TagResDto } from '@/dto/tag';
 import { Tag } from '@/entity/tag.entity';
+import { CreateTagArgs, DeleteTagArgs, UpdateTagArgs } from '@/types/args';
 
 @CustomRepository(Tag)
 export class TagRepository extends Repository<Tag> {
