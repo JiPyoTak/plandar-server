@@ -14,9 +14,9 @@ const USER_STUB: User = {
 };
 
 const GET_USER_ERROR_STUB = {
-  error: 'Bad Request',
+  error: 'Not Found',
   message: '존재하지 않는 유저입니다.',
-  statusCode: 400,
+  statusCode: 404,
   success: false,
 };
 
