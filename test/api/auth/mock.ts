@@ -20,5 +20,13 @@ class MockConfigService {
     return this[key];
   }
 }
+const MOCK_CONFIG_SERVICE = {
+  JWT_SECRET_KEY: 'test',
+  ACCESS_HEADER: 'access',
+  REFRESH_HEADER: 'refresh',
+  ACCESS_EXPIRES: '1h',
+  REFRESH_EXPIRES: '14d',
+  COOKIE_MAX_AGE: 100,
+};
 
-export { TOKEN_STUB, RESPONSE_STUB, MockConfigService };
+export { TOKEN_STUB, RESPONSE_STUB, MOCK_CONFIG_SERVICE, MockConfigService };
