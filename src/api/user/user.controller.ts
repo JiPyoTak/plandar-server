@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 
 import { UserService } from '@/api/user/user.service';
-import { User } from '@/decorators/user.decorator';
+import { User } from '@/common/decorators';
 import { User as UserEntity } from '@/entity/user.entity';
 import { TTokenUser } from '@/types';
 

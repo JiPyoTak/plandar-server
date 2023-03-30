@@ -8,8 +8,8 @@ import * as testRequest from 'supertest';
 import { JwtAuthGuard } from '@/api/auth/guards/jwt-auth.guard';
 import { UserController } from '@/api/user/user.controller';
 import { UserService } from '@/api/user/user.service';
-import { HttpExceptionFilter } from '@/common/http-exception.filter';
-import { SuccessInterceptor } from '@/common/success.interceptor';
+import { HttpExceptionFilter } from '@/common/filters';
+import { SuccessInterceptor } from '@/common/interceptors';
 import { createMockAuthGuard } from 'test/utils/createMockJwtAuthGuard';
 import createTestingModule from 'test/utils/createTestingModule';
 

@@ -9,7 +9,7 @@ import {
 import { Strategy as KStrategy, Profile as KProfile } from 'passport-kakao';
 
 import { UserService } from '@/api/user/user.service';
-import { CreateUserRetDto } from '@/dto/user/create-user.dto';
+import { UserCreateDto } from '@/dto/user';
 
 type Strategyptions = (
   configService: ConfigService,
@@ -40,9 +40,7 @@ const oAuthStrategyGenerator = (
   return OAuthStrategy;
 };
 
-const getProfileByProvider = (
-  profile: GProfile | KProfile,
-): CreateUserRetDto => {
+const getProfileByProvider = (profile: GProfile | KProfile): UserCreateDto => {
   switch (profile.provider) {
     case 'google':
       return {

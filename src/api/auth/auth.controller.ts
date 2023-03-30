@@ -2,10 +2,10 @@ import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 
-import { Public } from '@/decorators/skip-auth.decorator';
-import { User } from '@/decorators/user.decorator';
+import { Public, User } from '@/common/decorators';
 import { User as UserEntity } from '@/entity/user.entity';
 import { EJwtTokenType } from '@/types';
+import { ILoginCallbackArgs } from '@/types/args';
 
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard, KakaoAuthGuard } from './guards/oauth.guard';
@@ -21,19 +21,19 @@ export class AuthController {
     this.CLIENT_REDIRECT_URL = configService.get('CLIENT_REDIRECT_URL');
   }
 
-  async loginCallback(user: UserEntity, res: Response) {
+  async loginCallback({ user, res }: ILoginCallbackArgs) {
     const [accessToken, refreshToken] = await this.authService.login(user);
 
-    this.authService.registerTokenInCookie(
-      EJwtTokenType.ACCESS,
-      accessToken,
+    this.authService.registerTokenInCookie({
+      type: EJwtTokenType.ACCESS,
+      token: accessToken,
       res,
-    );
-    this.authService.registerTokenInCookie(
-      EJwtTokenType.REFRESH,
-      refreshToken,
+    });
+    this.authService.registerTokenInCookie({
+      type: EJwtTokenType.REFRESH,
+      token: refreshToken,
       res,
-    );
+    });
   }
 
   @Public()
@@ -60,7 +60,7 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   @Get('/google/callback')
   async googleLoginCallback(@User() user: UserEntity, @Res() res: Response) {
-    await this.loginCallback(user, res);
+    await this.loginCallback({ user, res });
 
     return res.redirect(this.CLIENT_REDIRECT_URL);
   }
@@ -69,7 +69,7 @@ export class AuthController {
   @UseGuards(KakaoAuthGuard)
   @Get('/kakao/callback')
   async kakaoLoginCallback(@User() user: UserEntity, @Res() res: Response) {
-    await this.loginCallback(user, res);
+    await this.loginCallback({ user, res });
 
     return res.redirect(this.CLIENT_REDIRECT_URL);
   }
@@ -81,11 +81,11 @@ export class AuthController {
   ) {
     const [accessToken] = await this.authService.login(user);
 
-    this.authService.registerTokenInCookie(
-      EJwtTokenType.ACCESS,
-      accessToken,
+    this.authService.registerTokenInCookie({
+      type: EJwtTokenType.ACCESS,
+      token: accessToken,
       res,
-    );
+    });
   }
 
   @Post('/logout')

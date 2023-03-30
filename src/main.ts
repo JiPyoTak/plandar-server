@@ -4,8 +4,8 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
-import { HttpExceptionFilter } from '@/common/http-exception.filter';
-import { SuccessInterceptor } from '@/common/success.interceptor';
+import { HttpExceptionFilter } from '@/common/filters';
+import { SuccessInterceptor } from '@/common/interceptors';
 
 import { AppModule } from './app.module';
 

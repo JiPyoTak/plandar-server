@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { CategoryRepository } from '@/api/category/category.repository';
-import { TypeOrmExModule } from '@/common/typeOrmEx.module';
+import { TypeOrmExModule } from '@/common/modules';
 
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
