@@ -30,14 +30,19 @@ describe('CategoryService', () => {
     it('return category list', async () => {
       // given
       const userId = stubCategory[0].user.id;
-      const shouldBe = stubCategory.map(({ id, name, color }) => ({
+      const repoRet = stubCategory.map(({ id, name, color }) => ({
         id,
         name,
         color,
       }));
+      const shouldBe = stubCategory.map(({ id, name, color }) => ({
+        id,
+        name,
+        color: `#${color}`,
+      }));
       const categoryRepoSpy = jest
         .spyOn(categoryRepo, 'readCategory')
-        .mockResolvedValue(shouldBe);
+        .mockResolvedValue(repoRet);
 
       // when
       const categories = await categoryService.readCategory(userId);
@@ -69,6 +74,7 @@ describe('CategoryService', () => {
         await categoryService.createCategory({ userId, categoryName, color });
       } catch (e) {
         // then
+        console.log(e);
         expect(e).toBeInstanceOf(ConflictException);
       }
       expect(categoryRepoFind).toHaveBeenCalledWith({
@@ -85,7 +91,16 @@ describe('CategoryService', () => {
       const categoryName = stubCategory[0].name;
       const color = stubCategory[0].color;
       const categoryId = stubCategory[0].id;
-      const shouldBe = { name: categoryName, id: categoryId, color };
+      const repoRet = {
+        name: categoryName,
+        id: categoryId,
+        color,
+      };
+      const shouldBe = {
+        name: categoryName,
+        id: categoryId,
+        color: `#${color}`,
+      };
       const params = {
         userId,
         categoryName,
@@ -95,7 +110,7 @@ describe('CategoryService', () => {
         .mockResolvedValue(null);
       const categoryRepoSpy = jest
         .spyOn(categoryRepo, 'createCategory')
-        .mockResolvedValue(shouldBe);
+        .mockResolvedValue(repoRet);
 
       // when
       const category = await categoryService.createCategory(params);
@@ -112,7 +127,16 @@ describe('CategoryService', () => {
       const categoryName = stubCategory[0].name;
       const color = stubCategory[0].color;
       const categoryId = stubCategory[0].id;
-      const shouldBe = { name: categoryName, id: categoryId, color };
+      const repoRet = {
+        name: categoryName,
+        id: categoryId,
+        color,
+      };
+      const shouldBe = {
+        name: categoryName,
+        id: categoryId,
+        color: `#${color}`,
+      };
       const params = {
         userId,
         categoryName,
@@ -123,7 +147,7 @@ describe('CategoryService', () => {
         .mockResolvedValue(null);
       const categoryRepoSpy = jest
         .spyOn(categoryRepo, 'createCategory')
-        .mockResolvedValue(shouldBe);
+        .mockResolvedValue(repoRet);
 
       // when
       const category = await categoryService.createCategory(params);
@@ -239,10 +263,15 @@ describe('CategoryService', () => {
         categoryId,
         categoryName: newCategoryName,
       };
-      const shouldBe = {
+      const repoRet = {
         name: newCategoryName,
         id: categoryId,
         color,
+      };
+      const shouldBe = {
+        name: newCategoryName,
+        id: categoryId,
+        color: `#${color}`,
       };
 
       const categoryFindById = jest
@@ -255,7 +284,7 @@ describe('CategoryService', () => {
 
       const categoryRepoSpy = jest
         .spyOn(categoryRepo, 'updateCategory')
-        .mockResolvedValue(shouldBe);
+        .mockResolvedValue(repoRet);
 
       // when
       const category = await categoryService.updateCategory(params);
@@ -278,10 +307,15 @@ describe('CategoryService', () => {
         categoryId,
         color: newColor,
       };
-      const shouldBe = {
+      const repoRet = {
         name: categoryName,
         id: categoryId,
         color: newColor,
+      };
+      const shouldBe = {
+        name: categoryName,
+        id: categoryId,
+        color: `#${newColor}`,
       };
 
       const categoryFindById = jest
@@ -294,7 +328,7 @@ describe('CategoryService', () => {
 
       const categoryRepoSpy = jest
         .spyOn(categoryRepo, 'updateCategory')
-        .mockResolvedValue(shouldBe);
+        .mockResolvedValue(repoRet);
 
       // when
       const category = await categoryService.updateCategory(params);
@@ -318,10 +352,15 @@ describe('CategoryService', () => {
         color,
         categoryName: newCategoryName,
       };
-      const shouldBe = {
+      const repoRet = {
         name: newCategoryName,
         id: categoryId,
         color,
+      };
+      const shouldBe = {
+        name: newCategoryName,
+        id: categoryId,
+        color: `#${color}`,
       };
 
       const categoryFindById = jest
@@ -334,7 +373,7 @@ describe('CategoryService', () => {
 
       const categoryRepoSpy = jest
         .spyOn(categoryRepo, 'updateCategory')
-        .mockResolvedValue(shouldBe);
+        .mockResolvedValue(repoRet);
 
       // when
       const category = await categoryService.updateCategory(params);
@@ -358,10 +397,15 @@ describe('CategoryService', () => {
         categoryName,
         color: newColor,
       };
-      const shouldBe = {
+      const repoRet = {
         name: categoryName,
         id: categoryId,
         color: newColor,
+      };
+      const shouldBe = {
+        name: categoryName,
+        id: categoryId,
+        color: `#${newColor}`,
       };
 
       const categoryFindById = jest
@@ -374,7 +418,7 @@ describe('CategoryService', () => {
 
       const categoryRepoSpy = jest
         .spyOn(categoryRepo, 'updateCategory')
-        .mockResolvedValue(shouldBe);
+        .mockResolvedValue(repoRet);
 
       // when
       const category = await categoryService.updateCategory(params);
@@ -398,10 +442,15 @@ describe('CategoryService', () => {
         color,
         categoryName: newCategoryName,
       };
-      const shouldBe = {
+      const repoRet = {
         name: newCategoryName,
         id: categoryId,
         color,
+      };
+      const shouldBe = {
+        name: newCategoryName,
+        id: categoryId,
+        color: `#${color}`,
       };
 
       const categoryFindById = jest
@@ -414,7 +463,7 @@ describe('CategoryService', () => {
 
       const categoryRepoSpy = jest
         .spyOn(categoryRepo, 'updateCategory')
-        .mockResolvedValue(shouldBe);
+        .mockResolvedValue(repoRet);
 
       // when
       const category = await categoryService.updateCategory(params);
@@ -462,14 +511,19 @@ describe('CategoryService', () => {
         userId,
         categoryId,
       };
-      const shouldBe = {
+      const repoRet = {
         name: categoryName,
         id: categoryId,
         color,
       };
+      const shouldBe = {
+        name: categoryName,
+        id: categoryId,
+        color: `#${color}`,
+      };
       const categoryFindById = jest
         .spyOn(categoryRepo, 'findCategoryById')
-        .mockResolvedValue(shouldBe);
+        .mockResolvedValue(repoRet);
       const categoryRepoSpy = jest
         .spyOn(categoryRepo, 'deleteCategory')
         .mockResolvedValue(true);

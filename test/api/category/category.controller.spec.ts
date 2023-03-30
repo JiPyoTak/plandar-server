@@ -3,6 +3,7 @@ import * as testRequest from 'supertest';
 
 import { CategoryController } from '@/api/category/category.controller';
 import { CategoryService } from '@/api/category/category.service';
+import { THexColor } from '@/types';
 import createTestingModule from 'test/utils/createTestingModule';
 
 import { STUB_CATEGORY } from './stub';
@@ -33,7 +34,7 @@ describe('CategoryController', () => {
       const resBody = STUB_CATEGORY.map((category) => ({
         name: category.name,
         id: category.id,
-        color: category.color,
+        color: `#${category.color}` as THexColor,
       }));
       const categoryServSpy = jest
         .spyOn(categoryService, 'readCategory')
@@ -58,7 +59,11 @@ describe('CategoryController', () => {
       const categoryId = stubCategory[0].id;
       const color = stubCategory[0].color;
       const reqBody = { name: categoryName };
-      const resBody = { name: categoryName, id: categoryId, color };
+      const resBody = {
+        name: categoryName,
+        id: categoryId,
+        color: `#${color}` as THexColor,
+      };
       const categoryServSpy = jest
         .spyOn(categoryService, 'createCategory')
         .mockResolvedValue(resBody);
@@ -87,7 +92,11 @@ describe('CategoryController', () => {
       const categoryId = stubCategory[0].id;
       const color = stubCategory[0].color;
       const reqBody = { name: categoryName, color };
-      const resBody = { name: categoryName, id: categoryId, color };
+      const resBody = {
+        name: categoryName,
+        id: categoryId,
+        color: `#${color}` as THexColor,
+      };
       const categoryServSpy = jest
         .spyOn(categoryService, 'createCategory')
         .mockResolvedValue(resBody);
@@ -135,7 +144,7 @@ describe('CategoryController', () => {
       const resBody = {
         name: newCategoryName,
         id: categoryId,
-        color,
+        color: `#${color}` as THexColor,
       };
       const categoryServSpy = jest
         .spyOn(categoryService, 'updateCategory')
@@ -169,7 +178,7 @@ describe('CategoryController', () => {
       const resBody = {
         name: categoryName,
         id: categoryId,
-        color,
+        color: `#${color}` as THexColor,
       };
       const categoryServSpy = jest
         .spyOn(categoryService, 'updateCategory')
@@ -203,7 +212,7 @@ describe('CategoryController', () => {
       const resBody = {
         name: newCategoryName,
         id: categoryId,
-        color: newColor,
+        color: `#${newColor}` as THexColor,
       };
       const categoryServSpy = jest
         .spyOn(categoryService, 'updateCategory')
@@ -234,7 +243,11 @@ describe('CategoryController', () => {
       const categoryId = stubCategory[0].id;
       const categoryName = stubCategory[0].name;
       const color = stubCategory[0].color;
-      const resBody = { id: categoryId, name: categoryName, color };
+      const resBody = {
+        id: categoryId,
+        name: categoryName,
+        color: `#${color}` as THexColor,
+      };
       const categoryServSpy = jest
         .spyOn(categoryService, 'deleteCategory')
         .mockResolvedValue(resBody);
