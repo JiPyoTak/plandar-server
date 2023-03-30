@@ -8,9 +8,9 @@ import { Transactional } from 'typeorm-transactional';
 import { CategoryRepository } from '@/api/category/category.repository';
 import { CategoryResDto } from '@/dto/category';
 import {
-  CreateCategoryArgs,
-  DeleteCategoryArgs,
-  UpdateCategoryArgs,
+  ICreateCategoryArgs,
+  IDeleteCategoryArgs,
+  IUpdateCategoryArgs,
 } from '@/types/args/category';
 import { mapToHexColor } from '@/utils/color-converter';
 
@@ -24,7 +24,7 @@ export class CategoryService {
 
   @Transactional()
   async createCategory(
-    createCategoryArgs: CreateCategoryArgs,
+    createCategoryArgs: ICreateCategoryArgs,
   ): Promise<CategoryResDto> {
     const category = await this.categoryRepo.findCategoryByName({
       userId: createCategoryArgs.userId,
@@ -41,7 +41,7 @@ export class CategoryService {
 
   @Transactional()
   async updateCategory(
-    updateCategoryArgs: UpdateCategoryArgs,
+    updateCategoryArgs: IUpdateCategoryArgs,
   ): Promise<CategoryResDto> {
     const [category, categoryByName] = await Promise.all([
       this.categoryRepo.findCategoryById({
@@ -79,7 +79,7 @@ export class CategoryService {
 
   @Transactional()
   async deleteCategory(
-    deleteCategoryArgs: DeleteCategoryArgs,
+    deleteCategoryArgs: IDeleteCategoryArgs,
   ): Promise<CategoryResDto> {
     const category = await this.categoryRepo.findCategoryById(
       deleteCategoryArgs,

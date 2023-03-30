@@ -3,10 +3,10 @@ import { Repository } from 'typeorm';
 import { CustomRepository } from '@/common/decorators/custom-repository.decorator';
 import { Category } from '@/entity/category.entity';
 import {
-  CategoryInfo,
-  CreateCategoryArgs,
-  DeleteCategoryArgs,
-  UpdateCategoryArgs,
+  ICategoryInfo,
+  ICreateCategoryArgs,
+  IDeleteCategoryArgs,
+  IUpdateCategoryArgs,
 } from '@/types/args/category';
 
 const SELECT = {
@@ -23,7 +23,7 @@ export class CategoryRepository extends Repository<Category> {
   }: {
     userId: number;
     categoryId: number;
-  }): Promise<CategoryInfo> {
+  }): Promise<ICategoryInfo> {
     return this.findOne({
       where: {
         id: categoryId,
@@ -39,7 +39,7 @@ export class CategoryRepository extends Repository<Category> {
   }: {
     userId: number;
     categoryName: string;
-  }): Promise<CategoryInfo> {
+  }): Promise<ICategoryInfo> {
     return this.findOne({
       where: {
         name: categoryName,
@@ -49,7 +49,7 @@ export class CategoryRepository extends Repository<Category> {
     });
   }
 
-  async readCategory(userId: number): Promise<CategoryInfo[]> {
+  async readCategory(userId: number): Promise<ICategoryInfo[]> {
     return this.find({
       where: {
         user: { id: userId },
@@ -62,7 +62,7 @@ export class CategoryRepository extends Repository<Category> {
     userId,
     categoryName,
     color,
-  }: CreateCategoryArgs): Promise<CategoryInfo> {
+  }: ICreateCategoryArgs): Promise<ICategoryInfo> {
     const {
       identifiers: [{ id }],
     } = await this.insert({
@@ -78,7 +78,7 @@ export class CategoryRepository extends Repository<Category> {
     categoryId,
     categoryName,
     color,
-  }: UpdateCategoryArgs): Promise<CategoryInfo> {
+  }: IUpdateCategoryArgs): Promise<ICategoryInfo> {
     await this.update({ id: categoryId }, { name: categoryName, color });
     return this.findCategoryById({ userId, categoryId });
   }
@@ -86,7 +86,7 @@ export class CategoryRepository extends Repository<Category> {
   async deleteCategory({
     categoryId,
     userId,
-  }: DeleteCategoryArgs): Promise<boolean> {
+  }: IDeleteCategoryArgs): Promise<boolean> {
     const { affected } = await this.delete({
       id: categoryId,
       user: { id: userId },
