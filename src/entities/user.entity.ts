@@ -5,6 +5,7 @@ import { Entity, Column, OneToMany } from 'typeorm';
 import { DefaultEntity } from '@/entities/default.entity';
 
 import { CategoryEntity } from './category.entity';
+import { PlanEntity } from './plan.entity';
 import { TagEntity } from './tag.entity';
 
 @Entity('user_tb')
@@ -37,4 +38,8 @@ export class UserEntity extends DefaultEntity {
   @ApiProperty()
   @OneToMany(() => TagEntity, (tag) => tag.user)
   tags?: TagEntity[];
+
+  @ApiProperty()
+  @OneToMany(() => PlanEntity, (plan) => plan.user)
+  plans?: PlanEntity[];
 }
