@@ -184,4 +184,36 @@ describe('PlanController', () => {
       expect(message).toBeInstanceOf(Array);
     });
   });
+
+  describe('Put /plan/:planId', () => {
+    it('expect success response with updating a plan', async () => {
+      const updatePlanReq = omitKey(
+        {
+          ...PLAN_STUB,
+          tags: PLAN_STUB.tags.map(({ name }) => name),
+        },
+        ['id', 'createdAt', 'updatedAt', 'user'],
+      );
+      const planRes = { ...PLAN_STUB };
+      const planServSpy = jest
+        .spyOn(planService, 'updatePlan')
+        .mockResolvedValue(planRes);
+      const result = {
+        success: true,
+        data: planRes,
+      };
+
+      const request = await testRequest(app.getHttpServer())
+        .put(`/plan/${PLAN_STUB.id}`)
+        .send(updatePlanReq)
+        .expect(200);
+
+      expect(planServSpy).toHaveBeenCalledWith({
+        ...updatePlanReq,
+        planId: PLAN_STUB.id,
+        userId: USER_STUB.id,
+      });
+      expect(request.body).toEqual(result);
+    });
+  });
 });
