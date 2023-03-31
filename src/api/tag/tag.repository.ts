@@ -2,11 +2,11 @@ import { Repository } from 'typeorm';
 
 import { CustomRepository } from '@/common/decorators';
 import { TagResDto } from '@/dto/tag';
-import { Tag } from '@/entity/tag.entity';
+import { TagEntity } from '@/entities';
 import { CreateTagArgs, DeleteTagArgs, UpdateTagArgs } from '@/types/args';
 
-@CustomRepository(Tag)
-export class TagRepository extends Repository<Tag> {
+@CustomRepository(TagEntity)
+export class TagRepository extends Repository<TagEntity> {
   async findTagById({
     tagId,
     userId,

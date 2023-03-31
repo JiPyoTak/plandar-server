@@ -1,6 +1,6 @@
-import { User } from '@/entity/user.entity';
+import { UserEntity } from '@/entities';
 
-const USER_STUB: User = {
+const USER_STUB: UserEntity = {
   id: 1,
   email: 'test@test.com',
   username: '테스트',

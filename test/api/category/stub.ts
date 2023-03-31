@@ -1,6 +1,6 @@
-import { Category } from '@/entity/category.entity';
+import { CategoryEntity } from '@/entities';
 
-const STUB_CATEGORY: Category[] = [
+const STUB_CATEGORY: CategoryEntity[] = [
   {
     id: 1,
     name: 'category1',

@@ -2,13 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { Entity, Column, OneToMany } from 'typeorm';
 
-import { DefaultEntity } from '@/entity/default.entity';
+import { DefaultEntity } from '@/entities/default.entity';
 
-import { Category } from './category.entity';
-import { Tag } from './tag.entity';
+import { CategoryEntity } from './category.entity';
+import { PlanEntity } from './plan.entity';
+import { TagEntity } from './tag.entity';
 
 @Entity('user_tb')
-export class User extends DefaultEntity {
+export class UserEntity extends DefaultEntity {
   @Column({ type: 'varchar', length: 20 })
   @ApiProperty()
   @IsNotEmpty()
@@ -31,10 +32,14 @@ export class User extends DefaultEntity {
   profileImage!: string;
 
   @ApiProperty()
-  @OneToMany(() => Category, (category) => category.user)
-  categories?: Category[];
+  @OneToMany(() => CategoryEntity, (category) => category.user)
+  categories?: CategoryEntity[];
 
   @ApiProperty()
-  @OneToMany(() => Tag, (tag) => tag.user)
-  tags?: Tag[];
+  @OneToMany(() => TagEntity, (tag) => tag.user)
+  tags?: TagEntity[];
+
+  @ApiProperty()
+  @OneToMany(() => PlanEntity, (plan) => plan.user)
+  plans?: PlanEntity[];
 }

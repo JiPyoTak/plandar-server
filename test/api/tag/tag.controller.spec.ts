@@ -4,7 +4,7 @@ import * as testRequest from 'supertest';
 import { TagController } from '@/api/tag/tag.controller';
 import { TagService } from '@/api/tag/tag.service';
 import { STUB_TAG } from 'test/api/tag/stub';
-import createTestingModule from 'test/utils/createTestingModule';
+import createTestingModule from 'test/utils/create-testing-module';
 
 describe('TagController', () => {
   const stubTag = Object.assign({}, STUB_TAG);

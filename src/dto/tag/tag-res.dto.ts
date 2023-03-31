@@ -1,7 +1,7 @@
 import { PickType } from '@nestjs/swagger';
 
-import { Tag } from '@/entity/tag.entity';
+import { TagEntity } from '@/entities';
 
-class TagResDto extends PickType(Tag, ['name', 'id'] as const) {}
+class TagResDto extends PickType(TagEntity, ['name', 'id'] as const) {}
 
 export { TagResDto };

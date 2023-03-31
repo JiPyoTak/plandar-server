@@ -1,8 +1,8 @@
 import { ExecutionContext } from '@nestjs/common';
 
-import { User } from '@/entity/user.entity';
+import { UserEntity } from '@/entities';
 
-export const createMockAuthGuard = (user: User) => ({
+export const createMockAuthGuard = (user: UserEntity) => ({
   canActivate: (context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();
     request.user = user;

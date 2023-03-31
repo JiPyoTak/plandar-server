@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 
-import { CustomRepository } from '@/common/decorators/custom-repository.decorator';
-import { Category } from '@/entity/category.entity';
+import { CustomRepository } from '@/common/decorators';
+import { CategoryEntity } from '@/entities';
 import {
   ICategoryInfo,
   ICreateCategoryArgs,
@@ -10,8 +10,8 @@ import {
 } from '@/types/args/category';
 import { CATEGORY_SELECT } from '@/utils/constants';
 
-@CustomRepository(Category)
-export class CategoryRepository extends Repository<Category> {
+@CustomRepository(CategoryEntity)
+export class CategoryRepository extends Repository<CategoryEntity> {
   async findCategoryById({
     userId,
     categoryId,

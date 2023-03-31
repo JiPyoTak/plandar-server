@@ -3,18 +3,18 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
+import { UserRepository } from '@/api/user/user.repository';
+import { UserService } from '@/api/user/user.service';
 import { TypeOrmExModule } from '@/common/modules';
+import {
+  GoogleAuthStrategy,
+  KaKaoAuthStrategy,
+  JwtStrategy,
+} from '@/common/strategies';
 import { ENV_PROVIDER } from '@/utils/constants';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './strategies/jwt-auth.strategy';
-import {
-  GoogleAuthStrategy,
-  KaKaoAuthStrategy,
-} from './strategies/oauth.strategy';
-import { UserRepository } from '../user/user.repository';
-import { UserService } from '../user/user.service';
 
 const CustomConfigProvider: Provider = {
   provide: ENV_PROVIDER,

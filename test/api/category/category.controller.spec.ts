@@ -4,7 +4,7 @@ import * as testRequest from 'supertest';
 import { CategoryController } from '@/api/category/category.controller';
 import { CategoryService } from '@/api/category/category.service';
 import { THexColor } from '@/types';
-import createTestingModule from 'test/utils/createTestingModule';
+import createTestingModule from 'test/utils/create-testing-module';
 
 import { STUB_CATEGORY } from './stub';
 

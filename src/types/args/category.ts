@@ -1,4 +1,4 @@
-import { CategoryResDto } from '@/dto/category/category-res.dto';
+import { CategoryResDto } from '@/dto/category';
 
 interface ICategoryInfo extends Omit<CategoryResDto, 'color'> {
   color: string;

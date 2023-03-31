@@ -9,9 +9,9 @@ import { UserController } from '@/api/user/user.controller';
 import { UserService } from '@/api/user/user.service';
 import { HttpExceptionFilter } from '@/common/filters';
 import { SuccessInterceptor } from '@/common/interceptors';
-import createTestingModule from 'test/utils/createTestingModule';
+import createTestingModule from 'test/utils/create-testing-module';
 
-import { GET_USER_ERROR_STUB, USER_STUB } from './mock';
+import { GET_USER_ERROR_STUB, USER_STUB } from './stub';
 
 describe('UserController', () => {
   const mockUser = Object.assign({}, USER_STUB);

@@ -6,7 +6,7 @@ import {
 
 import { UserRepository } from '@/api/user/user.repository';
 import { UserCreateDto } from '@/dto/user';
-import { User } from '@/entity/user.entity';
+import { UserEntity } from '@/entities';
 
 @Injectable()
 export class UserService {
@@ -24,7 +24,7 @@ export class UserService {
     return newUser;
   }
 
-  async getUser(id: number): Promise<User> {
+  async getUser(id: number): Promise<UserEntity> {
     const user = await this.userRepo.getUserById(id);
 
     if (!user) {
@@ -34,7 +34,7 @@ export class UserService {
     return user;
   }
 
-  async createUser(userInfo: UserCreateDto): Promise<User> {
+  async createUser(userInfo: UserCreateDto): Promise<UserEntity> {
     const user = await this.userRepo.getUserByEmail(userInfo.email);
 
     if (user) {

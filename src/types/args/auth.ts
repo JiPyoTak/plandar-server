@@ -1,12 +1,12 @@
 import { JwtSignOptions } from '@nestjs/jwt';
 import { Response } from 'express';
 
-import { User } from '@/entity/user.entity';
+import { UserEntity } from '@/entities';
 
 import { EJwtTokenType } from '..';
 
 interface ISignatureArgs {
-  user: User;
+  user: UserEntity;
   options?: JwtSignOptions;
 }
 
@@ -17,7 +17,7 @@ interface IRegisterTokenInCookieArgs {
 }
 
 interface ILoginCallbackArgs {
-  user: User;
+  user: UserEntity;
   res: Response;
 }
 

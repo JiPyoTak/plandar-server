@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { CookieOptions, Response } from 'express';
 
-import { User } from '@/entity/user.entity';
+import { UserEntity } from '@/entities';
 import { TAuthEnvironment, EJwtTokenType } from '@/types';
 import { IRegisterTokenInCookieArgs, ISignatureArgs } from '@/types/args';
 import { ENV_PROVIDER } from '@/utils/constants';
@@ -14,7 +14,7 @@ export class AuthService {
     @Inject(ENV_PROVIDER) private readonly env: TAuthEnvironment,
   ) {}
 
-  async login(user: User): Promise<[string, string]> {
+  async login(user: UserEntity): Promise<[string, string]> {
     const { ACCESS_EXPIRES, REFRESH_EXPIRES } = this.env;
 
     const accessOptions: JwtSignOptions = { expiresIn: ACCESS_EXPIRES };

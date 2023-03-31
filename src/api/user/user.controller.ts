@@ -9,7 +9,7 @@ import {
 
 import { UserService } from '@/api/user/user.service';
 import { User } from '@/common/decorators';
-import { User as UserEntity } from '@/entity/user.entity';
+import { UserEntity } from '@/entities';
 import { TTokenUser } from '@/types';
 
 @Controller('user')
