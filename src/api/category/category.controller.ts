@@ -19,13 +19,13 @@ import {
 } from '@nestjs/swagger';
 
 import { CategoryService } from '@/api/category/category.service';
+import { User } from '@/common/decorators';
 import {
   CategoryCreateReqDto,
   CategoryUpdateReqDto,
   CategoryResDto,
 } from '@/dto/category';
-
-const USER_ID = 1;
+import { UserEntity } from '@/entities';
 
 @ApiTags('category')
 @Controller('category')
@@ -41,8 +41,8 @@ export class CategoryController {
     isArray: true,
   })
   @Get()
-  async readCategory() {
-    return this.categoryService.readCategory(USER_ID);
+  async readCategory(@User() user: UserEntity) {
+    return this.categoryService.readCategory(user.id);
   }
 
   @ApiOperation({
@@ -58,9 +58,10 @@ export class CategoryController {
   @Post()
   async createCategory(
     @Body() { name: categoryName, color }: CategoryCreateReqDto,
+    @User() user: UserEntity,
   ) {
     return this.categoryService.createCategory({
-      userId: USER_ID,
+      userId: user.id,
       categoryName,
       color,
     });
@@ -84,12 +85,13 @@ export class CategoryController {
   async updateCategory(
     @Param('categoryId', ParseIntPipe) categoryId: number,
     @Body() { name: categoryName, color }: CategoryUpdateReqDto,
+    @User() user: UserEntity,
   ) {
     if (!(categoryName || color)) {
       throw new UnprocessableEntityException();
     }
     return this.categoryService.updateCategory({
-      userId: USER_ID,
+      userId: user.id,
       categoryId,
       categoryName,
       color,
@@ -107,7 +109,10 @@ export class CategoryController {
     description: '카테고리가 존재하지 않는 경우',
   })
   @Delete(':categoryId')
-  async deleteCategory(@Param('categoryId', ParseIntPipe) categoryId: number) {
-    return this.categoryService.deleteCategory({ userId: USER_ID, categoryId });
+  async deleteCategory(
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+    @User() user: UserEntity,
+  ) {
+    return this.categoryService.deleteCategory({ userId: user.id, categoryId });
   }
 }
