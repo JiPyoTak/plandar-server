@@ -1,4 +1,8 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import {
+  INestApplication,
+  InternalServerErrorException,
+  ValidationPipe,
+} from '@nestjs/common';
 import * as testRequest from 'supertest';
 
 import { PlanController } from '@/api/plan/plan.controller';
@@ -59,6 +63,35 @@ describe('PlanController', () => {
         userId: USER_STUB.id,
       });
       expect(request.body).toEqual(result);
+    });
+
+    it('expect failure response with invalid time query (timeMin > timeMax)', async () => {
+      const timeMin = PLAN_TIME_MIN_STUB;
+      const timeMax = PLAN_TIME_MAX_STUB;
+      const planServSpy = jest
+        .spyOn(planService, 'getPlans')
+        .mockRejectedValue(
+          new InternalServerErrorException(
+            'Service의 getPlans가 실행되어선 안됩니다.',
+          ),
+        );
+      const result = {
+        error: 'Bad Request',
+        statusCode: 400,
+        success: false,
+        message: '일정을 요구하는 시간 순서가 올바르지 않습니다.',
+      };
+
+      const request = await testRequest(app.getHttpServer())
+        .get(`/plan`)
+        .query({ timeMin: timeMax, timeMax: timeMin })
+        .expect(400);
+
+      expect(planServSpy).toHaveBeenCalledTimes(0);
+      expect(request.body).toEqual({
+        ...result,
+        timestamp: request.body.timestamp,
+      });
     });
   });
 });
