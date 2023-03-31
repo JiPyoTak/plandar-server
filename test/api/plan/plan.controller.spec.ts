@@ -215,5 +215,32 @@ describe('PlanController', () => {
       });
       expect(request.body).toEqual(result);
     });
+
+    it('expect failure response with invalid body (empty Body - nothing match)', async () => {
+      const planServSpy = jest
+        .spyOn(planService, 'updatePlan')
+        .mockRejectedValue(
+          new InternalServerErrorException(
+            'Service의 updatePlan이 실행되어선 안됩니다.',
+          ),
+        );
+      const result = {
+        error: 'Bad Request',
+        statusCode: 400,
+        success: false,
+        message: '일정을 수정하려면 적어도 유효한 값이 하나라도 있어야 합니다.',
+      };
+
+      const request = await testRequest(app.getHttpServer())
+        .put(`/plan/${PLAN_STUB.id}`)
+        .send({})
+        .expect(400);
+
+      expect(planServSpy).toHaveBeenCalledTimes(0);
+      expect(request.body).toEqual({
+        ...result,
+        timestamp: request.body.timestamp,
+      });
+    });
   });
 });
