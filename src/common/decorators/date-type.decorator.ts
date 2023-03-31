@@ -1,18 +1,11 @@
 import { Transform, TransformOptions } from 'class-transformer';
-import {
-  buildMessage,
-  IsDate,
-  ValidateBy,
-  ValidationOptions,
-} from 'class-validator';
+import { buildMessage, ValidateBy, ValidationOptions } from 'class-validator';
 
 const IS_DATE_TYPE = 'isDateType';
 
 function isDateType(value) {
   return !isNaN(new Date(value).getTime());
 }
-
-IsDate;
 
 export function IsDateType(validationOptions?: ValidationOptions) {
   return ValidateBy(
