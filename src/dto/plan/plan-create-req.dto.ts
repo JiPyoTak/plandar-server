@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
 import {
   ArrayMaxSize,
   IsArray,
+  IsHexColor,
   IsNumber,
   IsOptional,
   IsString,
@@ -18,14 +19,11 @@ class PlanCreateReqDto extends PickType(PlanEntity, [
   'endTime',
 ] as const) {
   @ApiPropertyOptional({
-    description: '일정 색상, 0x000000(0) ~ 0xffffff(16777215)',
-    example: 0x52d681,
-    minimum: 0x000000,
-    maximum: 0xffffff,
-    default: Buffer.from('0x52d681'),
+    description: '일정 색상, #000000 ~ #ffffff',
+    example: '#52d681',
   })
   @IsOptional()
-  @IsString()
+  @IsHexColor()
   color?: string;
 
   @ApiProperty({

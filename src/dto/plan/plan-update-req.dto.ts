@@ -7,6 +7,7 @@ import {
   IsOptional,
   IsString,
   IsEnum,
+  IsHexColor,
 } from 'class-validator';
 
 import { IsDateType } from '@/common/decorators/date-type.decorator';
@@ -31,10 +32,10 @@ class PlanUpdateReqDto {
 
   @ApiPropertyOptional({
     description: '일정이 나타내는 색상',
-    example: 123456,
+    example: '#52d681',
   })
+  @IsHexColor()
   @IsOptional()
-  @IsString()
   color?: string;
 
   @ApiPropertyOptional({
