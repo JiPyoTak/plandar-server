@@ -3,12 +3,12 @@ import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 
 import { Public, User } from '@/common/decorators';
-import { User as UserEntity } from '@/entity/user.entity';
+import { GoogleAuthGuard, KakaoAuthGuard } from '@/common/guards/oauth.guard';
+import { UserEntity } from '@/entities';
 import { EJwtTokenType } from '@/types';
 import { ILoginCallbackArgs } from '@/types/args';
 
 import { AuthService } from './auth.service';
-import { GoogleAuthGuard, KakaoAuthGuard } from './guards/oauth.guard';
 
 @Controller('auth')
 export class AuthController {

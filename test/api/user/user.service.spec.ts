@@ -2,9 +2,9 @@ import { ConflictException, NotFoundException } from '@nestjs/common';
 
 import { UserRepository } from '@/api/user/user.repository';
 import { UserService } from '@/api/user/user.service';
-import createTestingModule from 'test/utils/createTestingModule';
+import createTestingModule from 'test/utils/create-testing-module';
 
-import { USER_STUB } from './mock';
+import { USER_STUB } from './stub';
 
 describe('UserService', () => {
   const mockUser = Object.assign({}, USER_STUB);

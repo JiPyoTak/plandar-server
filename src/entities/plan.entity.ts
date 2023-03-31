@@ -21,11 +21,8 @@ import {
   IsDateType,
   TransformDate,
 } from '@/common/decorators/date-type.decorator';
-import { DefaultEntity } from '@/entity/default.entity';
-import { User } from '@/entity/user.entity';
-
-import { Category } from './category.entity';
-import { Tag } from './tag.entity';
+import { UserEntity, CategoryEntity, TagEntity } from '@/entities';
+import { DefaultEntity } from '@/entities/default.entity';
 
 export enum PLAN_TYPE {
   EVENT = 'event',
@@ -34,7 +31,7 @@ export enum PLAN_TYPE {
 }
 
 @Entity('plan_tb')
-export class Plan extends DefaultEntity {
+export class PlanEntity extends DefaultEntity {
   @ApiProperty()
   @Column({ type: 'varchar', length: 30 })
   @IsNotEmpty()
@@ -85,28 +82,28 @@ export class Plan extends DefaultEntity {
   endTime?: Date;
 
   @ApiProperty()
-  @ManyToOne(() => User, { onDelete: 'CASCADE', cascade: true })
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE', cascade: true })
   @JoinColumn({ name: 'user_id' })
-  user!: User;
+  user!: UserEntity;
 
   @Column({ type: 'int' })
   @IsNumber()
   categoryId!: number;
 
   @ApiProperty()
-  @ManyToOne(() => Category, (category) => category.plans, {
+  @ManyToOne(() => CategoryEntity, (category) => category.plans, {
     onDelete: 'CASCADE',
     cascade: true,
   })
   @JoinColumn({ name: 'categoryId' })
-  category!: Category;
+  category!: CategoryEntity;
 
   @ApiProperty()
-  @ManyToMany(() => Tag, (tag) => tag.plans, { cascade: true })
+  @ManyToMany(() => TagEntity, (tag) => tag.plans, { cascade: true })
   @JoinTable({
     joinColumn: { name: 'plan_id' },
     inverseJoinColumn: { name: 'tag_id' },
     name: 'plan_tag_tb',
   })
-  tags?: Tag[];
+  tags?: TagEntity[];
 }

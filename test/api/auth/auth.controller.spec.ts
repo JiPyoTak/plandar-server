@@ -3,14 +3,14 @@ import * as testRequest from 'supertest';
 
 import { AuthController } from '@/api/auth/auth.controller';
 import { AuthService } from '@/api/auth/auth.service';
-import { GoogleAuthGuard } from '@/api/auth/guards/oauth.guard';
 import { HttpExceptionFilter } from '@/common/filters';
+import { GoogleAuthGuard } from '@/common/guards';
 import { SuccessInterceptor } from '@/common/interceptors';
-import { USER_STUB } from 'test/api/user/mock';
-import { createMockAuthGuard } from 'test/utils/createMockJwtAuthGuard';
-import createTestingModule from 'test/utils/createTestingModule';
+import { USER_STUB } from 'test/api/user/stub';
+import { createMockAuthGuard } from 'test/utils/create-mock-jwt-auth-guard';
+import createTestingModule from 'test/utils/create-testing-module';
 
-import { TOKEN_STUB } from './mock';
+import { TOKEN_STUB } from './stub';
 
 describe('AuthController', () => {
   const mockUser = Object.assign({}, USER_STUB);

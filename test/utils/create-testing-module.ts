@@ -3,9 +3,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
 
-import { USER_STUB } from 'test/api/user/mock';
+import { USER_STUB } from 'test/api/user/stub';
 
-import { createMockAuthGuard } from './createMockJwtAuthGuard';
+import { createMockAuthGuard } from './create-mock-jwt-auth-guard';
 
 export default async function createTestingModule(
   metadata: ModuleMetadata,

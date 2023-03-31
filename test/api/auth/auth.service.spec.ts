@@ -2,13 +2,13 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 
 import { AuthService } from '@/api/auth/auth.service';
 import { UserService } from '@/api/user/user.service';
-import { User } from '@/entity/user.entity';
+import { UserEntity } from '@/entities';
 import { EJwtTokenType } from '@/types';
 import { ENV_PROVIDER } from '@/utils/constants';
-import { USER_STUB } from 'test/api/user/mock';
-import createTestingModule from 'test/utils/createTestingModule';
+import { USER_STUB } from 'test/api/user/stub';
+import createTestingModule from 'test/utils/create-testing-module';
 
-import { MOCK_CONFIG_SERVICE, RESPONSE_STUB, TOKEN_STUB } from './mock';
+import { MOCK_CONFIG_SERVICE, RESPONSE_STUB, TOKEN_STUB } from './stub';
 
 describe('AuthService', () => {
   const mockUser = Object.assign({}, USER_STUB);
@@ -43,7 +43,7 @@ describe('AuthService', () => {
 
   describe('signature', () => {
     it('should return JWT', async () => {
-      const user: User = { ...mockUser };
+      const user: UserEntity = { ...mockUser };
       const jwtSignOption: JwtSignOptions = { expiresIn: '60s' };
 
       const jwtServBySign = jest
@@ -62,7 +62,7 @@ describe('AuthService', () => {
 
   describe('login', () => {
     it('should return access token and refresh token.', async () => {
-      const user: User = { ...mockUser };
+      const user: UserEntity = { ...mockUser };
 
       const authServBySignature = jest
         .spyOn(authService, 'signature')

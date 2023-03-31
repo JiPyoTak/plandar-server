@@ -1,6 +1,6 @@
 import { PlanRepository } from '@/api/plan/plan.repository';
 import { PlanService } from '@/api/plan/plan.service';
-import createTestingModule from 'test/utils/createTestingModule';
+import createTestingModule from 'test/utils/create-testing-module';
 
 describe('PlanService', () => {
   let planRepository: PlanRepository;

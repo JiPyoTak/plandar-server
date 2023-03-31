@@ -1,4 +1,4 @@
-import { User } from '@/entity/user.entity';
+import { UserEntity } from '@/entities';
 
 const STUB_TAG = {
   id: 1,
@@ -12,7 +12,7 @@ const STUB_TAG = {
     profileImage: 'test image',
     createdAt: new Date(),
     updatedAt: new Date(),
-  } as User,
+  } as UserEntity,
 };
 
 export { STUB_TAG };

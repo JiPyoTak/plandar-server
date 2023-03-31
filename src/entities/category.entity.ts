@@ -2,13 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
-import { DefaultEntity } from '@/entity/default.entity';
+import { DefaultEntity } from '@/entities/default.entity';
 
-import { Plan } from './plan.entity';
-import { User } from './user.entity';
+import { PlanEntity } from './plan.entity';
+import { UserEntity } from './user.entity';
 
 @Entity('category_tb')
-export class Category extends DefaultEntity {
+export class CategoryEntity extends DefaultEntity {
   @ApiProperty()
   @Column({ type: 'varchar', length: 20 })
   @IsNotEmpty()
@@ -27,11 +27,11 @@ export class Category extends DefaultEntity {
   color!: string;
 
   @ApiProperty()
-  @ManyToOne(() => User, { onDelete: 'CASCADE', cascade: true })
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE', cascade: true })
   @JoinColumn({ name: 'user_id' })
-  user!: User;
+  user!: UserEntity;
 
   @ApiProperty()
-  @OneToMany(() => Plan, (plan) => plan.category)
-  plans?: Plan;
+  @OneToMany(() => PlanEntity, (plan) => plan.category)
+  plans?: PlanEntity;
 }

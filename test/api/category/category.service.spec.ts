@@ -2,7 +2,7 @@ import { ConflictException } from '@nestjs/common';
 
 import { CategoryRepository } from '@/api/category/category.repository';
 import { CategoryService } from '@/api/category/category.service';
-import createTestingModule from 'test/utils/createTestingModule';
+import createTestingModule from 'test/utils/create-testing-module';
 
 import { STUB_CATEGORY } from './stub';
 
@@ -74,7 +74,6 @@ describe('CategoryService', () => {
         await categoryService.createCategory({ userId, categoryName, color });
       } catch (e) {
         // then
-        console.log(e);
         expect(e).toBeInstanceOf(ConflictException);
       }
       expect(categoryRepoFind).toHaveBeenCalledWith({

@@ -2,9 +2,9 @@ import { ApiPropertyOptional, PickType } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsHexColor, IsOptional } from 'class-validator';
 
-import { Category } from '@/entity/category.entity';
+import { CategoryEntity } from '@/entities';
 
-class CategoryCreateReqDto extends PickType(Category, ['name'] as const) {
+class CategoryCreateReqDto extends PickType(CategoryEntity, ['name'] as const) {
   @ApiPropertyOptional({
     description: '카테고리 색상, #000000 ~ #ffffff',
     example: '#52d681',

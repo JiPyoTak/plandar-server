@@ -3,7 +3,7 @@ import { ConflictException } from '@nestjs/common';
 import { TagRepository } from '@/api/tag/tag.repository';
 import { TagService } from '@/api/tag/tag.service';
 import { STUB_TAG } from 'test/api/tag/stub';
-import createTestingModule from 'test/utils/createTestingModule';
+import createTestingModule from 'test/utils/create-testing-module';
 
 describe('TagService', () => {
   const stubTag = Object.assign({}, STUB_TAG);

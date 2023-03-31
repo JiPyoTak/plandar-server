@@ -2,10 +2,10 @@ import { Repository } from 'typeorm';
 
 import { CustomRepository } from '@/common/decorators';
 import { UserCreateDto } from '@/dto/user';
-import { User } from '@/entity/user.entity';
+import { UserEntity } from '@/entities';
 
-@CustomRepository(User)
-export class UserRepository extends Repository<User> {
+@CustomRepository(UserEntity)
+export class UserRepository extends Repository<UserEntity> {
   async createUser(userInfo: UserCreateDto) {
     return this.save(this.create(userInfo));
   }

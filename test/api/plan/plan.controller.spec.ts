@@ -2,7 +2,7 @@ import type { INestApplication } from '@nestjs/common';
 
 import { PlanController } from '@/api/plan/plan.controller';
 import { PlanService } from '@/api/plan/plan.service';
-import createTestingModule from 'test/utils/createTestingModule';
+import createTestingModule from 'test/utils/create-testing-module';
 
 describe('PlanController', () => {
   let app: INestApplication;
