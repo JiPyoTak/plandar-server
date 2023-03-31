@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
-  IsDate,
   IsOptional,
   IsEnum,
   IsNotEmpty,
   IsString,
   MaxLength,
+  IsNumber,
 } from 'class-validator';
 import {
   Column,
@@ -17,6 +17,10 @@ import {
   ManyToOne,
 } from 'typeorm';
 
+import {
+  IsDateType,
+  TransformDate,
+} from '@/common/decorators/date-type.decorator';
 import { DefaultEntity } from '@/entity/default.entity';
 import { User } from '@/entity/user.entity';
 
@@ -69,13 +73,15 @@ export class Plan extends DefaultEntity {
   @ApiProperty()
   @Column({ type: 'datetime' })
   @IsNotEmpty()
-  @IsDate()
+  @IsDateType()
+  @TransformDate()
   startTime!: Date;
 
   @ApiProperty()
   @Column({ type: 'datetime', nullable: true })
   @IsOptional()
-  @IsDate()
+  @IsDateType()
+  @TransformDate()
   endTime?: Date;
 
   @ApiProperty()
@@ -83,12 +89,16 @@ export class Plan extends DefaultEntity {
   @JoinColumn({ name: 'user_id' })
   user!: User;
 
+  @Column({ type: 'int' })
+  @IsNumber()
+  categoryId!: number;
+
   @ApiProperty()
   @ManyToOne(() => Category, (category) => category.plans, {
     onDelete: 'CASCADE',
     cascade: true,
   })
-  @JoinColumn({ name: 'category_id' })
+  @JoinColumn({ name: 'categoryId' })
   category!: Category;
 
   @ApiProperty()
