@@ -1,4 +1,4 @@
-import { UserEntity } from '@/entities/user.entity';
+import { UserEntity } from '@/entities';
 
 const enum EJwtTokenType {
   ACCESS = 'access',
