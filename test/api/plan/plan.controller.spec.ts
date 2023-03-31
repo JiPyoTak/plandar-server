@@ -10,6 +10,7 @@ import { PlanService } from '@/api/plan/plan.service';
 import { HttpExceptionFilter } from '@/common/filters';
 import { SuccessInterceptor } from '@/common/interceptors';
 import createTestingModule from 'test/utils/create-testing-module';
+import { omitKey } from 'test/utils/omit-key';
 
 import { PLAN_STUB, PLAN_TIME_MAX_STUB, PLAN_TIME_MIN_STUB } from './stub';
 import { USER_STUB } from '../user/stub';
@@ -85,6 +86,33 @@ describe('PlanController', () => {
       const request = await testRequest(app.getHttpServer())
         .get(`/plan`)
         .query({ timeMin: timeMax, timeMax: timeMin })
+        .expect(400);
+
+      expect(planServSpy).toHaveBeenCalledTimes(0);
+      expect(request.body).toEqual({
+        ...result,
+        timestamp: request.body.timestamp,
+      });
+    });
+
+    it('expect failure response with invalid time query (Empty)', async () => {
+      const planServSpy = jest
+        .spyOn(planService, 'getPlans')
+        .mockRejectedValue(
+          new InternalServerErrorException(
+            'Service의 getPlans가 실행되어선 안됩니다.',
+          ),
+        );
+      const result = {
+        error: 'Bad Request',
+        statusCode: 400,
+        success: false,
+        message: 'Validation failed (Date string is expected)',
+      };
+
+      const request = await testRequest(app.getHttpServer())
+        .get(`/plan`)
+        .query({})
         .expect(400);
 
       expect(planServSpy).toHaveBeenCalledTimes(0);
