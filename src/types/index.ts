@@ -19,4 +19,6 @@ type TAuthEnvironment = {
 
 type TTokenUser = Pick<User, 'id'>;
 
-export { TAuthEnvironment, TTokenUser, EJwtTokenType };
+type THexColor = `#${string}`;
+
+export { TAuthEnvironment, TTokenUser, EJwtTokenType, THexColor };

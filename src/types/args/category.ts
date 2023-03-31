@@ -1,19 +1,30 @@
-interface CreateCategoryArgs {
-  userId: number;
-  categoryName: string;
-  color?: number;
+import { CategoryResDto } from '@/dto/category/category-res.dto';
+
+interface ICategoryInfo extends Omit<CategoryResDto, 'color'> {
+  color: string;
 }
 
-interface UpdateCategoryArgs {
+interface ICreateCategoryArgs {
+  userId: number;
+  categoryName: string;
+  color?: string;
+}
+
+interface IUpdateCategoryArgs {
   userId: number;
   categoryId: number;
   categoryName?: string;
-  color?: number;
+  color?: string;
 }
 
-interface DeleteCategoryArgs {
+interface IDeleteCategoryArgs {
   userId: number;
   categoryId: number;
 }
 
-export { CreateCategoryArgs, UpdateCategoryArgs, DeleteCategoryArgs };
+export {
+  ICreateCategoryArgs,
+  IUpdateCategoryArgs,
+  IDeleteCategoryArgs,
+  ICategoryInfo,
+};

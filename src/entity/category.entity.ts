@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 import { DefaultEntity } from '@/entity/default.entity';
@@ -18,13 +18,13 @@ export class Category extends DefaultEntity {
 
   @ApiProperty()
   @Column({
-    type: 'binary',
-    length: 3,
-    default: Buffer.from('0x52d681'),
+    type: 'char',
+    length: 6,
+    default: '52d681',
   })
   @IsNotEmpty()
-  @IsNumber()
-  color!: number;
+  @IsString()
+  color!: string;
 
   @ApiProperty()
   @ManyToOne(() => User, { onDelete: 'CASCADE', cascade: true })
