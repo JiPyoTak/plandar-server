@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { PlanResDto } from '@/dto/plan';
 import {
   ICreatePlanArgs,
+  IDeletePlanArgs,
   IGetPlansArgs,
   IUpdatePlanWithTagsArgs,
 } from '@/types/args';
@@ -25,7 +26,7 @@ export class PlanService {
     return {} as PlanResDto;
   }
 
-  async deletePlan(data): Promise<PlanResDto> {
+  async deletePlan(data: IDeletePlanArgs): Promise<PlanResDto> {
     return {} as PlanResDto;
   }
 }

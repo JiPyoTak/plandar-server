@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -63,5 +64,13 @@ export class PlanController {
       planId,
       userId: user.id,
     });
+  }
+
+  @Delete('/:planId')
+  async deletePlan(
+    @Param('planId', ParseIntPipe) planId: number,
+    @User() user: UserEntity,
+  ) {
+    return this.planService.deletePlan({ planId, userId: user.id });
   }
 }

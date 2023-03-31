@@ -19,9 +19,15 @@ interface IUpdatePlanWithTagsArgs extends PlanUpdateReqDto {
   planId: number;
 }
 
+interface IDeletePlanArgs {
+  userId: number;
+  planId: number;
+}
+
 export {
   IGetPlansArgs,
   ICreatePlanArgs,
   IUpdatePlanArgs,
   IUpdatePlanWithTagsArgs,
+  IDeletePlanArgs,
 };
