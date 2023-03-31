@@ -154,5 +154,34 @@ describe('PlanController', () => {
       });
       expect(request.body).toEqual(result);
     });
+
+    it('expect failure response with invalid body', async () => {
+      const invalidPlan = {};
+      const planServSpy = jest
+        .spyOn(planService, 'createPlan')
+        .mockRejectedValue(
+          new InternalServerErrorException(
+            'Service의 createPlan이 실행되어선 안됩니다.',
+          ),
+        );
+      const result = {
+        error: 'Bad Request',
+        statusCode: 400,
+        success: false,
+      };
+
+      const request = await testRequest(app.getHttpServer())
+        .post(`/plan`)
+        .send(invalidPlan)
+        .expect(400);
+
+      const { message, ...body } = request.body;
+      expect(planServSpy).toHaveBeenCalledTimes(0);
+      expect(body).toEqual({
+        ...result,
+        timestamp: request.body.timestamp,
+      });
+      expect(message).toBeInstanceOf(Array);
+    });
   });
 });
