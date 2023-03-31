@@ -1,7 +1,13 @@
+import { PlanCreateReqDto } from '@/dto/plan';
+
 interface IGetPlansArgs {
   userId: number;
   timeMin: Date;
   timeMax: Date;
 }
 
-export { IGetPlansArgs };
+interface ICreatePlanArgs extends PlanCreateReqDto {
+  userId: number;
+}
+
+export { IGetPlansArgs, ICreatePlanArgs };

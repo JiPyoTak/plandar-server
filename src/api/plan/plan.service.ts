@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { PlanResDto } from '@/dto/plan';
-import { IGetPlansArgs } from '@/types/args/plan';
+import { ICreatePlanArgs, IGetPlansArgs } from '@/types/args';
 
 import { PlanRepository } from './plan.repository';
 
@@ -13,7 +13,7 @@ export class PlanService {
     return [];
   }
 
-  async createPlan(data): Promise<PlanResDto> {
+  async createPlan(data: ICreatePlanArgs): Promise<PlanResDto> {
     return {} as PlanResDto;
   }
 

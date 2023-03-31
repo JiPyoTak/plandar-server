@@ -1,7 +1,15 @@
-import { BadRequestException, Controller, Get, Query } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+} from '@nestjs/common';
 
 import { User } from '@/common/decorators/user.decorator';
 import { ParseDatePipe } from '@/common/pipes';
+import { PlanCreateReqDto } from '@/dto/plan';
 import { UserEntity } from '@/entities';
 
 import { PlanService } from './plan.service';
@@ -23,5 +31,16 @@ export class PlanController {
     }
 
     return this.planService.getPlans({ timeMin, timeMax, userId: user.id });
+  }
+
+  @Post('/')
+  async createPlan(
+    @Body() createPlanReqDto: PlanCreateReqDto,
+    @User() user: UserEntity,
+  ) {
+    return this.planService.createPlan({
+      ...createPlanReqDto,
+      userId: user.id,
+    });
   }
 }
