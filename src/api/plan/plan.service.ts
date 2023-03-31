@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { PlanEntity } from '@/entities';
+import { PlanResDto } from '@/dto/plan';
+import { IGetPlansArgs } from '@/types/args/plan';
 
 import { PlanRepository } from './plan.repository';
 
@@ -8,19 +9,19 @@ import { PlanRepository } from './plan.repository';
 export class PlanService {
   constructor(private readonly planRepository: PlanRepository) {}
 
-  async getPlans(data): Promise<PlanEntity[]> {
+  async getPlans(data: IGetPlansArgs): Promise<PlanResDto[]> {
     return [];
   }
 
-  async createPlan(data): Promise<PlanEntity> {
-    return {} as PlanEntity;
+  async createPlan(data): Promise<PlanResDto> {
+    return {} as PlanResDto;
   }
 
-  async updatePlan(data): Promise<PlanEntity> {
-    return {} as PlanEntity;
+  async updatePlan(data): Promise<PlanResDto> {
+    return {} as PlanResDto;
   }
 
-  async deletePlan(data): Promise<PlanEntity> {
-    return {} as PlanEntity;
+  async deletePlan(data): Promise<PlanResDto> {
+    return {} as PlanResDto;
   }
 }
