@@ -122,4 +122,37 @@ describe('PlanController', () => {
       });
     });
   });
+
+  describe('Post /plan', () => {
+    it('expect success response with creating a plan', async () => {
+      const createPlanReq = omitKey(
+        {
+          ...PLAN_STUB,
+          startTime: new Date(PLAN_STUB.startTime),
+          endTime: new Date(PLAN_STUB.endTime),
+          tags: PLAN_STUB.tags.map(({ name }) => name),
+        },
+        ['id', 'createdAt', 'updatedAt', 'user'],
+      );
+      const planRes = { ...PLAN_STUB };
+      const planServSpy = jest
+        .spyOn(planService, 'createPlan')
+        .mockResolvedValue(planRes);
+      const result = {
+        success: true,
+        data: planRes,
+      };
+
+      const request = await testRequest(app.getHttpServer())
+        .post(`/plan`)
+        .send(createPlanReq)
+        .expect(201);
+
+      expect(planServSpy).toHaveBeenCalledWith({
+        ...createPlanReq,
+        userId: USER_STUB.id,
+      });
+      expect(request.body).toEqual(result);
+    });
+  });
 });
