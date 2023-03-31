@@ -243,4 +243,27 @@ describe('PlanController', () => {
       });
     });
   });
+
+  describe('Delete /plan/:planId', () => {
+    it('expect success response with deleting a plan', async () => {
+      const planRes = { ...PLAN_STUB };
+      const planServSpy = jest
+        .spyOn(planService, 'deletePlan')
+        .mockResolvedValue(planRes);
+      const result = {
+        success: true,
+        data: planRes,
+      };
+
+      const request = await testRequest(app.getHttpServer())
+        .delete(`/plan/${PLAN_STUB.id}`)
+        .expect(200);
+
+      expect(planServSpy).toHaveBeenCalledWith({
+        planId: PLAN_STUB.id,
+        userId: USER_STUB.id,
+      });
+      expect(request.body).toEqual(result);
+    });
+  });
 });
