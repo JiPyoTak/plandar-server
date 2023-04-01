@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { ApiPropertyOptional, PickType } from '@nestjs/swagger';
 import {
   ArrayMaxSize,
   IsArray,
@@ -26,21 +26,23 @@ class PlanCreateReqDto extends PickType(PlanEntity, [
   @IsHexColor()
   color?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: '일정이 속해있는 카테고리 아이디',
-    example: 100,
+    example: 1,
   })
+  @IsOptional()
   @IsNumber()
-  categoryId!: number;
+  categoryId?: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: '일정이 속해있는 카테고리 아이디',
-    example: 100,
+    example: ['태그1', '태그2'],
   })
+  @IsOptional()
   @IsArray()
   @ArrayMaxSize(5)
   @IsString({ each: true })
-  tags!: string[];
+  tags?: string[];
 }
 
 export { PlanCreateReqDto };

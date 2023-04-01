@@ -10,7 +10,10 @@ import {
   IsHexColor,
 } from 'class-validator';
 
-import { IsDateType } from '@/common/decorators/date-type.decorator';
+import {
+  IsDateType,
+  TransformDate,
+} from '@/common/decorators/date-type.decorator';
 import { PLAN_TYPE } from '@/entities';
 
 class PlanUpdateReqDto {
@@ -60,6 +63,7 @@ class PlanUpdateReqDto {
   })
   @IsOptional()
   @IsDateType()
+  @TransformDate()
   startTime?: Date;
 
   @ApiPropertyOptional({
@@ -68,11 +72,12 @@ class PlanUpdateReqDto {
   })
   @IsOptional()
   @IsDateType()
+  @TransformDate()
   endTime?: Date | null;
 
   @ApiPropertyOptional({
     description: '일정이 속해있는 카테고리 아이디',
-    example: 100,
+    example: 1,
   })
   @IsOptional()
   @IsNumber()
