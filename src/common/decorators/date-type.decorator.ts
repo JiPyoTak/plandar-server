@@ -27,6 +27,10 @@ export function IsDateType(validationOptions?: ValidationOptions) {
 
 export function TransformDate(options?: TransformOptions) {
   return Transform(({ value }) => {
+    if (value === null) {
+      return null;
+    }
+
     const returnValue = new Date(value);
     return isNaN(returnValue.getTime()) ? null : returnValue;
   }, options);

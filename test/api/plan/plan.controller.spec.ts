@@ -191,6 +191,7 @@ describe('PlanController', () => {
         {
           ...PLAN_STUB,
           tags: PLAN_STUB.tags.map(({ name }) => name),
+          startTime: new Date(PLAN_STUB.startTime),
         },
         ['id', 'createdAt', 'updatedAt', 'user'],
       );
