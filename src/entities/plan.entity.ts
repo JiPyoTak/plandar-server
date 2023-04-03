@@ -7,6 +7,7 @@ import {
   IsString,
   MaxLength,
   IsNumber,
+  IsHexColor,
 } from 'class-validator';
 import {
   Column,
@@ -52,7 +53,7 @@ export class PlanEntity extends DefaultEntity {
     default: '52d681',
   })
   @IsNotEmpty()
-  @IsString()
+  @IsHexColor()
   color!: string;
 
   @ApiProperty()
