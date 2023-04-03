@@ -55,7 +55,7 @@ describe('PlanController', () => {
 
       const request = await testRequest(app.getHttpServer())
         .get(`/plan`)
-        .query({ timeMin, timeMax })
+        .query({ timemin: timeMin, timemax: timeMax })
         .expect(200);
 
       expect(planServSpy).toHaveBeenCalledWith({
@@ -85,7 +85,7 @@ describe('PlanController', () => {
 
       const request = await testRequest(app.getHttpServer())
         .get(`/plan`)
-        .query({ timeMin: timeMax, timeMax: timeMin })
+        .query({ timemin: timeMax, timemax: timeMin })
         .expect(400);
 
       expect(planServSpy).toHaveBeenCalledTimes(0);
