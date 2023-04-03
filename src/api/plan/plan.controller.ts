@@ -24,8 +24,8 @@ export class PlanController {
 
   @Get('/')
   async getPlans(
-    @Query('timeMin', new ParseDatePipe()) timeMin: Date,
-    @Query('timeMax', new ParseDatePipe()) timeMax: Date,
+    @Query('timemin', ParseDatePipe) timeMin: Date,
+    @Query('timemax', ParseDatePipe) timeMax: Date,
     @User() user: UserEntity,
   ) {
     if (timeMin > timeMax) {
