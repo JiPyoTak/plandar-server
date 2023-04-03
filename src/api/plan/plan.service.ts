@@ -12,7 +12,7 @@ import { PlanRepository } from './plan.repository';
 
 @Injectable()
 export class PlanService {
-  constructor(private readonly planRepository: PlanRepository) {}
+  constructor(private readonly planRepo: PlanRepository) {}
 
   async getPlans(data: IGetPlansArgs): Promise<PlanResDto[]> {
     return [];
