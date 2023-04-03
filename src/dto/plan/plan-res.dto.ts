@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { ArrayMaxSize, IsArray, IsNumber } from 'class-validator';
 
 import { TagResDto } from '@/dto/tag';
@@ -18,7 +18,7 @@ class PlanResDto extends OmitType(PlanEntity, [
   @IsNumber()
   categoryId?: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: '일정이 가지고 있는 태그 객체',
   })
   @IsArray()
