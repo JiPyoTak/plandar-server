@@ -132,7 +132,7 @@ describe('PlanController', () => {
           endTime: new Date(PLAN_STUB.endTime),
           tags: PLAN_STUB.tags.map(({ name }) => name),
         },
-        ['id', 'createdAt', 'updatedAt', 'user'],
+        ['id'],
       );
       const planRes = { ...PLAN_STUB };
       const planServSpy = jest
@@ -193,7 +193,7 @@ describe('PlanController', () => {
           tags: PLAN_STUB.tags.map(({ name }) => name),
           startTime: new Date(PLAN_STUB.startTime),
         },
-        ['id', 'createdAt', 'updatedAt', 'user'],
+        ['id'],
       );
       const planRes = { ...PLAN_STUB };
       const planServSpy = jest
