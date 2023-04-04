@@ -1,4 +1,4 @@
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, ForbiddenException } from '@nestjs/common';
 
 import { CategoryRepository } from '@/api/category/category.repository';
 import { CategoryService } from '@/api/category/category.service';
@@ -41,6 +41,26 @@ describe('CategoryService', () => {
 
       expect(categoryRepoSpy).toHaveBeenCalledTimes(1);
       expect(categoryRepoSpy).toHaveBeenCalledWith(args.categoryId);
+    });
+
+    it(`expect throw error when category's userId is not same with userId`, async () => {
+      const args = {
+        userId: USER_STUB.id,
+        categoryId: STUB_CATEGORY[0].id,
+      };
+      const categoryRepoSpy = jest
+        .spyOn(categoryRepo, 'findOnlyUserId')
+        .mockResolvedValue(Infinity);
+
+      try {
+        await categoryService.checkUserOwnCategory(args);
+        expect('not to be execute this').toBe('throw Error');
+      } catch (error) {
+        expect(categoryRepoSpy).toHaveBeenCalledTimes(1);
+        expect(categoryRepoSpy).toHaveBeenCalledWith(args.categoryId);
+        expect(error).toBeInstanceOf(ForbiddenException);
+        expect(typeof error.message).toBe('string');
+      }
     });
   });
 
