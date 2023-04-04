@@ -64,6 +64,22 @@ describe('CategoryService', () => {
     });
   });
 
+  describe('checkHasCategory', () => {
+    it(`should pass if categoryId is existing in database`, async () => {
+      const categoryId = STUB_CATEGORY[0].id;
+      const categoryRepoSpy = jest
+        .spyOn(categoryRepo, 'exist')
+        .mockResolvedValue(true);
+
+      await categoryService.checkHasCategory(categoryId);
+
+      expect(categoryRepoSpy).toHaveBeenCalledTimes(1);
+      expect(categoryRepoSpy).toHaveBeenCalledWith({
+        where: { id: categoryId },
+      });
+    });
+  });
+
   describe('success read', () => {
     it('return category list', async () => {
       // given
