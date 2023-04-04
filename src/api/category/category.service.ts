@@ -108,16 +108,15 @@ export class CategoryService {
   async deleteCategory(
     deleteCategoryArgs: IDeleteCategoryArgs,
   ): Promise<CategoryResDto> {
+    await this.checkUserOwnCategory(deleteCategoryArgs);
+
     const category = await this.categoryRepo.findCategoryById(
       deleteCategoryArgs,
     );
-    if (!category) {
-      throw new ConflictException('Category does not exist');
-    }
 
     if (!(await this.categoryRepo.deleteCategory(deleteCategoryArgs))) {
       throw new InternalServerErrorException(
-        'There is an error in deleting category',
+        '카테고리를 삭제하던 도중 에러가 발생했습니다. \n 삭제 요청을 취소합니다.',
       );
     }
     return mapToHexColor(category);

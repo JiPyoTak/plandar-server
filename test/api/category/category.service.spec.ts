@@ -567,31 +567,6 @@ describe('CategoryService', () => {
     });
   });
 
-  describe('fail delete', () => {
-    it('try to delete not existed category', async () => {
-      // given
-      const userId = stubCategory[0].user.id;
-      const categoryId = stubCategory[0].id;
-
-      const categoryRepoFind = jest
-        .spyOn(categoryRepo, 'findCategoryById')
-        .mockResolvedValue(null);
-
-      try {
-        // when
-        await categoryService.deleteCategory({ userId, categoryId });
-      } catch (e) {
-        // then
-        expect(e).toBeInstanceOf(ConflictException);
-      }
-
-      expect(categoryRepoFind).toHaveBeenCalledWith({
-        userId,
-        categoryId,
-      });
-    });
-  });
-
   describe('success delete', () => {
     it('success delete category', async () => {
       // given
@@ -613,6 +588,9 @@ describe('CategoryService', () => {
         id: categoryId,
         color: `#${color}`,
       };
+      const categoryCheckUserOwnCategorySpy = jest
+        .spyOn(categoryService, 'checkUserOwnCategory')
+        .mockResolvedValue(undefined);
       const categoryFindById = jest
         .spyOn(categoryRepo, 'findCategoryById')
         .mockResolvedValue(repoRet);
@@ -624,6 +602,7 @@ describe('CategoryService', () => {
       const category = await categoryService.deleteCategory(params);
 
       // then
+      expect(categoryCheckUserOwnCategorySpy).toHaveBeenCalledWith(params);
       expect(categoryFindById).toHaveBeenCalledWith(params);
       expect(categoryRepoSpy).toHaveBeenCalledWith(params);
       expect(category).toEqual(shouldBe);
