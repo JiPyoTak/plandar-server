@@ -25,8 +25,15 @@ export class CategoryService {
     categoryId,
   }: ICheckUserOwnCategoryArgs): Promise<void> {
     const categoryUserID = await this.categoryRepo.findOnlyUserId(categoryId);
-    if (!categoryUserID || userId !== categoryUserID) {
-      throw new ForbiddenException('유저가 조작할 수 없는 카테고리 입니다');
+    if (!categoryUserID) {
+      throw new ConflictException(
+        `존재하지 않는 카테고리입니다: ${categoryId}`,
+      );
+    }
+    if (userId !== categoryUserID) {
+      throw new ForbiddenException(
+        `유저가 조작할 수 없는 카테고리 입니다: ${categoryId}`,
+      );
     }
   }
 
