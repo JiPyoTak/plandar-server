@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -8,6 +9,7 @@ import { Transactional } from 'typeorm-transactional';
 import { CategoryRepository } from '@/api/category/category.repository';
 import { CategoryResDto } from '@/dto/category';
 import {
+  ICheckUserOwnCategoryArgs,
   ICreateCategoryArgs,
   IDeleteCategoryArgs,
   IUpdateCategoryArgs,
@@ -17,6 +19,16 @@ import { mapToHexColor } from '@/utils/color-converter';
 @Injectable()
 export class CategoryService {
   constructor(private readonly categoryRepo: CategoryRepository) {}
+
+  async checkUserOwnCategory({
+    userId,
+    categoryId,
+  }: ICheckUserOwnCategoryArgs): Promise<void> {
+    const categoryUserID = await this.categoryRepo.findOnlyUserId(categoryId);
+    if (!categoryUserID || userId !== categoryUserID) {
+      throw new ForbiddenException('유저가 조작할 수 없는 카테고리 입니다');
+    }
+  }
 
   async readCategory(userId: number): Promise<CategoryResDto[]> {
     return mapToHexColor(await this.categoryRepo.readCategory(userId));
