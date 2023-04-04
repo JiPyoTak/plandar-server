@@ -30,6 +30,13 @@ export class CategoryService {
     }
   }
 
+  async checkHasCategory(id: number): Promise<void> {
+    const hasCategory = await this.categoryRepo.exist({ where: { id } });
+    if (!hasCategory) {
+      throw new ConflictException(`존재하지 않는 카테고리입니다 : ${id}`);
+    }
+  }
+
   async readCategory(userId: number): Promise<CategoryResDto[]> {
     return mapToHexColor(await this.categoryRepo.readCategory(userId));
   }
