@@ -78,6 +78,25 @@ describe('CategoryService', () => {
         where: { id: categoryId },
       });
     });
+
+    it(`expect throw conflict error if categoryId is not existed in database`, async () => {
+      const categoryId = STUB_CATEGORY[0].id;
+      const categoryRepoSpy = jest
+        .spyOn(categoryRepo, 'exist')
+        .mockResolvedValue(false);
+
+      try {
+        await categoryService.checkHasCategory(categoryId);
+        expect('not to be execute this').toBe('throw Error');
+      } catch (error) {
+        expect(categoryRepoSpy).toHaveBeenCalledTimes(1);
+        expect(categoryRepoSpy).toHaveBeenCalledWith({
+          where: { id: categoryId },
+        });
+        expect(error).toBeInstanceOf(ConflictException);
+        expect(typeof error.message).toBe('string');
+      }
+    });
   });
 
   describe('success read', () => {
