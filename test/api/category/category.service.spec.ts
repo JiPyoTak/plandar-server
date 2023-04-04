@@ -5,6 +5,7 @@ import { CategoryService } from '@/api/category/category.service';
 import createTestingModule from 'test/utils/create-testing-module';
 
 import { STUB_CATEGORY } from './stub';
+import { USER_STUB } from '../user/stub';
 
 describe('CategoryService', () => {
   const stubCategory = STUB_CATEGORY;
@@ -24,6 +25,23 @@ describe('CategoryService', () => {
   it('Check defining Modules', () => {
     expect(categoryRepo).toBeDefined();
     expect(categoryService).toBeDefined();
+  });
+
+  describe('checkUserOwnCategory', () => {
+    it(`should pass - userId & category's userId are same`, async () => {
+      const args = {
+        userId: USER_STUB.id,
+        categoryId: STUB_CATEGORY[0].id,
+      };
+      const categoryRepoSpy = jest
+        .spyOn(categoryRepo, 'findOnlyUserId')
+        .mockResolvedValue(args.userId);
+
+      await categoryService.checkUserOwnCategory(args);
+
+      expect(categoryRepoSpy).toHaveBeenCalledTimes(1);
+      expect(categoryRepoSpy).toHaveBeenCalledWith(args.categoryId);
+    });
   });
 
   describe('success read', () => {
