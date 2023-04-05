@@ -7,6 +7,29 @@ import { CreateTagArgs, DeleteTagArgs, UpdateTagArgs } from '@/types/args';
 
 @CustomRepository(TagEntity)
 export class TagRepository extends Repository<TagEntity> {
+  async findTagWithPlans({
+    tagId,
+    userId,
+  }: {
+    tagId: number;
+    userId: number;
+  }): Promise<TagResDto & { plans: { id: number }[] }> {
+    return this.findOne({
+      where: {
+        id: tagId,
+        user: { id: userId },
+      },
+      select: {
+        id: true,
+        name: true,
+        plans: {
+          id: true,
+        },
+      },
+      relations: { plans: true },
+    });
+  }
+
   async findTagById({
     tagId,
     userId,
