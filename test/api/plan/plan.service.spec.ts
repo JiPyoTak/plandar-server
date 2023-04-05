@@ -319,4 +319,42 @@ describe('PlanService', () => {
       expect(plans).toEqual(result);
     });
   });
+
+  describe('deletePlan', () => {
+    it('should delete plan and return', async () => {
+      const args = {
+        planId: PLAN_STUB.id,
+        userId: USER_STUB.id,
+      };
+      const result = { ...PLAN_STUB_WITH_COLOR };
+      const planCheckUserOwnPlanSpy = jest
+        .spyOn(planService, 'checkUserOwnPlan')
+        .mockResolvedValue(undefined);
+      const planFindById = jest
+        .spyOn(planRepository, 'findPlanById')
+        .mockResolvedValue({ ...PLAN_STUB });
+      const planRepoSpy = jest
+        .spyOn(planRepository, 'deletePlan')
+        .mockResolvedValue(true);
+      const tagServSpy = jest
+        .spyOn(tagService, 'deleteTagIfNotReferenced')
+        .mockImplementation(async ({ tagId }) => ({
+          ...PLAN_STUB.tags.find(({ id }) => id === tagId),
+        }));
+
+      const plan = await planService.deletePlan(args);
+
+      expect(planCheckUserOwnPlanSpy).toHaveBeenCalledTimes(1);
+      expect(planCheckUserOwnPlanSpy).toHaveBeenCalledWith(args);
+      expect(planFindById).toHaveBeenCalledTimes(1);
+      expect(planFindById).toHaveBeenCalledWith(args.planId);
+      expect(planRepoSpy).toHaveBeenCalledTimes(1);
+      expect(planRepoSpy).toHaveBeenCalledWith(args.planId);
+      expect(tagServSpy).toHaveBeenCalledTimes(PLAN_STUB.tags.length);
+      PLAN_STUB.tags.forEach(({ id: tagId }) => {
+        expect(tagServSpy).toHaveBeenCalledWith({ tagId, userId: args.userId });
+      });
+      expect(plan).toEqual(result);
+    });
+  });
 });
