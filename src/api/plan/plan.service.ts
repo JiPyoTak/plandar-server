@@ -14,6 +14,7 @@ import {
   IGetPlansArgs,
   IUpdatePlanWithTagsArgs,
 } from '@/types/args';
+import { mapToHexColor } from '@/utils/color-converter';
 
 import { PlanRepository } from './plan.repository';
 
@@ -45,7 +46,7 @@ export class PlanService {
   }
 
   async getPlans(data: IGetPlansArgs): Promise<PlanResDto[]> {
-    return [];
+    return mapToHexColor(await this.planRepo.findPlansBetweenDate(data));
   }
 
   async createPlan(data: ICreatePlanArgs): Promise<PlanResDto> {
