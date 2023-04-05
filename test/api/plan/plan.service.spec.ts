@@ -12,6 +12,7 @@ import {
 } from 'test/api/plan/stub';
 import { USER_STUB } from 'test/api/user/stub';
 import createTestingModule from 'test/utils/create-testing-module';
+import { omitKey } from 'test/utils/omit-key';
 
 describe('PlanService', () => {
   let planRepository: PlanRepository;
@@ -142,6 +143,49 @@ describe('PlanService', () => {
       expect(planRepoSpy).toHaveBeenCalledTimes(1);
       expect(planRepoSpy).toHaveBeenCalledWith(args);
       expect(plans).toEqual(result);
+    });
+  });
+
+  describe('createPlan', () => {
+    it('should createPlan without category & tags and return new', async () => {
+      const newPlanData = omitKey(
+        {
+          ...PLAN_STUB,
+          userId: USER_STUB.id,
+        },
+        ['categoryId', 'tags'],
+      );
+      const result = {
+        ...PLAN_STUB_WITH_COLOR,
+        tags: [],
+        categoryId: null,
+      };
+      const categoryServSpy = jest
+        .spyOn(categoryService, 'checkUserOwnCategory')
+        .mockRejectedValue(
+          new Error(
+            'categoryService - checkUserOwnCategory : 실행되어선 안되는 함수입니다.',
+          ),
+        );
+      const tagServSpy = jest
+        .spyOn(tagService, 'createTag')
+        .mockRejectedValue(
+          new Error('tagService - createTag : 실행되어선 안되는 함수입니다.'),
+        );
+      const planRepoSpy = jest
+        .spyOn(planRepository, 'createPlan')
+        .mockResolvedValue({ ...result, color: PLAN_STUB.color });
+
+      const plan = await planService.createPlan(newPlanData);
+
+      expect(categoryServSpy).toHaveBeenCalledTimes(0);
+      expect(tagServSpy).toHaveBeenCalledTimes(0);
+      expect(planRepoSpy).toHaveBeenCalledTimes(1);
+      expect(planRepoSpy).toHaveBeenCalledWith({
+        ...newPlanData,
+        tags: [],
+      });
+      expect(plan).toEqual(result);
     });
   });
 });
