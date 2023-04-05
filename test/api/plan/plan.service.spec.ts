@@ -88,4 +88,18 @@ describe('PlanService', () => {
       }
     });
   });
+
+  describe('checkHasPlan', () => {
+    it(`should pass if planId is existing in database`, async () => {
+      const planId = PLAN_STUB.id;
+      const planRepoSpy = jest
+        .spyOn(planRepository, 'exist')
+        .mockResolvedValue(true);
+
+      await planService.checkHasPlan(planId);
+
+      expect(planRepoSpy).toHaveBeenCalledTimes(1);
+      expect(planRepoSpy).toHaveBeenCalledWith({ where: { id: planId } });
+    });
+  });
 });
