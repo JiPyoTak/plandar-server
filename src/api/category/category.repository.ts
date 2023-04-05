@@ -16,6 +16,7 @@ export class CategoryRepository extends Repository<CategoryEntity> {
     const category = await this.findOne({
       where: { id },
       select: { user: { id: true } },
+      relations: { user: true },
     });
 
     return category?.user.id ?? null;
