@@ -1,9 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 
 import { CategoryService } from '@/api/category/category.service';
 import { TagService } from '@/api/tag/tag.service';
 import { PlanResDto } from '@/dto/plan';
 import {
+  ICheckUserOwnPlan,
   ICreatePlanArgs,
   IDeletePlanArgs,
   IGetPlansArgs,
@@ -19,6 +24,18 @@ export class PlanService {
     private readonly categoryService: CategoryService,
     private readonly tagService: TagService,
   ) {}
+
+  async checkUserOwnPlan({ userId, planId }: ICheckUserOwnPlan): Promise<void> {
+    const planUserId = await this.planRepo.findOnlyUserId(planId);
+    if (!planUserId) {
+      throw new ConflictException(`존재하지 않는 일정입니다: ${planId}`);
+    }
+    if (planUserId !== userId) {
+      throw new ForbiddenException(
+        `유저가 조작할 수 없는 일정입니다: ${planId}`,
+      );
+    }
+  }
 
   async getPlans(data: IGetPlansArgs): Promise<PlanResDto[]> {
     return [];

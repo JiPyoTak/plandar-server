@@ -1,5 +1,10 @@
 import { PlanCreateReqDto, PlanUpdateReqDto } from '@/dto/plan';
 
+interface ICheckUserOwnPlan {
+  userId: number;
+  planId: number;
+}
+
 interface IGetPlansArgs {
   userId: number;
   timeMin: Date;
@@ -10,13 +15,13 @@ interface ICreatePlanArgs extends PlanCreateReqDto {
   userId: number;
 }
 
-interface IUpdatePlanArgs extends Omit<PlanUpdateReqDto, 'tags'> {
+interface IUpdatePlanArgs extends PlanUpdateReqDto {
   id: number;
 }
 
 interface IUpdatePlanWithTagsArgs extends PlanUpdateReqDto {
   userId: number;
-  planId: number;
+  id: number;
 }
 
 interface IDeletePlanArgs {
@@ -25,6 +30,7 @@ interface IDeletePlanArgs {
 }
 
 export {
+  ICheckUserOwnPlan,
   IGetPlansArgs,
   ICreatePlanArgs,
   IUpdatePlanArgs,
