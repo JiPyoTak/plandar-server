@@ -61,7 +61,7 @@ export class PlanController {
     }
     return this.planService.updatePlan({
       ...updatePlanReqDto,
-      planId,
+      id: planId,
       userId: user.id,
     });
   }

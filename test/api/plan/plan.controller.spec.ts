@@ -211,7 +211,7 @@ describe('PlanController', () => {
 
       expect(planServSpy).toHaveBeenCalledWith({
         ...updatePlanReq,
-        planId: PLAN_STUB.id,
+        id: PLAN_STUB.id,
         userId: USER_STUB.id,
       });
       expect(request.body).toEqual(result);
