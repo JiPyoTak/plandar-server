@@ -2,8 +2,9 @@ import { Between, Repository } from 'typeorm';
 
 import { CustomRepository } from '@/common/decorators';
 import { PlanResDto } from '@/dto/plan';
+import { TagResDto } from '@/dto/tag';
 import { PlanEntity } from '@/entities';
-import { IGetPlansArgs } from '@/types/args';
+import { ICreatePlanArgs, IGetPlansArgs } from '@/types/args';
 import { PLAN_SELECT } from '@/utils/constants';
 
 @CustomRepository(PlanEntity)
@@ -36,5 +37,15 @@ export class PlanRepository extends Repository<PlanEntity> {
       select: PLAN_SELECT,
       relations: { tags: true },
     });
+  }
+
+  async createPlan(
+    planData: Omit<ICreatePlanArgs, 'tags'> & { tags: TagResDto[] },
+  ): Promise<PlanResDto> {
+    const filteredPlan = this.create(planData);
+
+    const { id } = await this.save(filteredPlan);
+
+    return await this.findPlanById(id);
   }
 }
