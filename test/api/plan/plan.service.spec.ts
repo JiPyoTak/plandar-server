@@ -4,7 +4,12 @@ import { CategoryService } from '@/api/category/category.service';
 import { PlanRepository } from '@/api/plan/plan.repository';
 import { PlanService } from '@/api/plan/plan.service';
 import { TagService } from '@/api/tag/tag.service';
-import { PLAN_STUB } from 'test/api/plan/stub';
+import {
+  PLAN_STUB,
+  PLAN_STUB_WITH_COLOR,
+  PLAN_TIME_MAX_STUB,
+  PLAN_TIME_MIN_STUB,
+} from 'test/api/plan/stub';
 import { USER_STUB } from 'test/api/user/stub';
 import createTestingModule from 'test/utils/create-testing-module';
 
@@ -117,6 +122,26 @@ describe('PlanService', () => {
         expect(error).toBeInstanceOf(ConflictException);
         expect(typeof error.message).toBe('string');
       }
+    });
+  });
+
+  describe('getPlans', () => {
+    it('should return plans between timemin, timemax query', async () => {
+      const args = {
+        userId: USER_STUB.id,
+        timeMin: PLAN_TIME_MIN_STUB,
+        timeMax: PLAN_TIME_MAX_STUB,
+      };
+      const result = [{ ...PLAN_STUB_WITH_COLOR }];
+      const planRepoSpy = jest
+        .spyOn(planRepository, 'findPlansBetweenDate')
+        .mockResolvedValue([{ ...PLAN_STUB }]);
+
+      const plans = await planService.getPlans(args);
+
+      expect(planRepoSpy).toHaveBeenCalledTimes(1);
+      expect(planRepoSpy).toHaveBeenCalledWith(args);
+      expect(plans).toEqual(result);
     });
   });
 });
