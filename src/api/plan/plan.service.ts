@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Injectable,
 } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 
 import { CategoryService } from '@/api/category/category.service';
 import { TagService } from '@/api/tag/tag.service';
@@ -49,8 +50,26 @@ export class PlanService {
     return mapToHexColor(await this.planRepo.findPlansBetweenDate(data));
   }
 
-  async createPlan(data: ICreatePlanArgs): Promise<PlanResDto> {
-    return {} as PlanResDto;
+  @Transactional()
+  async createPlan({
+    tags = [],
+    ...planData
+  }: ICreatePlanArgs): Promise<PlanResDto> {
+    const { categoryId, userId } = planData;
+    if (categoryId) {
+      await this.categoryService.checkUserOwnCategory({ categoryId, userId });
+    }
+
+    const createdTags = await Promise.all(
+      tags.map((tagName) => this.tagService.createTag({ tagName, userId })),
+    );
+
+    const newPlan = await this.planRepo.createPlan({
+      ...planData,
+      tags: createdTags,
+    });
+
+    return mapToHexColor(newPlan);
   }
 
   async updatePlan(data: IUpdatePlanWithTagsArgs): Promise<PlanResDto> {
