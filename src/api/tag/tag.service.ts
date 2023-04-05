@@ -46,4 +46,19 @@ export class TagService {
     }
     return tag;
   }
+
+  async deleteTagIfNotReferenced(
+    deleteTagArgs: DeleteTagArgs,
+  ): Promise<TagResDto | null> {
+    const tagWithPlans = await this.tagRepo.findTagWithPlans(deleteTagArgs);
+
+    if (!tagWithPlans) return null;
+
+    const { plans, ...tagData } = tagWithPlans;
+    if (tagWithPlans && plans.length === 0) {
+      await this.tagRepo.deleteTag(deleteTagArgs);
+    }
+
+    return tagData;
+  }
 }
