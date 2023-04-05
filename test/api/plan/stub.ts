@@ -9,7 +9,7 @@ const PLAN_STUB: PlanResDto = Object.freeze({
   id: 1,
   title: 'MyPlan',
   description: '',
-  color: '#123456',
+  color: '123456',
   startTime: new Date(
     '2023-03-07 15:38:06.785155',
   ).toISOString() as unknown as Date,
@@ -24,4 +24,14 @@ const PLAN_STUB: PlanResDto = Object.freeze({
   ] as TagResDto[],
 });
 
-export { PLAN_STUB, PLAN_TIME_MIN_STUB, PLAN_TIME_MAX_STUB };
+const PLAN_STUB_WITH_COLOR: PlanResDto = Object.freeze({
+  ...PLAN_STUB,
+  color: '#123456',
+});
+
+export {
+  PLAN_STUB,
+  PLAN_STUB_WITH_COLOR,
+  PLAN_TIME_MIN_STUB,
+  PLAN_TIME_MAX_STUB,
+};
