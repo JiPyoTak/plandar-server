@@ -7,6 +7,7 @@ import { PlanEntity } from '@/entities';
 class PlanResDto extends OmitType(PlanEntity, [
   'createdAt',
   'updatedAt',
+  'userId',
   'user',
   'tags',
   'category',
@@ -20,6 +21,7 @@ class PlanResDto extends OmitType(PlanEntity, [
 
   @ApiProperty({
     description: '일정이 가지고 있는 태그 객체',
+    example: ['태그1', '태그2'],
   })
   @IsArray()
   @ArrayMaxSize(5)

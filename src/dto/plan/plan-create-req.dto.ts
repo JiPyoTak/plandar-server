@@ -1,4 +1,5 @@
 import { ApiPropertyOptional, PickType } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   ArrayMaxSize,
   IsArray,
@@ -24,6 +25,7 @@ class PlanCreateReqDto extends PickType(PlanEntity, [
   })
   @IsOptional()
   @IsHexColor()
+  @Transform(({ value }) => value.replace('#', ''))
   color?: string;
 
   @ApiPropertyOptional({

@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsOptional,
@@ -33,20 +34,26 @@ export enum PLAN_TYPE {
 
 @Entity('plan_tb')
 export class PlanEntity extends DefaultEntity {
-  @ApiProperty()
+  @ApiProperty({
+    example: '제목!!',
+  })
   @Column({ type: 'varchar', length: 30 })
   @IsNotEmpty()
   @IsString()
   @MaxLength(30)
   title!: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: '나만의 설명',
+  })
   @Column({ type: 'text', nullable: true })
   @IsOptional()
   @IsString()
   description?: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: '#52d681',
+  })
   @Column({
     type: 'char',
     length: 6,
@@ -54,52 +61,68 @@ export class PlanEntity extends DefaultEntity {
   })
   @IsNotEmpty()
   @IsHexColor()
+  @Transform(({ value }) => value.replace('#', ''))
   color!: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: true,
+  })
   @Column({ type: 'boolean', default: true })
   @IsNotEmpty()
   @IsBoolean()
   isAllDay: boolean;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 'task',
+  })
   @Column({ type: 'enum', enum: PLAN_TYPE })
   @IsNotEmpty()
   @IsEnum(PLAN_TYPE)
   type!: PLAN_TYPE;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: '2023-04-05T04:41:19.933Z',
+  })
   @Column({ type: 'datetime' })
   @IsNotEmpty()
   @IsDateType()
   @TransformDate()
   startTime!: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: '2023-04-05T04:41:19.933Z',
+  })
   @Column({ type: 'datetime', nullable: true })
   @IsOptional()
   @IsDateType()
   @TransformDate()
   endTime?: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: 1,
+  })
+  @Column({ type: 'int' })
+  @IsNumber()
+  userId!: number;
+
   @ManyToOne(() => UserEntity, { onDelete: 'CASCADE', cascade: true })
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'userId' })
   user!: UserEntity;
 
+  @ApiProperty({
+    example: 1,
+  })
   @Column({ type: 'int' })
   @IsNumber()
   categoryId!: number;
 
-  @ApiProperty()
-  @ManyToOne(() => CategoryEntity, (category) => category.plans, {
-    onDelete: 'CASCADE',
-    cascade: true,
-  })
+  @ManyToOne(() => CategoryEntity, (category) => category.plans)
   @JoinColumn({ name: 'categoryId' })
   category!: CategoryEntity;
 
-  @ApiProperty()
+  @ApiProperty({
+    example: ['태그1', '태그2'],
+  })
   @ManyToMany(() => TagEntity, (tag) => tag.plans, { cascade: true })
   @JoinTable({
     joinColumn: { name: 'plan_id' },
