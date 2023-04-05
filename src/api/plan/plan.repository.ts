@@ -4,7 +4,7 @@ import { CustomRepository } from '@/common/decorators';
 import { PlanResDto } from '@/dto/plan';
 import { TagResDto } from '@/dto/tag';
 import { PlanEntity } from '@/entities';
-import { ICreatePlanArgs, IGetPlansArgs } from '@/types/args';
+import { ICreatePlanArgs, IGetPlansArgs, IUpdatePlanArgs } from '@/types/args';
 import { PLAN_SELECT } from '@/utils/constants';
 
 @CustomRepository(PlanEntity)
@@ -46,6 +46,17 @@ export class PlanRepository extends Repository<PlanEntity> {
 
     const { id } = await this.save(filteredPlan);
 
+    return await this.findPlanById(id);
+  }
+
+  async updatePlan({
+    id,
+    ...planData
+  }: Omit<IUpdatePlanArgs, 'tags'> & {
+    tags: TagResDto[];
+  }): Promise<PlanResDto> {
+    const data = this.create({ ...planData, id });
+    await this.save(data);
     return await this.findPlanById(id);
   }
 }
