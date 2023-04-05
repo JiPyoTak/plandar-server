@@ -230,4 +230,47 @@ describe('PlanService', () => {
       expect(plan).toEqual(result);
     });
   });
+
+  describe('updatePlan', () => {
+    it('should update plan without categoryId & tags and return', async () => {
+      const planData = omitKey(
+        {
+          ...PLAN_STUB,
+          tags: [],
+          userId: USER_STUB.id,
+        },
+        ['categoryId'],
+      );
+      const result = { ...PLAN_STUB_WITH_COLOR, tags: [], categoryId: null };
+      const planCheckUserOwnPlanSpy = jest
+        .spyOn(planService, 'checkUserOwnPlan')
+        .mockResolvedValue(undefined);
+      const categoryServSpy = jest
+        .spyOn(categoryService, 'checkUserOwnCategory')
+        .mockRejectedValue(
+          new Error(
+            'categoryService - checkUserOwnCategory : 실행되어선 안되는 함수입니다.',
+          ),
+        );
+      const tagServSpy = jest
+        .spyOn(tagService, 'createTag')
+        .mockRejectedValue(
+          new Error('tagService - createTag : 실행되어선 안되는 함수입니다.'),
+        );
+      const planRepoSpy = jest
+        .spyOn(planRepository, 'updatePlan')
+        .mockResolvedValue({ ...result, color: PLAN_STUB.color });
+
+      const plans = await planService.updatePlan(planData);
+
+      expect(planCheckUserOwnPlanSpy).toHaveBeenCalledTimes(1);
+      expect(categoryServSpy).toHaveBeenCalledTimes(0);
+      expect(tagServSpy).toHaveBeenCalledTimes(0);
+      expect(planRepoSpy).toHaveBeenCalledTimes(1);
+      expect(planRepoSpy).toHaveBeenCalledWith({
+        ...planData,
+      });
+      expect(plans).toEqual(result);
+    });
+  });
 });
