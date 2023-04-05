@@ -14,4 +14,13 @@ export class PlanRepository extends Repository<PlanEntity> {
       relations: { category: false, tags: true },
     });
   }
+
+  async findOnlyUserId(id: number): Promise<number> {
+    const plan = await this.findOne({
+      where: { id },
+      select: { userId: true },
+    });
+
+    return plan?.userId ?? null;
+  }
 }
