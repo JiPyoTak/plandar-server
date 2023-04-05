@@ -101,5 +101,22 @@ describe('PlanService', () => {
       expect(planRepoSpy).toHaveBeenCalledTimes(1);
       expect(planRepoSpy).toHaveBeenCalledWith({ where: { id: planId } });
     });
+
+    it(`expect throw conflict error if planId is not existed in database`, async () => {
+      const planId = PLAN_STUB.id;
+      const planRepoSpy = jest
+        .spyOn(planRepository, 'exist')
+        .mockResolvedValue(false);
+
+      try {
+        await planService.checkHasPlan(planId);
+        expect('not to be execute this').toBe('throw Error');
+      } catch (error) {
+        expect(planRepoSpy).toHaveBeenCalledTimes(1);
+        expect(planRepoSpy).toHaveBeenCalledWith({ where: { id: planId } });
+        expect(error).toBeInstanceOf(ConflictException);
+        expect(typeof error.message).toBe('string');
+      }
+    });
   });
 });
