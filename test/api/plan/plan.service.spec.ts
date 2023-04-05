@@ -272,5 +272,51 @@ describe('PlanService', () => {
       });
       expect(plans).toEqual(result);
     });
+
+    it('should update plan with categoryId & tags and return', async () => {
+      const planData = {
+        ...PLAN_STUB,
+        tags: PLAN_STUB.tags.map(({ name }) => name),
+        userId: USER_STUB.id,
+      };
+      const result = { ...PLAN_STUB_WITH_COLOR };
+      const planCheckUserOwnPlanSpy = jest
+        .spyOn(planService, 'checkUserOwnPlan')
+        .mockResolvedValue(undefined);
+      const categoryServSpy = jest
+        .spyOn(categoryService, 'checkUserOwnCategory')
+        .mockResolvedValue(undefined);
+      const tagServSpy = jest
+        .spyOn(tagService, 'createTag')
+        .mockImplementation(async ({ tagName }) => ({
+          ...PLAN_STUB.tags.find(({ name }) => name === tagName),
+        }));
+      const planRepoSpy = jest
+        .spyOn(planRepository, 'updatePlan')
+        .mockResolvedValue({ ...PLAN_STUB });
+
+      const plans = await planService.updatePlan(planData);
+
+      expect(planCheckUserOwnPlanSpy).toHaveBeenCalledTimes(1);
+      expect(categoryServSpy).toHaveBeenCalledTimes(1);
+      expect(categoryServSpy).toHaveBeenCalledWith({
+        categoryId: planData.categoryId,
+        userId: planData.userId,
+      });
+      expect(tagServSpy).toHaveBeenCalledTimes(planData.tags.length);
+      planData.tags.forEach((tagName) => {
+        expect(tagServSpy).toHaveBeenCalledWith({
+          tagName,
+          userId: planData.userId,
+        });
+      });
+      expect(planRepoSpy).toHaveBeenCalledTimes(1);
+      expect(planRepoSpy).toHaveBeenCalledWith({
+        ...result,
+        color: PLAN_STUB.color,
+        userId: planData.userId,
+      });
+      expect(plans).toEqual(result);
+    });
   });
 });
