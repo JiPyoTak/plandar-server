@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
+import { CategoryService } from '@/api/category/category.service';
+import { TagService } from '@/api/tag/tag.service';
 import { PlanResDto } from '@/dto/plan';
 import {
   ICreatePlanArgs,
@@ -12,7 +14,11 @@ import { PlanRepository } from './plan.repository';
 
 @Injectable()
 export class PlanService {
-  constructor(private readonly planRepo: PlanRepository) {}
+  constructor(
+    private readonly planRepo: PlanRepository,
+    private readonly categoryService: CategoryService,
+    private readonly tagService: TagService,
+  ) {}
 
   async getPlans(data: IGetPlansArgs): Promise<PlanResDto[]> {
     return [];
