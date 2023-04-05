@@ -1,4 +1,4 @@
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, ForbiddenException } from '@nestjs/common';
 
 import { CategoryService } from '@/api/category/category.service';
 import { PlanRepository } from '@/api/plan/plan.repository';
@@ -64,6 +64,26 @@ describe('PlanService', () => {
         expect(planRepoSpy).toHaveBeenCalledTimes(1);
         expect(planRepoSpy).toHaveBeenCalledWith(args.planId);
         expect(error).toBeInstanceOf(ConflictException);
+        expect(typeof error.message).toBe('string');
+      }
+    });
+
+    it(`expect throw error when plan's userId is not same with userId`, async () => {
+      const args = {
+        userId: USER_STUB.id,
+        planId: PLAN_STUB.id,
+      };
+      const planRepoSpy = jest
+        .spyOn(planRepository, 'findOnlyUserId')
+        .mockResolvedValue(Infinity);
+
+      try {
+        await planService.checkUserOwnPlan(args);
+        expect('not to be execute this').toBe('throw Error');
+      } catch (error) {
+        expect(planRepoSpy).toHaveBeenCalledTimes(1);
+        expect(planRepoSpy).toHaveBeenCalledWith(args.planId);
+        expect(error).toBeInstanceOf(ForbiddenException);
         expect(typeof error.message).toBe('string');
       }
     });
