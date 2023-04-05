@@ -72,8 +72,29 @@ export class PlanService {
     return mapToHexColor(newPlan);
   }
 
-  async updatePlan(data: IUpdatePlanWithTagsArgs): Promise<PlanResDto> {
-    return {} as PlanResDto;
+  @Transactional()
+  async updatePlan({
+    tags = [],
+    ...data
+  }: IUpdatePlanWithTagsArgs): Promise<PlanResDto> {
+    const { id, categoryId, userId } = data;
+
+    await this.checkUserOwnPlan({ userId, planId: id });
+
+    if (categoryId) {
+      await this.categoryService.checkUserOwnCategory({ categoryId, userId });
+    }
+
+    const createdTags = await Promise.all(
+      tags.map((tagName) => this.tagService.createTag({ tagName, userId })),
+    );
+
+    const updatedPlan = await this.planRepo.updatePlan({
+      ...data,
+      tags: createdTags,
+    });
+
+    return mapToHexColor(updatedPlan);
   }
 
   async deletePlan(data: IDeletePlanArgs): Promise<PlanResDto> {
