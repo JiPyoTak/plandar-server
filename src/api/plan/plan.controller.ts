@@ -24,7 +24,7 @@ import {
 import { User } from '@/common/decorators/user.decorator';
 import { ParseDatePipe } from '@/common/pipes';
 import { PlanCreateReqDto, PlanResDto, PlanUpdateReqDto } from '@/dto/plan';
-import { UserEntity } from '@/entities';
+import { TTokenUser } from '@/types';
 
 import { PlanService } from './plan.service';
 
@@ -59,7 +59,7 @@ export class PlanController {
   async getPlans(
     @Query('timemin', ParseDatePipe) timeMin: Date,
     @Query('timemax', ParseDatePipe) timeMax: Date,
-    @User() user: UserEntity,
+    @User() user: TTokenUser,
   ) {
     if (timeMin > timeMax) {
       throw new BadRequestException(
@@ -83,7 +83,7 @@ export class PlanController {
   @Post('/')
   async createPlan(
     @Body() createPlanReqDto: PlanCreateReqDto,
-    @User() user: UserEntity,
+    @User() user: TTokenUser,
   ) {
     return this.planService.createPlan({
       ...createPlanReqDto,
@@ -112,7 +112,7 @@ export class PlanController {
   async updatePlan(
     @Param('planId', ParseIntPipe) planId: number,
     @Body() updatePlanReqDto: PlanUpdateReqDto,
-    @User() user: UserEntity,
+    @User() user: TTokenUser,
   ) {
     if (Object.keys(updatePlanReqDto).length === 0) {
       throw new BadRequestException(
@@ -145,7 +145,7 @@ export class PlanController {
   @Delete('/:planId')
   async deletePlan(
     @Param('planId', ParseIntPipe) planId: number,
-    @User() user: UserEntity,
+    @User() user: TTokenUser,
   ) {
     return this.planService.deletePlan({ planId, userId: user.id });
   }
