@@ -59,4 +59,9 @@ export class PlanRepository extends Repository<PlanEntity> {
     await this.save(data);
     return await this.findPlanById(id);
   }
+
+  async deletePlan(planId: number): Promise<boolean> {
+    const { affected } = await this.delete({ id: planId });
+    return !!affected;
+  }
 }
