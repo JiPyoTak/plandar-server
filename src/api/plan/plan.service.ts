@@ -37,6 +37,13 @@ export class PlanService {
     }
   }
 
+  async checkHasPlan(id: number): Promise<void> {
+    const hasPlan = await this.planRepo.exist({ where: { id } });
+    if (!hasPlan) {
+      throw new ConflictException(`존재하지 않는 일정입니다 : ${id}`);
+    }
+  }
+
   async getPlans(data: IGetPlansArgs): Promise<PlanResDto[]> {
     return [];
   }
