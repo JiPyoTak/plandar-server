@@ -2,6 +2,7 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 
@@ -97,7 +98,24 @@ export class PlanService {
     return mapToHexColor(updatedPlan);
   }
 
-  async deletePlan(data: IDeletePlanArgs): Promise<PlanResDto> {
-    return {} as PlanResDto;
+  @Transactional()
+  async deletePlan({ userId, planId }: IDeletePlanArgs): Promise<PlanResDto> {
+    await this.checkUserOwnPlan({ userId, planId });
+
+    const plan = await this.planRepo.findPlanById(planId);
+
+    const isDeleted = await this.planRepo.deletePlan(planId);
+    if (!isDeleted) {
+      throw new InternalServerErrorException('일정을 삭제하는데 실패했습니다');
+    }
+
+    const { tags } = plan;
+    const tagDatas = await Promise.all(
+      tags.map(({ id }) =>
+        this.tagService.deleteTagIfNotReferenced({ tagId: id, userId }),
+      ),
+    );
+
+    return mapToHexColor({ ...plan, tags: tagDatas });
   }
 }
