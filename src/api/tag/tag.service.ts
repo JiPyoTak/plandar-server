@@ -55,7 +55,7 @@ export class TagService {
     if (!tagWithPlans) return null;
 
     const { plans, ...tagData } = tagWithPlans;
-    if (tagWithPlans && plans.length === 0) {
+    if (plans.length === 0) {
       await this.tagRepo.deleteTag(deleteTagArgs);
     }
 
