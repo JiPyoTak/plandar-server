@@ -12,6 +12,16 @@ import { CATEGORY_SELECT } from '@/utils/constants';
 
 @CustomRepository(CategoryEntity)
 export class CategoryRepository extends Repository<CategoryEntity> {
+  async findOnlyUserId(id: number): Promise<number> {
+    const category = await this.findOne({
+      where: { id },
+      select: { user: { id: true } },
+      relations: { user: true },
+    });
+
+    return category?.user.id ?? null;
+  }
+
   async findCategoryById({
     userId,
     categoryId,

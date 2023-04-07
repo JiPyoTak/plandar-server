@@ -1,4 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import {
   ArrayMaxSize,
   IsArray,
@@ -39,6 +40,7 @@ class PlanUpdateReqDto {
   })
   @IsHexColor()
   @IsOptional()
+  @Transform(({ value }) => value.replace('#', ''))
   color?: string;
 
   @ApiPropertyOptional({

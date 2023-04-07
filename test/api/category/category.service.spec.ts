@@ -1,10 +1,11 @@
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, ForbiddenException } from '@nestjs/common';
 
 import { CategoryRepository } from '@/api/category/category.repository';
 import { CategoryService } from '@/api/category/category.service';
 import createTestingModule from 'test/utils/create-testing-module';
 
 import { STUB_CATEGORY } from './stub';
+import { USER_STUB } from '../user/stub';
 
 describe('CategoryService', () => {
   const stubCategory = STUB_CATEGORY;
@@ -24,6 +25,98 @@ describe('CategoryService', () => {
   it('Check defining Modules', () => {
     expect(categoryRepo).toBeDefined();
     expect(categoryService).toBeDefined();
+  });
+
+  describe('checkUserOwnCategory', () => {
+    it(`should pass - userId & category's userId are same`, async () => {
+      const args = {
+        userId: USER_STUB.id,
+        categoryId: STUB_CATEGORY[0].id,
+      };
+      const categoryRepoSpy = jest
+        .spyOn(categoryRepo, 'findOnlyUserId')
+        .mockResolvedValue(args.userId);
+
+      await categoryService.checkUserOwnCategory(args);
+
+      expect(categoryRepoSpy).toHaveBeenCalledTimes(1);
+      expect(categoryRepoSpy).toHaveBeenCalledWith(args.categoryId);
+    });
+
+    it(`expect throw error when category does not exist`, async () => {
+      const args = {
+        userId: USER_STUB.id,
+        categoryId: STUB_CATEGORY[0].id,
+      };
+      const categoryRepoSpy = jest
+        .spyOn(categoryRepo, 'findOnlyUserId')
+        .mockResolvedValue(null);
+
+      try {
+        await categoryService.checkUserOwnCategory(args);
+        expect('not to be execute this').toBe('throw Error');
+      } catch (error) {
+        expect(categoryRepoSpy).toHaveBeenCalledTimes(1);
+        expect(categoryRepoSpy).toHaveBeenCalledWith(args.categoryId);
+        expect(error).toBeInstanceOf(ConflictException);
+        expect(typeof error.message).toBe('string');
+      }
+    });
+
+    it(`expect throw error when category's userId is not same with userId`, async () => {
+      const args = {
+        userId: USER_STUB.id,
+        categoryId: STUB_CATEGORY[0].id,
+      };
+      const categoryRepoSpy = jest
+        .spyOn(categoryRepo, 'findOnlyUserId')
+        .mockResolvedValue(Infinity);
+
+      try {
+        await categoryService.checkUserOwnCategory(args);
+        expect('not to be execute this').toBe('throw Error');
+      } catch (error) {
+        expect(categoryRepoSpy).toHaveBeenCalledTimes(1);
+        expect(categoryRepoSpy).toHaveBeenCalledWith(args.categoryId);
+        expect(error).toBeInstanceOf(ForbiddenException);
+        expect(typeof error.message).toBe('string');
+      }
+    });
+  });
+
+  describe('checkHasCategory', () => {
+    it(`should pass if categoryId is existing in database`, async () => {
+      const categoryId = STUB_CATEGORY[0].id;
+      const categoryRepoSpy = jest
+        .spyOn(categoryRepo, 'exist')
+        .mockResolvedValue(true);
+
+      await categoryService.checkHasCategory(categoryId);
+
+      expect(categoryRepoSpy).toHaveBeenCalledTimes(1);
+      expect(categoryRepoSpy).toHaveBeenCalledWith({
+        where: { id: categoryId },
+      });
+    });
+
+    it(`expect throw conflict error if categoryId is not existed in database`, async () => {
+      const categoryId = STUB_CATEGORY[0].id;
+      const categoryRepoSpy = jest
+        .spyOn(categoryRepo, 'exist')
+        .mockResolvedValue(false);
+
+      try {
+        await categoryService.checkHasCategory(categoryId);
+        expect('not to be execute this').toBe('throw Error');
+      } catch (error) {
+        expect(categoryRepoSpy).toHaveBeenCalledTimes(1);
+        expect(categoryRepoSpy).toHaveBeenCalledWith({
+          where: { id: categoryId },
+        });
+        expect(error).toBeInstanceOf(ConflictException);
+        expect(typeof error.message).toBe('string');
+      }
+    });
   });
 
   describe('success read', () => {
@@ -474,31 +567,6 @@ describe('CategoryService', () => {
     });
   });
 
-  describe('fail delete', () => {
-    it('try to delete not existed category', async () => {
-      // given
-      const userId = stubCategory[0].user.id;
-      const categoryId = stubCategory[0].id;
-
-      const categoryRepoFind = jest
-        .spyOn(categoryRepo, 'findCategoryById')
-        .mockResolvedValue(null);
-
-      try {
-        // when
-        await categoryService.deleteCategory({ userId, categoryId });
-      } catch (e) {
-        // then
-        expect(e).toBeInstanceOf(ConflictException);
-      }
-
-      expect(categoryRepoFind).toHaveBeenCalledWith({
-        userId,
-        categoryId,
-      });
-    });
-  });
-
   describe('success delete', () => {
     it('success delete category', async () => {
       // given
@@ -520,6 +588,9 @@ describe('CategoryService', () => {
         id: categoryId,
         color: `#${color}`,
       };
+      const categoryCheckUserOwnCategorySpy = jest
+        .spyOn(categoryService, 'checkUserOwnCategory')
+        .mockResolvedValue(undefined);
       const categoryFindById = jest
         .spyOn(categoryRepo, 'findCategoryById')
         .mockResolvedValue(repoRet);
@@ -531,6 +602,7 @@ describe('CategoryService', () => {
       const category = await categoryService.deleteCategory(params);
 
       // then
+      expect(categoryCheckUserOwnCategorySpy).toHaveBeenCalledWith(params);
       expect(categoryFindById).toHaveBeenCalledWith(params);
       expect(categoryRepoSpy).toHaveBeenCalledWith(params);
       expect(category).toEqual(shouldBe);

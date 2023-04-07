@@ -1,5 +1,10 @@
 import { CategoryResDto } from '@/dto/category';
 
+interface ICheckUserOwnCategoryArgs {
+  userId: number;
+  categoryId: number;
+}
+
 interface ICategoryInfo extends Omit<CategoryResDto, 'color'> {
   color: string;
 }
@@ -23,6 +28,7 @@ interface IDeleteCategoryArgs {
 }
 
 export {
+  ICheckUserOwnCategoryArgs,
   ICreateCategoryArgs,
   IUpdateCategoryArgs,
   IDeleteCategoryArgs,

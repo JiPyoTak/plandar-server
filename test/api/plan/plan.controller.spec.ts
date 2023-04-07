@@ -55,7 +55,7 @@ describe('PlanController', () => {
 
       const request = await testRequest(app.getHttpServer())
         .get(`/plan`)
-        .query({ timeMin, timeMax })
+        .query({ timemin: timeMin, timemax: timeMax })
         .expect(200);
 
       expect(planServSpy).toHaveBeenCalledWith({
@@ -85,7 +85,7 @@ describe('PlanController', () => {
 
       const request = await testRequest(app.getHttpServer())
         .get(`/plan`)
-        .query({ timeMin: timeMax, timeMax: timeMin })
+        .query({ timemin: timeMax, timemax: timeMin })
         .expect(400);
 
       expect(planServSpy).toHaveBeenCalledTimes(0);
@@ -132,7 +132,7 @@ describe('PlanController', () => {
           endTime: new Date(PLAN_STUB.endTime),
           tags: PLAN_STUB.tags.map(({ name }) => name),
         },
-        ['id', 'createdAt', 'updatedAt', 'user'],
+        ['id'],
       );
       const planRes = { ...PLAN_STUB };
       const planServSpy = jest
@@ -191,8 +191,9 @@ describe('PlanController', () => {
         {
           ...PLAN_STUB,
           tags: PLAN_STUB.tags.map(({ name }) => name),
+          startTime: new Date(PLAN_STUB.startTime),
         },
-        ['id', 'createdAt', 'updatedAt', 'user'],
+        ['id'],
       );
       const planRes = { ...PLAN_STUB };
       const planServSpy = jest
@@ -210,7 +211,7 @@ describe('PlanController', () => {
 
       expect(planServSpy).toHaveBeenCalledWith({
         ...updatePlanReq,
-        planId: PLAN_STUB.id,
+        id: PLAN_STUB.id,
         userId: USER_STUB.id,
       });
       expect(request.body).toEqual(result);

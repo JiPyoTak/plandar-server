@@ -1,6 +1,9 @@
 import { THexColor } from '@/types';
 
-const strToHexColor = (color: string): THexColor => `#${color}`;
+const strToHexColor = (color: string): THexColor => {
+  if (color[0] === '#') return color as THexColor;
+  return `#${color}`;
+};
 
 const mapToHexColor = <
   IType extends { color: string },

@@ -194,4 +194,74 @@ describe('TagService', () => {
       expect(tag).toEqual(shouldBe);
     });
   });
+
+  describe('success delete tag that has no plan', () => {
+    it('return deleted tag info (name & id)', async () => {
+      const userId = stubTag.user.id;
+      const tagId = stubTag.id;
+      const params = { userId, tagId };
+      const shouldBe = { name: stubTag.name, id: stubTag.id };
+
+      const tagRepoFindByTagIdWithPlans = jest
+        .spyOn(tagRepo, 'findTagWithPlans')
+        .mockResolvedValue({
+          id: tagId,
+          name: stubTag.name,
+          plans: [],
+        });
+      const tagRepoDeleteTag = jest
+        .spyOn(tagRepo, 'deleteTag')
+        .mockResolvedValue(true);
+
+      const tag = await tagService.deleteTagIfNotReferenced(params);
+
+      expect(tagRepoFindByTagIdWithPlans).toHaveBeenCalledWith(params);
+      expect(tagRepoDeleteTag).toHaveBeenCalledWith(params);
+      expect(tag).toEqual(shouldBe);
+    });
+
+    it('return tag without deleting', async () => {
+      const userId = stubTag.user.id;
+      const tagId = stubTag.id;
+      const params = { userId, tagId };
+      const shouldBe = { name: stubTag.name, id: stubTag.id };
+
+      const tagRepoFindByTagIdWithPlans = jest
+        .spyOn(tagRepo, 'findTagWithPlans')
+        .mockResolvedValue({
+          id: tagId,
+          name: stubTag.name,
+          plans: [{ id: 1 }],
+        });
+      const tagRepoDeleteTag = jest
+        .spyOn(tagRepo, 'deleteTag')
+        .mockResolvedValue(true);
+
+      const tag = await tagService.deleteTagIfNotReferenced(params);
+
+      expect(tagRepoFindByTagIdWithPlans).toHaveBeenCalledWith(params);
+      expect(tagRepoDeleteTag).toHaveBeenCalledTimes(0);
+      expect(tag).toEqual(shouldBe);
+    });
+
+    it('return null if no tag', async () => {
+      const userId = stubTag.user.id;
+      const tagId = stubTag.id;
+      const params = { userId, tagId };
+      const shouldBe = null;
+
+      const tagRepoFindByTagIdWithPlans = jest
+        .spyOn(tagRepo, 'findTagWithPlans')
+        .mockResolvedValue(shouldBe);
+      const tagRepoDeleteTag = jest
+        .spyOn(tagRepo, 'deleteTag')
+        .mockResolvedValue(true);
+
+      const tag = await tagService.deleteTagIfNotReferenced(params);
+
+      expect(tagRepoFindByTagIdWithPlans).toHaveBeenCalledWith(params);
+      expect(tagRepoDeleteTag).toHaveBeenCalledTimes(0);
+      expect(tag).toEqual(shouldBe);
+    });
+  });
 });
