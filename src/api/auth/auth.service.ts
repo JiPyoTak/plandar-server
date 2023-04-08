@@ -40,14 +40,20 @@ export class AuthService {
   registerTokenInCookie({ type, token, res }: IRegisterTokenInCookieArgs) {
     const { ACCESS_HEADER, REFRESH_HEADER, COOKIE_MAX_AGE } = this.env;
 
-    const tokenName =
-      type === EJwtTokenType.ACCESS ? ACCESS_HEADER : REFRESH_HEADER;
+    const isRefresh = type === EJwtTokenType.REFRESH;
+    const tokenName = isRefresh ? REFRESH_HEADER : ACCESS_HEADER;
 
-    const cookieOptions: CookieOptions = {
+    let cookieOptions: CookieOptions = {
       maxAge: Number(COOKIE_MAX_AGE),
-      httpOnly: true,
       secure: true,
     };
+
+    if (isRefresh) {
+      cookieOptions = {
+        ...cookieOptions,
+        httpOnly: true,
+      };
+    }
 
     res.cookie(tokenName, token, cookieOptions);
   }
