@@ -25,12 +25,37 @@ import { User } from '@/common/decorators/user.decorator';
 import { ParseDatePipe } from '@/common/pipes';
 import { PlanCreateReqDto, PlanResDto, PlanUpdateReqDto } from '@/dto/plan';
 import { TTokenUser } from '@/types';
+import { getBetweenDate } from '@/utils/getBetweenDate';
 
 import { PlanService } from './plan.service';
 
 @Controller('plan')
 export class PlanController {
   constructor(private readonly planService: PlanService) {}
+
+  @ApiOperation({
+    summary: '원하는 달의 일정 조회',
+  })
+  @ApiQuery({
+    name: 'date',
+    type: Date,
+    example: '2023-04-01T00:00:00.000Z',
+    required: true,
+  })
+  @ApiOkResponse({
+    description: '일정 조회 성공',
+    type: PlanResDto,
+    isArray: true,
+  })
+  @Get('/')
+  async getPlans(
+    @Query('date', ParseDatePipe) date: Date,
+    @User() user: TTokenUser,
+  ) {
+    const [timeMin, timeMax] = getBetweenDate(date);
+
+    return this.planService.getPlans({ timeMin, timeMax, userId: user.id });
+  }
 
   @ApiOperation({
     summary: '원하는 날짜 사이의 일정 조회',
