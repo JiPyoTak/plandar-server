@@ -40,7 +40,7 @@ describe('PlanController', () => {
     expect(planService).toBeDefined();
   });
 
-  describe('GET /plan', () => {
+  describe('GET /plan/between', () => {
     it('expect success response - plans (Query with between time)', async () => {
       const timeMin = PLAN_TIME_MIN_STUB;
       const timeMax = PLAN_TIME_MAX_STUB;
@@ -54,7 +54,7 @@ describe('PlanController', () => {
       };
 
       const request = await testRequest(app.getHttpServer())
-        .get(`/plan`)
+        .get(`/plan/between`)
         .query({ timemin: timeMin, timemax: timeMax })
         .expect(200);
 
@@ -84,7 +84,7 @@ describe('PlanController', () => {
       };
 
       const request = await testRequest(app.getHttpServer())
-        .get(`/plan`)
+        .get(`/plan/between`)
         .query({ timemin: timeMax, timemax: timeMin })
         .expect(400);
 
@@ -111,7 +111,7 @@ describe('PlanController', () => {
       };
 
       const request = await testRequest(app.getHttpServer())
-        .get(`/plan`)
+        .get(`/plan/between`)
         .query({})
         .expect(400);
 

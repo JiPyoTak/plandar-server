@@ -33,7 +33,7 @@ export class PlanController {
   constructor(private readonly planService: PlanService) {}
 
   @ApiOperation({
-    summary: '원하는 날짜의 일정 조회',
+    summary: '원하는 날짜 사이의 일정 조회',
   })
   @ApiQuery({
     name: 'timemin',
@@ -55,8 +55,8 @@ export class PlanController {
   @ApiBadRequestResponse({
     description: 'timemin query 값이 timemax query 값보다 이후일 때',
   })
-  @Get('/')
-  async getPlans(
+  @Get('/between')
+  async getBetweenPlans(
     @Query('timemin', ParseDatePipe) timeMin: Date,
     @Query('timemax', ParseDatePipe) timeMax: Date,
     @User() user: TTokenUser,
