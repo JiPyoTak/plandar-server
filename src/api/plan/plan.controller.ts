@@ -19,6 +19,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
+  ApiTags,
 } from '@nestjs/swagger';
 
 import { User } from '@/common/decorators/user.decorator';
@@ -29,6 +30,7 @@ import { getBetweenDate } from '@/utils/getBetweenDate';
 
 import { PlanService } from './plan.service';
 
+@ApiTags('plan')
 @Controller('plan')
 export class PlanController {
   constructor(private readonly planService: PlanService) {}
