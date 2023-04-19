@@ -45,6 +45,7 @@ describe('PlanController', () => {
     it('expect success response - plans', async () => {
       const date = new Date();
       const [timeMin, timeMax] = getBetweenDate(date);
+      console.log(timeMin, timeMax);
 
       const plans = [{ ...PLAN_STUB }];
       const planServSpy = jest
@@ -57,7 +58,7 @@ describe('PlanController', () => {
 
       const request = await testRequest(app.getHttpServer())
         .get(`/plan`)
-        .query({ date: timeMin })
+        .query({ date })
         .expect(200);
 
       expect(planServSpy).toHaveBeenCalledWith({

@@ -39,7 +39,7 @@ export class PlanController {
   @ApiQuery({
     name: 'date',
     type: Date,
-    example: '2023-04-01T00:00:00.000Z',
+    example: '2023-04',
     required: true,
   })
   @ApiOkResponse({
@@ -54,7 +54,13 @@ export class PlanController {
   ) {
     const [timeMin, timeMax] = getBetweenDate(date);
 
-    return this.planService.getPlans({ timeMin, timeMax, userId: user.id });
+    const data = await this.planService.getPlans({
+      timeMin,
+      timeMax,
+      userId: user.id,
+    });
+
+    return data;
   }
 
   @ApiOperation({

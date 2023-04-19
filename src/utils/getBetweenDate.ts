@@ -7,12 +7,16 @@ const getBetweenDate = (date: Date) => {
   const nextFullYear = fullYear + additionYear;
   nextMonth = nextMonth > 12 ? nextMonth - 12 : nextMonth;
 
-  const firstOfMonth = new Date(`${fullYear}-${month}-01, 00:00:00`);
-  const firstOfNextMonth = new Date(
-    `${nextFullYear}-${nextMonth}-01, 00:00:00`,
+  const firstOfMonth = new Date(
+    `${fullYear}-${month.toString().padStart(2, '0')}-01T00:00:00.000Z`,
+  );
+  const lastOfMonth = new Date(
+    new Date(
+      `${nextFullYear}-${nextMonth.toString().padStart(2, '0')}-01T00:00:00Z`,
+    ).getTime() - 1,
   );
 
-  return [firstOfMonth, firstOfNextMonth];
+  return [firstOfMonth, lastOfMonth];
 };
 
 export { getBetweenDate };
