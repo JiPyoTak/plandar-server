@@ -26,7 +26,11 @@ import { User } from '@/common/decorators/user.decorator';
 import { ParseDatePipe } from '@/common/pipes';
 import { PlanCreateReqDto, PlanResDto, PlanUpdateReqDto } from '@/dto/plan';
 import { TTokenUser } from '@/types';
-import { getBetweenDate } from '@/utils/getBetweenDate';
+import {
+  getStartTimeDate,
+  getEndTimeDate,
+  getMonthRangeDate,
+} from '@/utils/date';
 
 import { PlanService } from './plan.service';
 
@@ -54,7 +58,7 @@ export class PlanController {
     @Query('date', ParseDatePipe) date: Date,
     @User() user: TTokenUser,
   ) {
-    const [timeMin, timeMax] = getBetweenDate(date);
+    const [timeMin, timeMax] = getMonthRangeDate(date);
 
     const data = await this.planService.getPlans({
       timeMin,
@@ -100,7 +104,11 @@ export class PlanController {
       );
     }
 
-    return this.planService.getPlans({ timeMin, timeMax, userId: user.id });
+    return this.planService.getPlans({
+      timeMin: getStartTimeDate(timeMin),
+      timeMax: getEndTimeDate(timeMax),
+      userId: user.id,
+    });
   }
 
   @ApiOperation({
