@@ -81,7 +81,7 @@ export class PlanEntity extends DefaultEntity {
   type!: PLAN_TYPE;
 
   @ApiProperty({
-    example: '2023-04-05T04:41:19.933Z',
+    example: '2023-04-01T00:00:00.000Z',
   })
   @Column({ type: 'datetime' })
   @IsNotEmpty()
@@ -90,7 +90,7 @@ export class PlanEntity extends DefaultEntity {
   startTime!: Date;
 
   @ApiProperty({
-    example: '2023-04-05T04:41:19.933Z',
+    example: '2023-04-30T00:00:00.000Z',
   })
   @Column({ type: 'datetime', nullable: true })
   @IsOptional()

@@ -19,21 +19,54 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiQuery,
+  ApiTags,
 } from '@nestjs/swagger';
 
 import { User } from '@/common/decorators/user.decorator';
 import { ParseDatePipe } from '@/common/pipes';
 import { PlanCreateReqDto, PlanResDto, PlanUpdateReqDto } from '@/dto/plan';
 import { TTokenUser } from '@/types';
+import { getBetweenDate } from '@/utils/getBetweenDate';
 
 import { PlanService } from './plan.service';
 
+@ApiTags('plan')
 @Controller('plan')
 export class PlanController {
   constructor(private readonly planService: PlanService) {}
 
   @ApiOperation({
-    summary: '원하는 날짜의 일정 조회',
+    summary: '원하는 달의 일정 조회',
+  })
+  @ApiQuery({
+    name: 'date',
+    type: Date,
+    example: '2023-04',
+    required: true,
+  })
+  @ApiOkResponse({
+    description: '일정 조회 성공',
+    type: PlanResDto,
+    isArray: true,
+  })
+  @Get('/')
+  async getPlans(
+    @Query('date', ParseDatePipe) date: Date,
+    @User() user: TTokenUser,
+  ) {
+    const [timeMin, timeMax] = getBetweenDate(date);
+
+    const data = await this.planService.getPlans({
+      timeMin,
+      timeMax,
+      userId: user.id,
+    });
+
+    return data;
+  }
+
+  @ApiOperation({
+    summary: '원하는 날짜 사이의 일정 조회',
   })
   @ApiQuery({
     name: 'timemin',
@@ -55,8 +88,8 @@ export class PlanController {
   @ApiBadRequestResponse({
     description: 'timemin query 값이 timemax query 값보다 이후일 때',
   })
-  @Get('/')
-  async getPlans(
+  @Get('/between')
+  async getBetweenPlans(
     @Query('timemin', ParseDatePipe) timeMin: Date,
     @Query('timemax', ParseDatePipe) timeMax: Date,
     @User() user: TTokenUser,

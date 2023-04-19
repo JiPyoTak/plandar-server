@@ -1,4 +1,4 @@
-import { Between, Repository } from 'typeorm';
+import { Between, LessThan, MoreThan, Repository } from 'typeorm';
 
 import { CustomRepository } from '@/common/decorators';
 import { PlanResDto } from '@/dto/plan';
@@ -31,9 +31,18 @@ export class PlanRepository extends Repository<PlanEntity> {
     timeMax,
   }: IGetPlansArgs): Promise<PlanResDto[]> {
     return await this.find({
-      where: {
-        startTime: Between(timeMin, timeMax),
-      },
+      where: [
+        {
+          startTime: Between(timeMin, timeMax),
+        },
+        {
+          endTime: Between(timeMin, timeMax),
+        },
+        {
+          startTime: LessThan(timeMin),
+          endTime: MoreThan(timeMax),
+        },
+      ],
       select: PLAN_SELECT,
       relations: { tags: true },
     });
