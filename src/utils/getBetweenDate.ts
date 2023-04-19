@@ -12,7 +12,9 @@ const getBetweenDate = (date: Date) => {
   );
   const lastOfMonth = new Date(
     new Date(
-      `${nextFullYear}-${nextMonth.toString().padStart(2, '0')}-01T00:00:00Z`,
+      `${nextFullYear}-${nextMonth
+        .toString()
+        .padStart(2, '0')}-01T00:00:00.000Z`,
     ).getTime() - 1,
   );
 
