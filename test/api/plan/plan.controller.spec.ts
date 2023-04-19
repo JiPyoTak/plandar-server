@@ -9,7 +9,11 @@ import { PlanController } from '@/api/plan/plan.controller';
 import { PlanService } from '@/api/plan/plan.service';
 import { HttpExceptionFilter } from '@/common/filters';
 import { SuccessInterceptor } from '@/common/interceptors';
-import { getBetweenDate } from '@/utils/getBetweenDate';
+import {
+  getStartTimeDate,
+  getEndTimeDate,
+  getMonthRangeDate,
+} from '@/utils/date';
 import createTestingModule from 'test/utils/create-testing-module';
 import { omitKey } from 'test/utils/omit-key';
 
@@ -44,7 +48,7 @@ describe('PlanController', () => {
   describe('GET /plan', () => {
     it('expect success response - plans', async () => {
       const date = new Date();
-      const [timeMin, timeMax] = getBetweenDate(date);
+      const [timeMin, timeMax] = getMonthRangeDate(date);
 
       const plans = [{ ...PLAN_STUB }];
       const planServSpy = jest
@@ -115,8 +119,8 @@ describe('PlanController', () => {
         .expect(200);
 
       expect(planServSpy).toHaveBeenCalledWith({
-        timeMin,
-        timeMax,
+        timeMin: getStartTimeDate(timeMin),
+        timeMax: getEndTimeDate(timeMax),
         userId: USER_STUB.id,
       });
       expect(request.body).toEqual(result);
