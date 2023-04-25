@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy, Type } from '@nestjs/passport';
 import { Strategy } from 'passport';
@@ -58,7 +58,7 @@ const getProfileByProvider = (profile: GProfile | KProfile): UserCreateDto => {
         ),
       };
     default:
-      throw new InternalServerErrorException('유저 정보가 존재하지 않습니다.');
+      throw new NotFoundException('유저 정보가 존재하지 않습니다.');
   }
 };
 
