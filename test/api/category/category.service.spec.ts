@@ -397,6 +397,7 @@ describe('CategoryService', () => {
       const params = {
         userId,
         categoryId,
+        categoryName,
         color: newColor,
       };
       const repoRet = {
@@ -410,13 +411,19 @@ describe('CategoryService', () => {
         color: `#${newColor}`,
       };
 
+      const originalCategory = {
+        name: categoryName,
+        id: categoryId,
+        color,
+      };
+
       const categoryFindById = jest
         .spyOn(categoryRepo, 'findCategoryById')
-        .mockResolvedValue({
-          name: categoryName,
-          id: categoryId,
-          color,
-        });
+        .mockResolvedValue(originalCategory);
+
+      const categoryFindByName = jest
+        .spyOn(categoryRepo, 'findCategoryByName')
+        .mockResolvedValue(originalCategory);
 
       const categoryRepoSpy = jest
         .spyOn(categoryRepo, 'updateCategory')
