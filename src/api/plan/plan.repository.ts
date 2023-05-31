@@ -29,18 +29,22 @@ export class PlanRepository extends Repository<PlanEntity> {
   async findPlansBetweenDate({
     timeMin,
     timeMax,
+    userId,
   }: IGetPlansArgs): Promise<PlanResDto[]> {
     return await this.find({
       where: [
         {
           startTime: Between(timeMin, timeMax),
+          userId,
         },
         {
           endTime: Between(timeMin, timeMax),
+          userId,
         },
         {
           startTime: LessThan(timeMin),
           endTime: MoreThan(timeMax),
+          userId,
         },
       ],
       select: PLAN_SELECT,
