@@ -112,13 +112,13 @@ export class PlanEntity extends DefaultEntity {
   @ApiProperty({
     example: 1,
   })
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   @IsNumber()
-  categoryId!: number;
+  categoryId?: number;
 
   @ManyToOne(() => CategoryEntity, (category) => category.plans)
   @JoinColumn({ name: 'categoryId' })
-  category!: CategoryEntity;
+  category?: CategoryEntity;
 
   @ApiProperty({
     example: ['태그1', '태그2'],
