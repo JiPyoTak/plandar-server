@@ -106,19 +106,19 @@ export class PlanEntity extends DefaultEntity {
   userId!: number;
 
   @ManyToOne(() => UserEntity, { onDelete: 'CASCADE', cascade: true })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'user_id' })
   user!: UserEntity;
 
   @ApiProperty({
     example: 1,
   })
-  @Column({ type: 'int' })
+  @Column({ type: 'int', nullable: true })
   @IsNumber()
-  categoryId!: number;
+  categoryId?: number;
 
   @ManyToOne(() => CategoryEntity, (category) => category.plans)
-  @JoinColumn({ name: 'categoryId' })
-  category!: CategoryEntity;
+  @JoinColumn({ name: 'category_id' })
+  category?: CategoryEntity;
 
   @ApiProperty({
     example: ['태그1', '태그2'],
