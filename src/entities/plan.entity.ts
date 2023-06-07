@@ -106,7 +106,7 @@ export class PlanEntity extends DefaultEntity {
   userId!: number;
 
   @ManyToOne(() => UserEntity, { onDelete: 'CASCADE', cascade: true })
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'user_id' })
   user!: UserEntity;
 
   @ApiProperty({
@@ -117,7 +117,7 @@ export class PlanEntity extends DefaultEntity {
   categoryId?: number;
 
   @ManyToOne(() => CategoryEntity, (category) => category.plans)
-  @JoinColumn({ name: 'categoryId' })
+  @JoinColumn({ name: 'category_id' })
   category?: CategoryEntity;
 
   @ApiProperty({
