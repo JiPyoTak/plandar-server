@@ -5,16 +5,15 @@ const tagToStringArray = (tags: TagResDto[]): string[] => {
 };
 
 const mapTagsToStringArray = <
-  IType extends { tags?: TagResDto[] },
+  IType extends { tags: TagResDto[] },
   TArgs = IType | IType[],
-  TForm = { tags?: TagResDto[] } & Omit<IType, 'tags'>,
+  TForm = { tags: TagResDto[] } & Omit<IType, 'tags'>,
   TReturn = TArgs extends any[] ? TForm[] : TForm,
 >(
   obj: TArgs,
 ): TReturn => {
   if (obj instanceof Array) {
     return obj.map(({ tags, ...rest }) => {
-      if (tags?.length === 0) return rest as TReturn;
       return {
         ...rest,
         tags: tagToStringArray(tags),
@@ -23,9 +22,7 @@ const mapTagsToStringArray = <
   }
 
   const { tags, ...rest } = obj as unknown as IType;
-  return (
-    tags?.length > 0 ? { ...rest, tags: tagToStringArray(tags) } : rest
-  ) as TReturn;
+  return { ...rest, tags: tagToStringArray(tags) } as TReturn;
 };
 
 export { mapTagsToStringArray };
