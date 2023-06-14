@@ -50,7 +50,10 @@ describe('PlanController', () => {
       const date = new Date();
       const [timeMin, timeMax] = getMonthRangeDate(date);
 
-      const plans = [{ ...PLAN_STUB }];
+      const plans = [{ ...PLAN_STUB }].map(({ tags, ...rest }) => ({
+        ...rest,
+        tags: tags.map(({ name }) => name),
+      }));
       const planServSpy = jest
         .spyOn(planService, 'getPlans')
         .mockResolvedValue(plans);
@@ -104,7 +107,10 @@ describe('PlanController', () => {
     it('expect success response - plans (Query with between time)', async () => {
       const timeMin = PLAN_TIME_MIN_STUB;
       const timeMax = PLAN_TIME_MAX_STUB;
-      const plans = [{ ...PLAN_STUB }];
+      const plans = [{ ...PLAN_STUB }].map(({ tags, ...rest }) => ({
+        ...rest,
+        tags: tags.map(({ name }) => name),
+      }));
       const planServSpy = jest
         .spyOn(planService, 'getPlans')
         .mockResolvedValue(plans);
@@ -194,7 +200,8 @@ describe('PlanController', () => {
         },
         ['id'],
       );
-      const planRes = { ...PLAN_STUB };
+      const { tags, ...rest } = PLAN_STUB;
+      const planRes = { ...rest, tags: tags.map(({ name }) => name) };
       const planServSpy = jest
         .spyOn(planService, 'createPlan')
         .mockResolvedValue(planRes);
@@ -255,7 +262,8 @@ describe('PlanController', () => {
         },
         ['id'],
       );
-      const planRes = { ...PLAN_STUB };
+      const { tags, ...rest } = PLAN_STUB;
+      const planRes = { ...rest, tags: tags.map(({ name }) => name) };
       const planServSpy = jest
         .spyOn(planService, 'updatePlan')
         .mockResolvedValue(planRes);
@@ -307,7 +315,8 @@ describe('PlanController', () => {
 
   describe('Delete /plan/:planId', () => {
     it('expect success response with deleting a plan', async () => {
-      const planRes = { ...PLAN_STUB };
+      const { tags, ...rest } = PLAN_STUB;
+      const planRes = { ...rest, tags: tags.map(({ name }) => name) };
       const planServSpy = jest
         .spyOn(planService, 'deletePlan')
         .mockResolvedValue(planRes);

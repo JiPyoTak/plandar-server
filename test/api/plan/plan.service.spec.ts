@@ -133,7 +133,10 @@ describe('PlanService', () => {
         timeMin: PLAN_TIME_MIN_STUB,
         timeMax: PLAN_TIME_MAX_STUB,
       };
-      const result = [{ ...PLAN_STUB_WITH_COLOR }];
+      const result = [{ ...PLAN_STUB_WITH_COLOR }].map(({ tags, ...rest }) => ({
+        ...rest,
+        tags: tags.map(({ name }) => name),
+      }));
       const planRepoSpy = jest
         .spyOn(planRepository, 'findPlansBetweenDate')
         .mockResolvedValue([{ ...PLAN_STUB }]);
@@ -194,7 +197,8 @@ describe('PlanService', () => {
         tags: PLAN_STUB.tags.map(({ name }) => name),
         userId: USER_STUB.id,
       };
-      const result = { ...PLAN_STUB_WITH_COLOR };
+      const { tags, ...rest } = PLAN_STUB_WITH_COLOR;
+      const result = { ...rest, tags: tags.map(({ name }) => name) };
       const categoryServSpy = jest
         .spyOn(categoryService, 'checkUserOwnCategory')
         .mockResolvedValue(undefined);
@@ -224,6 +228,7 @@ describe('PlanService', () => {
       expect(planRepoSpy).toHaveBeenCalledTimes(1);
       expect(planRepoSpy).toHaveBeenCalledWith({
         ...result,
+        tags,
         color: PLAN_STUB.color,
         userId: newPlanData.userId,
       });
@@ -279,7 +284,8 @@ describe('PlanService', () => {
         tags: PLAN_STUB.tags.map(({ name }) => name),
         userId: USER_STUB.id,
       };
-      const result = { ...PLAN_STUB_WITH_COLOR };
+      const { tags, ...rest } = PLAN_STUB_WITH_COLOR;
+      const result = { ...rest, tags: tags.map(({ name }) => name) };
       const planCheckUserOwnPlanSpy = jest
         .spyOn(planService, 'checkUserOwnPlan')
         .mockResolvedValue(undefined);
@@ -313,6 +319,7 @@ describe('PlanService', () => {
       expect(planRepoSpy).toHaveBeenCalledTimes(1);
       expect(planRepoSpy).toHaveBeenCalledWith({
         ...result,
+        tags,
         color: PLAN_STUB.color,
         userId: planData.userId,
       });
@@ -326,7 +333,8 @@ describe('PlanService', () => {
         planId: PLAN_STUB.id,
         userId: USER_STUB.id,
       };
-      const result = { ...PLAN_STUB_WITH_COLOR };
+      const { tags, ...rest } = PLAN_STUB_WITH_COLOR;
+      const result = { ...rest, tags: tags.map(({ name }) => name) };
       const planCheckUserOwnPlanSpy = jest
         .spyOn(planService, 'checkUserOwnPlan')
         .mockResolvedValue(undefined);
