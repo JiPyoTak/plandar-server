@@ -25,7 +25,7 @@ class PlanResDto extends OmitType(PlanEntity, [
   })
   @IsArray()
   @ArrayMaxSize(5)
-  tags?: TagResDto[];
+  tags?: string[];
 }
 
 export { PlanResDto };
