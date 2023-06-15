@@ -17,6 +17,7 @@ import {
   IUpdatePlanWithTagsArgs,
 } from '@/types/args';
 import { mapToHexColor } from '@/utils/color-converter';
+import { mapTagsToStringArray } from '@/utils/tag-converter';
 
 import { PlanRepository } from './plan.repository';
 
@@ -48,7 +49,9 @@ export class PlanService {
   }
 
   async getPlans(data: IGetPlansArgs): Promise<PlanResDto[]> {
-    return mapToHexColor(await this.planRepo.findPlansBetweenDate(data));
+    return mapTagsToStringArray(
+      mapToHexColor(await this.planRepo.findPlansBetweenDate(data)),
+    );
   }
 
   @Transactional()
@@ -70,7 +73,7 @@ export class PlanService {
       tags: createdTags,
     });
 
-    return mapToHexColor(newPlan);
+    return mapTagsToStringArray(mapToHexColor(newPlan));
   }
 
   @Transactional()
@@ -95,7 +98,7 @@ export class PlanService {
       tags: createdTags,
     });
 
-    return mapToHexColor(updatedPlan);
+    return mapTagsToStringArray(mapToHexColor(updatedPlan));
   }
 
   @Transactional()
@@ -116,6 +119,6 @@ export class PlanService {
       ),
     );
 
-    return mapToHexColor({ ...plan, tags: tagDatas });
+    return mapTagsToStringArray(mapToHexColor({ ...plan, tags: tagDatas }));
   }
 }

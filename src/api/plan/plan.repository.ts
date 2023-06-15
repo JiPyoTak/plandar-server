@@ -9,7 +9,9 @@ import { PLAN_SELECT } from '@/utils/constants';
 
 @CustomRepository(PlanEntity)
 export class PlanRepository extends Repository<PlanEntity> {
-  async findPlanById(id: number): Promise<PlanResDto> {
+  async findPlanById(
+    id: number,
+  ): Promise<Omit<PlanResDto, 'tags'> & { tags?: TagResDto[] }> {
     return await this.findOne({
       where: { id },
       select: PLAN_SELECT,
@@ -30,7 +32,9 @@ export class PlanRepository extends Repository<PlanEntity> {
     timeMin,
     timeMax,
     userId,
-  }: IGetPlansArgs): Promise<PlanResDto[]> {
+  }: IGetPlansArgs): Promise<
+    (Omit<PlanResDto, 'tags'> & { tags?: TagResDto[] })[]
+  > {
     return await this.find({
       where: [
         {
@@ -54,7 +58,7 @@ export class PlanRepository extends Repository<PlanEntity> {
 
   async createPlan(
     planData: Omit<ICreatePlanArgs, 'tags'> & { tags: TagResDto[] },
-  ): Promise<PlanResDto> {
+  ): Promise<Omit<PlanResDto, 'tags'> & { tags?: TagResDto[] }> {
     const filteredPlan = this.create(planData);
 
     const { id } = await this.save(filteredPlan);
@@ -67,7 +71,7 @@ export class PlanRepository extends Repository<PlanEntity> {
     ...planData
   }: Omit<IUpdatePlanArgs, 'tags'> & {
     tags: TagResDto[];
-  }): Promise<PlanResDto> {
+  }): Promise<Omit<PlanResDto, 'tags'> & { tags?: TagResDto[] }> {
     const data = this.create({ ...planData, id });
     await this.save(data);
     return await this.findPlanById(id);

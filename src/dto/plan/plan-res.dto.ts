@@ -1,7 +1,6 @@
-import { ApiPropertyOptional, OmitType } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, OmitType } from '@nestjs/swagger';
 import { ArrayMaxSize, IsArray, IsNumber } from 'class-validator';
 
-import { TagResDto } from '@/dto/tag';
 import { PlanEntity } from '@/entities';
 
 class PlanResDto extends OmitType(PlanEntity, [
@@ -19,13 +18,13 @@ class PlanResDto extends OmitType(PlanEntity, [
   @IsNumber()
   categoryId?: number;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     description: '일정이 가지고 있는 태그 객체',
     example: ['태그1', '태그2'],
   })
   @IsArray()
   @ArrayMaxSize(5)
-  tags?: TagResDto[];
+  tags!: string[];
 }
 
 export { PlanResDto };
