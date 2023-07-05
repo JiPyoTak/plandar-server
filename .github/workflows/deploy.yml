@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      tags: ${{ steps.meta.outputs.tags }}
+      version: ${{ steps.meta.outputs.version }}
 
     steps:
       - uses: actions/checkout@v2
@@ -62,7 +62,15 @@ jobs:
         run: docker images | grep $NAME/$REPO | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} docker rmi $NAME/$REPO:{}
 
       - name: Pull docker image
-        run: docker pull ${{ needs.build.outputs.tags }}
+        env:
+          NAME: ${{ secrets.DOCKER_HUB_NAMESPACE }}
+          REPO: ${{ secrets.DOCKER_HUB_REPO }}
+          VERS: ${{ needs.build.outputs.version }}
+        run: docker pull $NAME/$REPO:$VERS
 
       - name: Run docker container
-        run: docker run --name plandar-server -p 4000:4000 -d --link plandar-db-container ${{ needs.build.outputs.tags }}
+        env:
+          NAME: ${{ secrets.DOCKER_HUB_NAMESPACE }}
+          REPO: ${{ secrets.DOCKER_HUB_REPO }}
+          VERS: ${{ needs.build.outputs.version }}
+        run: docker run --name plandar-server-container -p 4000:4000 -d --link plandar-db-container $NAME/$REPO:$VERS
