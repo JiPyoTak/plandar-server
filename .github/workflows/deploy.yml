@@ -51,11 +51,13 @@ jobs:
 
     steps:
       - name: Stop docker container
+        continue-on-error: true
         run: |
           docker stop plandar-server-container
           docker rm plandar-server-container
 
       - name: Delete docker images
+        continue-on-error: true
         env:
           NAME: ${{ secrets.DOCKER_HUB_NAMESPACE }}
           REPO: ${{ secrets.DOCKER_HUB_REPO }}
