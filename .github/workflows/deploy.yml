@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
 
     steps:
       - uses: actions/checkout@v2
@@ -48,21 +50,6 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Docker Hub Login
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{secrets.DOCKER_HUB_TOKEN}}
-
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ${{ secrets.DOCKER_HUB_NAMESPACE }}/${{ secrets.DOCKER_HUB_REPO }}
-
-      - name: test
-        run: echo ${{ steps.meta.outputs.tags }}
-
       - name: Stop docker container
         run: |
           docker stop plandar-server-container
@@ -75,7 +62,7 @@ jobs:
         run: docker images | grep $NAME/$REPO | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} docker rmi $NAME/$REPO:{}
 
       - name: Pull docker image
-        run: docker pull ${{ steps.meta.outputs.tags }}
+        run: docker pull ${{ needs.build.outputs.tags }}
 
       - name: Run docker container
-        run: docker run --name plandar-server -p 4000:4000 -d --link plandar-db-container ${{ steps.meta.outputs.tags }}
+        run: docker run --name plandar-server -p 4000:4000 -d --link plandar-db-container ${{ needs.build.outputs.tags }}
