@@ -105,7 +105,7 @@ export class PlanEntity extends DefaultEntity {
   @IsNumber()
   userId!: number;
 
-  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE', cascade: true })
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user!: UserEntity;
 
@@ -116,7 +116,9 @@ export class PlanEntity extends DefaultEntity {
   @IsNumber()
   categoryId?: number;
 
-  @ManyToOne(() => CategoryEntity, (category) => category.plans)
+  @ManyToOne(() => CategoryEntity, (category) => category.plans, {
+    onDelete: 'SET NULL',
+  })
   @JoinColumn({ name: 'category_id' })
   category?: CategoryEntity;
 
