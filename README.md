@@ -19,15 +19,15 @@
 </p>
 
 <p align="center">
-  <a href="#contributors">Contributors</a> •
-  <a href="#key-features">Key Features</a> •
-  <a href="#how-to-use">How To Use</a> •
-  <a href="#credits">Credits</a> •
-  <a href="#related">Related</a>
+  <a href="#contributors-🙋🏼‍♂️">Contributors</a> •
+  <a href="#key-features-⚒️">Key Features</a> •
+  <a href="#how-to-use-⚙️">How To Use</a> •
+  <a href="#credits-📚">Credits</a> •
+  <a href="#related-🔗">Related</a>
 </p>
 
 <div align="center">
-<img src="https://github.com/JiPyoTak/plandar-client/assets/55688122/00d20860-235a-43da-9750-ba7cae49180c"/>
+<img src="https://github.com/JiPyoTak/plandar-client/assets/60173534/82117794-1efd-4785-bb3c-55bda63fef92"/>
 </div>
 
 ## Contributors 🙋🏼‍♂️
