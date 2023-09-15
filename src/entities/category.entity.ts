@@ -27,7 +27,7 @@ export class CategoryEntity extends DefaultEntity {
   color!: string;
 
   @ApiProperty()
-  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE', cascade: true })
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user!: UserEntity;
 
